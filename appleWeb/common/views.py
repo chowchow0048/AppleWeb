@@ -25,7 +25,7 @@ def login_view(request):
             # 로그인 페이지로 redirect
             return render(
                 request,
-                "accounts/login.html",
+                "users/login.html",
                 {"error": "아이디 혹은 비밀번호가 올바르지 않습니다"},
             )
     # GET 요청이 들어왔을 때
@@ -42,7 +42,7 @@ def user_list_view(request):
         # 모든 사용자의 목록을 가져온다
         users = User.objects.all()
         # 가져온 사용자 목록 render
-        return render(request, "accounts/user_list.html", {"users": users})
+        return render(request, "users/user_list.html", {"users": users})
     # 로그인한 유저가 staff가 아니라면
     else:
         # 로그인 페이지로 redirect

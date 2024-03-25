@@ -28,18 +28,20 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = "common.User"
 
 # Application definition
 
 INSTALLED_APPS = [
+    "common",
+    "main",
+    "community",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "users",
-    "app",
 ]
 
 MIDDLEWARE = [
@@ -83,8 +85,6 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = "users.User"
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -119,7 +119,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "s/tatic/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]

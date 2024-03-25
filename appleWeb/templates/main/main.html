@@ -8,7 +8,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
 
-        <title>APPLE SCIENCE</title>
+        <title>애플과학</title>
 
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}" />
@@ -18,10 +18,17 @@
 
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'css/main.css' %}" rel="stylesheet" />
+        <!-- <style>
+            .timetable-time:hover {
+                background-color: #0d6dfd79;
+                color: white;
+                outline: none;
+            }
+        </style> -->
     </head>
     <body>
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <!-- navbar -->
+        <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container px-5">
                 <a class="navbar-brand" href="#!">APPLE SCIENCE</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -34,8 +41,9 @@
                     </ul>
                 </div>
             </div>
-        </nav>
-        <!-- Header--> 
+        </nav> -->
+
+        <!-- Header --> 
         <header class="bg-dark py-5">
             <div class="container px-5">
                 <div class="row gx-5 justify-content-center">
@@ -52,37 +60,48 @@
                 </div>
             </div>
         </header>
-        <!-- Features section-->
+
+        <!-- 시간표 + 공지사항 -->
         <section class="py-5 border-bottom" id="features">
             <div class="container px-5 my-5">
                 <div class="row gx-5">
                     <div class="col-lg-4 mb-5 mb-lg-0">
                         <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
                         <h2 class="h4 fw-bolder">시간표</h2>
-                        <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                        <a class="text-decoration-none" href="#!">
+                        <!-- 학교 학년별 시간표 이동 링크 -->
+                        <p class="timetable-time" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="세화고1">세화고 1학년</p>
+                        <p class="timetable-time" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="세화고2">세화고 2학년</p>
+                        <p class="timetable-time" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="세화여고1">세화여고 1학년</p>
+                        <p class="timetable-time" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="세화여고2">세화여고 2학년</p>
+                        <p class="timetable-time" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="연합반">연합</p>
+
+                        <!-- <a class="text-decoration-none" href="#!">
                             Call to action
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
+                            <i class="bi bi-arrow-right"></i> 
+                        </a> -->
                     </div>
-                    <div class="col-lg-4 mb-5 mb-lg-0">
+                    <div class="col-lg-8 mb-5 mb-lg-0">
                         <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-building"></i></div>
                         <h2 class="h4 fw-bolder">공지사항</h2>
-                        <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                        <a class="text-decoration-none" href="#!">
+                        <p> 작은 게시판, 학원 외부인들에게 보여질 공지들 </p>
+                        <p>어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구</p>
+                        <p>어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구</p>
+                        <p>어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구</p>
+                        <p>어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구어쩌구 저쩌구</p>
+                        <!-- <a class="text-decoration-none" href="#!">
                             Call to action
                             <i class="bi bi-arrow-right"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
         </section>
-        <!-- Testimonials section-->
+
+        <!-- 수강 후기 -->
         <section class="py-5 border-bottom">
             <div class="container px-5 my-5 px-5">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bolder">Customer testimonials</h2>
-                    <p class="lead mb-0">Our customers love working with us</p>
+                    <h2 class="fw-bolder">수강 후기</h2>
                 </div>
                 <div class="row gx-5 justify-content-center">
                     <div class="col-lg-6">
@@ -114,14 +133,29 @@
                 </div>
             </div>
         </section>
+
+        <!-- 시간표 모달 -->
+        <div class="modal fade" id="timetableModal" tabindex="-1" aria-labelledby="timetableModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="timetableModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+            </div>
+        </div>
+
         <!-- Footer-->
         <footer class="py-5 bg-dark">
             <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
         </footer>
+        
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script src="{% static 'scripts/scripts.js' %}"></script>
+        <script src="{% static 'scripts/main/main.js' %}"></script>
         <!-- SB Forms -->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>

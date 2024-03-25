@@ -535,6 +535,13 @@ progress {
   }
 }
 
+.timetable-time:hover{
+  background-color: #0d6dfd79;
+  color: white;
+  outline: none;
+
+}
+
 .display-5 {
   font-size: calc(1.425rem + 2.1vw);
   font-weight: 300;
