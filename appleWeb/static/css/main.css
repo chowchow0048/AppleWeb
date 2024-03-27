@@ -10,6 +10,29 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+/* ===== custom ===== */
+.container-custom{ 
+  outline: #00ffd0;
+}
+
+.timetable-time{
+  margin-bottom: 0.5rem;
+
+  &:hover{
+    background-color: #0d6dfd79;
+    color: white;
+    outline: none;
+  }
+}
+
+.table-content td{
+  padding-bottom: 0.5rem;
+  
+  .table-title{
+    width: 50%;
+  }
+}
+
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -336,6 +359,7 @@ th {
   border-width: 0;
 }
 
+
 label {
   display: inline-block;
 }
@@ -533,13 +557,6 @@ progress {
   .display-4 {
     font-size: 3.5rem;
   }
-}
-
-.timetable-time:hover{
-  background-color: #0d6dfd79;
-  color: white;
-  outline: none;
-
 }
 
 .display-5 {
