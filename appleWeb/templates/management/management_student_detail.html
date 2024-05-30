@@ -1,0 +1,43 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container p-5">
+    <h1 class="mb-4 pb-2 border-bottom">{{ student.name }}의 정보</h1>
+    <p class="mb-4">학교: {{ student.school }}</p>
+    <p class="mb-4">학년: {{ student.grade }}</p>
+    {% if student.phone == None %}
+        <p class="mb-4">전화번호: -</p>
+    {% else %}
+        <p class="mb-4">전화번호: {{ student.phone }}</p>
+    {% endif %}
+    <p class="mb-4">부모님 전화번호: {{ student.parent_phone }}</p>
+    <p class="mb-4">잔여 수업 횟수: {{ student.payment_count }}</p>
+    {% if student.payment_request %}
+    <p class="mb-4">결제 요청: 필요함</p>
+    {% endif %}
+    <h3 class="mb-4 py-2 border-top border-bottom">수강 과목</h3>
+    <ul>
+        {% for course in courses %}
+        <!-- <li>{{ course }} - {{ course.course_day }} {{ course.course_time }}</li> -->
+        <p class="nomargin">{{ course }} - {{ course.course_day }} {{ course.course_time }}</p>
+        {% endfor %}
+    </ul>
+    <h3 class="mb-4 py-2 border-top border-bottom">출석 기록</h3>
+    <ul>
+        {% for attendance in attendances %}
+        <!-- <li>{{ attendance.attended_at|date:"Y-m-d H:i" }}</li> -->
+        <!-- <li>{{ attendance }}</li> -->
+        <p class="nomargin">{{ attendance }}</p>
+        {% endfor %}
+    </ul>
+    <h3 class="mb-4 py-2 border-top border-bottom">결석 기록</h3>
+    <ul>
+        {% for absence in absences %}
+        <!-- <li>{{ attendance.attended_at|date:"Y-m-d H:i" }}</li> -->
+        <!-- <li>{{ absence }}</li> -->
+        <p class="nomargin">{{ absence }}</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

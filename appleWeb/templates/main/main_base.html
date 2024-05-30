@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
@@ -12,53 +11,70 @@
 
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}" />
-
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
-
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{% static 'css/main.css' %}" rel="stylesheet" />
-        <!-- <style>
-            .timetable-time:hover {
-                background-color: #0d6dfd79;
-                color: white;
-                outline: none;
-            }
-        </style> -->
+        <link href="{% static 'css/base.css' %}" rel="stylesheet" />
+        {% block extra_css %}{% endblock %}
+        
     </head>
-    <body>
-        <!-- navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container px-5">
-                <a class="navbar-brand" href="#!">APPLE SCIENCE</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link active px-3" href="/community">로그인</a></li>
-                        <!-- <li class="nav-item"><a class="nav-link" href="#!">About</a></li> -->
-                        <!-- 원본 <a class="btn btn-primary btn-lg px-4 me-sm-3" href="/community">로그인</a> -->
+    <body class="d-flex flex-column min-vh-100">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white fixed-top">
+            <div class="container d-flex">
+                <div>
+                    <a class="navbar-brand" href="{% url 'main_home' %}">애플 과학</a>
+                </div>
+                <div>
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="width: 50%;">
                     </ul>
+                    <a class="navbar-brand pe-5" href="#timetable">시간표</a>
+                    <a class="navbar-brand pe-5" href="#notice">공지사항</a>
+                    <a class="navbar-brand pe-5" href="#review">수강후기</a>
+                    <a class="navbar-brand" href="#way">오시는 길</a>
+                </div>
+                <div>
+                    {% if request.user.is_authenticated %}
+                        <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                            <li class="nav-item dropdown">
+                                <div class="navbar-user-main">
+                                    <!-- <p class="navbar-text nomargin nopadding" id="sessionTimer">90:00</p> -->
+                                    <a class="nav-link dropdown-toggle nopadding ms-1" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ request.user.name }}
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{% url 'community_home' %}">커뮤니티</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'user_logout' %}">로그아웃</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <a class="navbar-brand" href="{% url 'user_login' %}">login</a>
+                    {% endif %}
                 </div>
             </div>
         </nav>
 
-        <main>
+        <main class="flex-grow-1">
             {% block content %}
             {% endblock %}
         </main>
 
         <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; chowchow0048 2024</p></div>
-        </footer>
+        <footer class="mt-auto">
+            <div class="container px-5">
+                <p class="m-0 text-center text-white">Copyright &copy; chowchow0048 2024</p>
+            </div>
+        </footer>        
         
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="{% static 'scripts/main/main.js' %}"></script>
         <!-- SB Forms -->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <!-- Core theme JS-->
+        <script type="module" src="{% static 'scripts/main/main_base.js' %}"></script>
+        {% block extra_scripts %}{% endblock %}
     </body>
 </html>

@@ -1,0 +1,110 @@
+#course-title{
+    font-size: x-large;
+    font-weight: 350;
+    padding: 25px 0px;
+    /* margin: 20px 0px; */
+}
+
+.decorate-none{
+    text-decoration-style: none;
+}
+
+.btn.active {
+    background-color: #007B; /* 예시로 파란색 배경 설정 */
+    color: white;
+}
+
+/* .table thead th {
+    width: auto;
+    text-align: center;
+} */
+
+.d-flex-ni{
+    display: flex;
+}
+
+#attendanceForm{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: 250;
+}
+
+.table .th-school{
+    width: 13%;
+    text-align: center;
+}
+
+.table .th-grade{
+    width: 11%;
+    text-align: center;
+}
+
+.table .th-name{
+    width: 16%;
+    text-align: center;
+}
+
+.table .th-phone{
+    width: 25%;
+    text-align: center;
+}
+
+.table .th-grade{
+    width: 10%;
+    text-align: center;
+}
+
+/* .studentlist-detail-head tr {
+
+} */
+
+#mngsldt-thead th,
+#mngsl-thead th,
+#mngpl-thead th{
+    font-size: large;
+    font-weight: 350;
+    padding-bottom: 15px;
+}
+
+#mngsldt-tbody>tr>td,
+#mngsl-tbody>tr>td,
+#mngpl-tbody>tr>td {
+    padding: 10px 5px 
+}
+
+
+#selectAllAttendance, #selectAllAbsence{
+    text-decoration: none;
+    font-size: large;
+    font-weight: 350;
+    color: black;
+    border: 1px solid #DEE2E6;
+    padding: 6px 10px;
+    margin-bottom: -5px;
+}
+
+#selectAllAttendance{
+    animation: 0.5s linear;
+
+    &:hover{
+        background-color: rgb(84, 196, 120);
+        color: white;
+    }
+}
+
+#selectAllAbsence{
+    animation: 0.5s linear;
+
+    &:hover{
+        background-color: rgb(220, 61, 61);
+        color: white;
+    }
+}
+
+.slbtn{
+    width: 10%;
+    justify-content: center;
+}

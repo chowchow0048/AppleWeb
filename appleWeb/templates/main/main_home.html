@@ -1,108 +1,164 @@
 {% extends 'main/main_base.html' %}
-
-{% block title %} Welcome to Main Page {% endblock %}
+{% load static %}
+{% block extra_css %}<link href="{% static 'css/main/main_home.css' %}" rel="stylesheet" />{% endblock %}
 
 {% block content %}
-<!-- Header --> 
-<header class="bg-dark py-4">
-    <div class="container px-4">
-        <div class="row gx-5 justify-content-center">
-            <div class="col-lg-6">
-                <div class="text-center my-5">
-                    <h1 class="display-5 fw-bolder text-white mb-2">애플과학</h1>
-                    <p class="lead text-white-50 mb-4">어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구</p>
-                    <!-- <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                        <a class="btn btn-primary btn-lg px-4 me-sm-3" href="/community">로그인</a>
-                    </div> -->
+<!-- 헤더 -->
+<div class="backSky">
+    <svg class="sky">
+    </svg>
+    <!-- Header --> 
+    <header class="text-white py-5 header-height header">
+        <div class="container px-5">
+            <div class="row gx-5 justify-content-center">
+                <div class="col-lg-6">
+                    <div class="text-center my-5">
+                        <br>
+                        <h1 class="display-5 fw-bolder text-white mb-2 bigger-text">애플과학</h1>
+                        <br>
+                        <br>
+                        <h4 class="text-white-50">
+                            반포의 명예, 20년 한자리에서 키워낸 압도적인 성공의 이야기
+                        </h4>
+                        <h4 class="text-white-50">
+                            의대와 서울대를 매년 배출하는 압도적 성과
+                        </h4>
+                        <h4 class="text-white-50">
+                            매년 전교권의 조교진과 함께
+                        </h4>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
+</div>
 
-<!-- 시간표 + 공지사항 -->
-<section class="py-5 border-bottom" id="features">
-    <div class="container px-5 my-5">
-        <div class="row gx-5">
-            <div class="col-lg-4 mb-5 mb-lg-0 container-custom">
-                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                <h2 class="h4 fw-bolder">시간표</h2>
-                <!-- 학교 학년별 시간표 이동 링크 -->
-                <p class="timetable-time" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="세화고1">세화고 1학년</p>
-                <p class="timetable-time" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="세화고2">세화고 2학년</p>
-                <p class="timetable-time" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="세화여고1">세화여고 1학년</p>
-                <p class="timetable-time" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="세화여고2">세화여고 2학년</p>
-                <p class="timetable-time" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="연합반">연합</p>
-
-                <!-- <a class="text-decoration-none" href="#!">
-                    Call to action
-                    <i class="bi bi-arrow-right"></i> 
-                </a> -->
-            </div>
-            <div class="col-lg-8 mb-5 mb-lg-0">
-                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-building"></i></div>
-                <h2 class="h4 fw-bolder">
-                    <a href="{% url 'notice' %}"> <!---->
-                        공지사항
-                    </a>
-                </h2>
-                <table style="width: 100%;">
-                    <!-- <thead>
-                        <tr>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>작성/수정 날짜</th>
-                        </tr>
-                    </thead> -->
-                    <tbody>
-                        {% for article in boards %}
-                        <tr class="table-content">
-                            <td class="table-title">{{article.title}}</td>
-                            <td class="table-author">{{article.author}}</td>
-                            <td class="table-created">{{article.created_at|date:"Y-m-d" }}</td>
-                        </tr>
-                        {% endfor %}                            
-                    </tbody>
-                </table>
-                <!-- <a class="text-decoration-none" href="#!">
-                    Call to action
-                    <i class="bi bi-arrow-right"></i>
-                </a> -->
-            </div>
+<!-- 시간표 -->
+<section class="py-5 border-bottom" id="timetable">
+    <div class="container px-5 my-2 px-5 component-height component-flex">
+        <div class="text-center margin-bt-big component-title">
+            <h2 class="t-n2 fw-bolder big-text">시간표</h2>
+        </div>
+        <div class="timetable-container">
+            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="1학년">1학년</div>
+            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="세화고2">세화고 2학년</div>
+            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="세화여고2">세화여고 2학년</div>
         </div>
     </div>
 </section>
 
-<!-- 수강 후기 -->
-<section class="py-5 border-bottom">
-    <div class="container px-5 my-5 px-5">
-        <div class="text-center mb-5">
-            <h2 class="fw-bolder">수강 후기</h2>
+<!-- 클리닉 -->
+<!-- <section class="py-5 border-bottom" id="timetable">
+    <div class="container px-5 my-2 px-5 component-height component-flex">
+        <div class="text-center margin-bt-big component-title">
+            <h2 class="fw-bolder big-text">클리닉</h2>
         </div>
-        <div class="row gx-5 justify-content-center">
-            <div class="col-lg-6">
-                <!-- Testimonial 1-->
-                <div class="card mb-4">
-                    <div class="card-body p-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0"><i class="bi bi-chat-right-quote-fill text-primary fs-1"></i></div>
-                            <div class="ms-4">
-                                <p class="mb-1">Thank you for putting together such a great product. We loved working with you and the whole team, and we will be recommending you to others!</p>
-                                <div class="small text-muted">- Client Name, Location</div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="timetable-container mt-4">
+            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="1학년"> 물리</div>
+            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="1학년"> 화학</div>
+            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="1학년"> 생물</div>
+            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="1학년"> 지구과학</div>
+            
+        </div>
+    </div>
+</section> -->
+
+<!-- 공지사항 -->
+<section class="py-5 px-3 border-bottom component-flex" id="notice">
+    <div class="container mt-4">
+        <div class="text-center margin-bt-big ">
+            <h2 class="t-1 fw-bolder big-text">공지사항</h2>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">제목</th>
+                    <th scope="col">작성자</th>
+                    <th scope="col">작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                <tr onclick="location.href='{% url 'notice_detail' article.id %}'">
+                    <td class="col-no">{{ forloop.counter }}</td>
+                    <td class="col-title">{{ article.title }}</td>
+                    <td class="col-author">{{ article.author }}</td>
+                    <td class="col-date">{{ article.created_at|date:"Y-m-d" }}</td>
+                </tr>
+                {% empty %}
+                {% for _ in articles.paginator.page_range|slice:":10" %}
+                <tr>
+                    <td colspan="4">&nbsp;</td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if articles.paginator.num_pages > 1 %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if articles.has_previous %}
+            <a href="?page=1#notice">&laquo;</a>  <!-- 처음 페이지로 -->
+            <a href="?page={{ articles.previous_page_number }}#notice">&lt;</a>  <!-- 이전 페이지로 -->
+            {% endif %}
+
+            {% for i in articles.paginator.page_range %}
+            <a href="?page={{ i }}#notice" class="{% if articles.number == i %}current{% endif %}">{{ i }}</a>
+            {% endfor %}
+
+            {% if articles.has_next %}
+            <a href="?page={{ articles.next_page_number }}#notice">&gt;</a>  <!-- 다음 페이지로 -->
+            <a href="?page={{ articles.paginator.num_pages }}#notice">&raquo;</a>  <!-- 마지막 페이지로 -->
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+
+</section>
+
+<!-- 수강 후기 -->
+<section class="py-5 px-3 border-bottom component-flex" id="review">
+    <div class="container mt-4">
+        <div class="text-center margin-bt-big component-title">
+            <h2 class="t-n1 fw-bolder big-text">수강 후기</h2>
+        </div>
+        <div class="row row-cols-2 row-cols-md-6 g-2 review-container">
+            {% for review in reviews %}
+            <div class="col" onclick="location.href='{% url 'review_detail' review.id %}'">
+                <div class="review-box p-3">
+                    <p>{{review.school}}</p>
+                    <p>{{review.name}}</p>
+                    <p>{{review.university}}</p>
+                    <p>{{review.major}}</p>
                 </div>
-                <!-- Testimonial 2-->
-                <div class="card">
-                    <div class="card-body p-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0"><i class="bi bi-chat-right-quote-fill text-primary fs-1"></i></div>
-                            <div class="ms-4">
-                                <p class="mb-1">The whole team was a huge help with putting things together for our company and brand. We will be hiring them again in the near future for additional work!</p>
-                                <div class="small text-muted">- Client Name, Location</div>
-                            </div>
-                        </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 오시는 길 -->
+<section class="mb-n3 border-bottom component-flex" id="way">
+    <div class="way nomargin nopadding">
+        <div class="way-container">
+            <div id="map"></div>
+            <div class="way-info">
+                <div class="way-info-title">
+                    <h1 class="t-1 big-text fw-bolder">오시는 길</h1>
+                </div>
+                <div class="way-info-contents">
+                    <div class="info-contents-content">
+                        <h2>Address</h2>
+                        <h5>서울특별시 서초구 신반포로 189 반포쇼핑타운 4동 402호</h5>
+                    </div>
+                    <div class="info-contents-content">
+                        <h2>Contanct</h2>
+                        <h4>02-532-1706</h4>
+                    </div>
+                    <div class="info-contents-content">
+                        <h4>자가용 이용시 주차권 1시간 제공해 드립니다</h4>
                     </div>
                 </div>
             </div>
@@ -118,9 +174,15 @@
         <h5 class="modal-title" id="timetableModalLabel"></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body"></div>
+        <div class="modal-body-custom"></div> <!-- 이미지 들어갈 곳 -->
     </div>
     </div>
 </div>
+  
+{% endblock %}
 
+{% block extra_scripts %}
+<!-- Naver map API -->
+<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v2uy1n9cc7"></script>        
+<script type="module" src="{% static 'scripts/main/main_home.js' %}"></script>
 {% endblock %}

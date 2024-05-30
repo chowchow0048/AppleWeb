@@ -1,0 +1,23 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+{% block extra_css %}<link href="{% static 'css/management/management_home.css' %}" rel="stylesheet" />{% endblock %}
+
+{% block content %}
+<div class="container wth-fl">
+    <!-- <div id="current-time" class="current-time fs-1 text-center my-2">
+        <p id="date-display"></p>
+    </div> -->
+    <h1 class="my-4" >데일리</h1>
+    <div id="school-buttons" class="row d-flex justify-content-center mb-3">
+        <button class="btn btn-primary school-button col-sm-3 mx-1" data-school="세화고">세화고</button>
+        <button class="btn btn-primary school-button col-sm-3 mx-1" data-school="세화여고">세화여고</button>
+        <button class="btn btn-primary school-button col-sm-3 mx-1" data-school="연합반">연합반</button>
+    </div>
+    <div id="courses-list-gr2" class="courses-list mb-5 text-justify px-5 py-2"></div>
+    <div id="courses-list-gr1" class="courses-list mb-2 text-justify px-5 py-2"></div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script type="module" src="{% static 'scripts/management/management_home.js' %}"></script>
+{% endblock extra_scripts %}

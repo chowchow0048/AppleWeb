@@ -1,4 +1,4 @@
 from django.urls import path
 from . import views
 
-urlpatterns = [path("", views.community, name="community")]
+urlpatterns = [path("", views.community_home, name="community_home")]
