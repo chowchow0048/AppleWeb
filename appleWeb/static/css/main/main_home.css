@@ -6,6 +6,11 @@
     margin-top: -2rem !important;
 }
 
+.t-n3{
+    position: relative;
+    top: -3rem;
+}
+
 .t-n2{
     position: relative;
     top: -2rem;
@@ -152,6 +157,7 @@
     font-size: 2rem;
     height: 300px;
     width: 25%;
+    border-radius: 25px;
     background-color: #212529;
     color: white;
     margin-bottom: 0.5rem;
@@ -308,6 +314,7 @@
     height: 200px;
     width: 200px;
     background-color: #212529;
+    border-radius: 25px;
     color: white;
     margin-right: 0.5rem; /* 좌우 스크롤을 위해 마진을 오른쪽에만 추가 */
     /* overflow: auto; */
@@ -347,27 +354,30 @@
 }
 
 .way-info{
-    padding: 20px 0px;
+    padding: 30px 15px;
     width: 40%;
     height: 100%;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; */
 }
 
 .way-info-title{
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .way-info-contents{
     display: flex;
     flex-direction: column;
-    /* padding-left: 1.5rem; */
-    padding: 1.5rem;
 }
 
 .info-contents-content{
-    margin-bottom: 3rem;
+    /* margin-top: 1rem;
+    margin-bottom: 2rem; */
+    margin: 1rem 0;
+    font-weight: 100;
+    /* position: relative; */
+
 }
 
 .iw_inner{

@@ -5,6 +5,11 @@
 {% endblock %}
 
 {% block content %}
+<!-- <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'user_login' %}'">뒤로가기</button> -->
+<!-- <a class="btn-back" href="{% url 'user_login' %}"> < 로그인 화면으로</a> -->
+<a class="btn-back" href="{% url 'user_login' %}">
+    <img class="btn-back-img" src="{% static 'images/arrow.png' %}" alt="뒤로가기">
+</a>
 <header class="py-1 mb-3">
     <h1 class="text-center">회원가입</h1>
     <p class="text-center text-muted">애플과학에 오신 것을 환영합니다.</p>
@@ -29,41 +34,9 @@
                 {% endif %}
             </div>
             {% endfor %}
-        <!-- 선택과목 보류 -->
-        <!-- </div>
-        <div class="mb-3 form-field" id="form-subjects" style="display: none;">
-            <label class="form-label" for="subjects-container">선택과목</label>
-            <div class="mb-3 subjects-junior" id="subjects-junior" style="display: none;">
-                <div class="junior-container checkbox-custom">
-                    <input class="mb-1" type="checkbox" name="integrated_science" id="id_integrated_science" checked>
-                    <label for="id_integrated_science">통합과학</label>
-                </div>
-            </div>
-            <div class="mb-3 subjects-senior" id="subjects-senior" style="display: none;">
-                <div class="senior-container checkbox-custom">
-                    <div class="checkbox-custom-option">
-                        <input type="checkbox" name="physics" id="id_physics">
-                        <label for="id_physics">물리</label>
-                    </div>
-                    <div class="checkbox-custom-option">
-                        <input type="checkbox" name="chemistry" id="id_chemistry">
-                        <label for="id_chemistry">화학</label>
-                    </div>
-                    <div class="checkbox-custom-option">
-                        <input type="checkbox" name="biology" id="id_biology">
-                        <label for="id_biology">생명과학</label>
-                    </div>
-                    <div class="checkbox-custom-option">
-                        <input type="checkbox" name="earth_science" id="id_earth_science">
-                        <label for="id_earth_science">지구과학</label>
-                    </div>
-                </div>    
-            </div>    
-        </div>      -->
-
+        </div>
         <div class="text-center mb-5 d-flex flex-column align-items-center wth-fl">
-            <button type="submit" class="btn btn-primary my-4 wth-fl">회원가입</button>
-            <!-- <button type="button" id="log" class="btn btn-secondary wth-hf" onclick="logFormData()">TEST</button>  -->
+            <button type="submit" class="btn btn-primary my-4 wth-hf">회원가입</button>
         </div>
     </form>
 </div>
@@ -71,105 +44,15 @@
 
 {% block extra_scripts %}
 <script>
-    // 선택과목 보류
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     handleGradeChange();
-    //     handleSubjectCheck();
-    // }); 
-
-    // function handleGradeChange(){
-    //     const gradeField = document.querySelectorAll('[name="grade"]');
-    //     const subjectsForm = document.getElementById('form-subjects');
-    //     const subjectFields = {
-    //         "physics": document.querySelector('[name="physics"]'),
-    //         "chemistry": document.querySelector('[name="chemistry"]'),
-    //         "biology": document.querySelector('[name="biology"]'),
-    //         "earth_science": document.querySelector('[name="earth_science"]'),
-    //         "integrated_science": document.querySelector('[name="integrated_science"]')
-    //     };
-    //     // const juniorSubject = document.getElementById('id_integrated_science');
-    //     const seniorSubjectsContainer = document.getElementById('subjects-senior');
-
-    //     gradeField.forEach(grade => grade.addEventListener("change", function() {
-    //         const whatGrade = this.value;
-
-    //         if(whatGrade === '1학년'){
-    //             subjectsForm.style.display = "none";
-    //             seniorSubjectsContainer.style.display = 'none';
-
-    //             for (const key in subjectFields) {
-    //                 subjectFields[key].checked = (key === "integrated_science");
-    //                 subjectFields[key].disabled = (key !== "integrated_science");
-                    
-    //                 if(subjectFields[key].checked) {
-    //                     subjectFields[key].value = "True"
-    //                 } else {
-    //                     subjectFields[key].value = "False"
-    //                 }
-
-    //                 console.log('grade:', whatGrade,'name:', subjectFields[key].name, 'checked:', subjectFields[key].checked, 'value:', subjectFields[key].value, '\n');
-    //             }
-
-    //         } else {
-    //             subjectsForm.style.display = "";
-    //             seniorSubjectsContainer.style.display = 'flex';
-
-    //             for (const key in subjectFields) {
-    //                 subjectFields[key].checked = false 
-    //                 subjectFields[key].disabled = (key === "integrated_science");
-                    
-    //                 if(subjectFields[key].checked) {
-    //                     subjectFields[key].value = "True"
-    //                 } else {
-    //                     subjectFields[key].value = "False"
-    //                 }
-
-    //                 console.log('grade:', grade,'name:', subjectFields[key].name, 'checked:', subjectFields[key].checked, 'value:', subjectFields[key].value, '\n');
-    //             }
-    //         }   
-    //     }))
-    // }
-  
-    // function handleSubjectCheck() {
-    //     const subjectFields = {
-    //         "physics": document.querySelector('[name="physics"]'),
-    //         "chemistry": document.querySelector('[name="chemistry"]'),
-    //         "biology": document.querySelector('[name="biology"]'),
-    //         "earth_science": document.querySelector('[name="earth_science"]'),
-    //         "integrated_science": document.querySelector('[name="integrated_science"]')
-    //     };
-
-    //     for (const key in subjectFields) {
-    //         subjectFields[key].addEventListener("change", function (){
-    //             this.value = this.checked ? 'True' : 'False';
-    //             console.log('SUBJECT CHECK---','key:', key, 'value:', this.value);
-    //         })
-    //     }
-    // }
-
     function logFormData() {
         const form = document.getElementById('signupForm');
         const formData = new FormData(form);
-        const integrated = document.getElementById('id_integrated_science');
-        const physics = document.getElementById('id_physics');
-        const chemistry = document.getElementById('id_chemistry');
-        const biology = document.getElementById('id_biology');
-        const earth_science = document.getElementById('id_earth_science');
 
         console.log("----- DATA TEST START -----");
         for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
         }
-        // console.log("----- SUBJECTS -----");
-        // console.log(`${integrated.name}: ${integrated.value}`);
-        // console.log(`${physics.name}: ${physics.value}`);
-        // console.log(`${chemistry.name}: ${chemistry.value}`);
-        // console.log(`${biology.name}: ${biology.value}`);
-        // console.log(`${earth_science.name}: ${earth_science.value}`);
-
         console.log("----- DATA TEST END -----");
     }
 </script>
 {% endblock %}
-
-

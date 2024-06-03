@@ -3,20 +3,27 @@
 {% block extra_css %}<link href="{% static 'css/user.css' %}" rel="stylesheet" />{% endblock %}
 
 {% block content %}
+<!-- <button type="button" class="btn btn-secondary back-button" onclick="window.location.href='{% url 'main_home' %}'">뒤로가기</button> -->
+<a class="btn-back" href="{% url 'main_home' %}">
+    <img class="btn-back-img" src="{% static 'images/arrow.png' %}" alt="뒤로가기">
+</a>
 <header class="py-1 mb-3">
-    <!-- <a class="text-center" href="{% url 'main_home' %}">애플과학</a> -->
     <h1 class="text-center">로그인</h1>
     <p class="text-center text-muted">애플과학에 오신 것을 환영합니다.</p>
+    <!-- 뒤로가기 버튼 (추가됨) -->
 </header>
 <div>
+     <!-- 성공 메시지 처리 (추가됨) -->
     {% if messages %}
     <script type="text/javascript">
         window.onload = function() {
             {% for message in messages %}
-                alert("{{ message }}");
+                {% if message.tags == "success" %}
+                    alert("{{ message }}");
+                {% endif %}
             {% endfor %}
         }
-    </script>
+     </script>
     {% endif %}
     <form method="post" class="login-form">
         {% csrf_token %}
@@ -31,10 +38,8 @@
             <div class="mb-4">
                 <label class="form-label" for="password">비밀번호</label>
                 <input class="form-control" type="password" name="password" required>
-                <!-- <a class="login-helper" href="#">계정찾기</a> -->
             </div>
         </div>
-
         <button type="submit" class="btn btn-primary login-btn mb-4">로그인</button>
         <p>
             <span class="fs-6 fw-light">아직 회원이 아니신가요?</span>
@@ -46,3 +51,10 @@
 
 {% block extra_scripts %}
 {% endblock %}
+<style>
+    .back-button {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+</style>

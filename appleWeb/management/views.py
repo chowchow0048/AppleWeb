@@ -258,16 +258,6 @@ def bulk_attendance(request):
     date = timezone.now().date()  # 오늘 날짜를 가져옴
     course_id = request.POST.get("course_id")  # POST 데이터에서 course_id를 가져옴
 
-    # print("BULK ATTENDANCE-------0------")
-    # print("course_id:", course_id, "date:", date)
-    # print(
-    #     "attendance_ids:", request.POST.getlist("attendance")
-    # )  # POST 데이터에서 attendance 리스트를 가져옴
-    # print(
-    #     "absence_ids:", request.POST.getlist("absence")
-    # )  # POST 데이터에서 absence 리스트를 가져옴
-    # print("BULK ATTENDANCE ENDENDENDENEND-------0------")
-
     if not course_id:
         return redirect("management_home")  # course_id가 없으면 홈 페이지로 리디렉션
 
@@ -282,103 +272,106 @@ def bulk_attendance(request):
         "absence"
     )  # POST 데이터에서 absence 리스트를 가져옴
 
-    # 해당 course, date가 일치하는 출석 및 결석 기록을 초기화.
-    Attendance.objects.filter(
-        course=course, date=date
-    ).delete()  # 해당 날짜와 Course에 대한 기존 출석 기록을 삭제
-    Absence.objects.filter(
-        course=course, date=date
-    ).delete()  # 해당 날짜와 Course에 대한 기존 결석 기록을 삭제
+    # 기존 출석 및 결석 기록을 초기화하기 전에 기존 출석 기록의 결제 횟수를 복구
+    old_attendance_records = Attendance.objects.filter(course=course, date=date)
+    old_absence_records = Absence.objects.filter(course=course, date=date)
 
-    # Record new attendance
+    # 기존 출석 기록을 삭제하고, 결제 횟수를 복구합니다
+    for record in old_attendance_records:
+        user = record.student.user  # 학생의 User 객체를 가져옴
+        user.payment_count += 1  # 결제 횟수를 복구
+        user.save()
+
+    old_attendance_records.delete()  # 기존 출석 기록 삭제
+    old_absence_records.delete()  # 기존 결석 기록 삭제
+
+    # 새로운 출석 기록을 생성하고, 결제 횟수를 차감
     for student_id in attendance_ids:
         student = course.course_students.get(
             id=student_id
         )  # student_id에 해당하는 학생을 가져옴
         Attendance.objects.create(
             course=course, student=student, date=date
-        )  # 새로운 출석 기록을 생성
+        )  # 새로운 출석 기록 생성
+        user = student.user  # 학생의 User 객체를 가져옴
+        user.payment_count -= 1  # 결제 횟수를 차감
+        user.save()
 
-    # Record new absence
+    # 새로운 결석 기록을 생성
     for student_id in absence_ids:
         student = course.course_students.get(
             id=student_id
         )  # student_id에 해당하는 학생을 가져옴
         Absence.objects.create(
             course=course, student=student, date=date
-        )  # 새로운 결석 기록을 생성
+        )  # 새로운 결석 기록 생성
 
     return redirect(
         "management_studentlist_detail", course_id=course_id
     )  # 출석부 페이지로 리디렉션
 
-    return redirect("management_home")  # 기본 리디렉션
-
 
 # @login_required
+# @require_POST  # 이 뷰 함수는 POST 요청만 허용
 # def bulk_attendance(request):
-#     if request.method == "POST":
-#         date = timezone.now().date()
-#         # date = '일요일'
-#         course_id = request.POST.get("course_id")
+#     date = timezone.now().date()  # 오늘 날짜를 가져옴
+#     course_id = request.POST.get("course_id")  # POST 데이터에서 course_id를 가져옴
 
-#         print("BULK ATTENDANCE-------0------")
-#         print("course_id:", course_id, "date:", date)
-#         print("attendance_ids:", request.POST.getlist("attendance"))
-#         print("absence_ids:", request.POST.getlist("absence"))
-#         print("BULK ATTENDANCE ENDENDENDENEND-------0------")
+#     # print("BULK ATTENDANCE-------0------")
+#     # print("course_id:", course_id, "date:", date)
+#     # print(
+#     #     "attendance_ids:", request.POST.getlist("attendance")
+#     # )  # POST 데이터에서 attendance 리스트를 가져옴
+#     # print(
+#     #     "absence_ids:", request.POST.getlist("absence")
+#     # )  # POST 데이터에서 absence 리스트를 가져옴
+#     # print("BULK ATTENDANCE ENDENDENDENEND-------0------")
 
-#         if not course_id:
-#             return redirect("management_home")
+#     if not course_id:
+#         return redirect("management_home")  # course_id가 없으면 홈 페이지로 리디렉션
 
-#         course = get_object_or_404(Course, id=course_id)
+#     course = get_object_or_404(
+#         Course, id=course_id
+#     )  # 주어진 course_id에 해당하는 Course 객체를 가져옴
 
-#         attendance_ids = request.POST.getlist("attendance")
-#         absence_ids = request.POST.getlist("absence")
+#     attendance_ids = request.POST.getlist(
+#         "attendance"
+#     )  # POST 데이터에서 attendance 리스트를 가져옴
+#     absence_ids = request.POST.getlist(
+#         "absence"
+#     )  # POST 데이터에서 absence 리스트를 가져옴
 
-#         # Clear previous records for the selected date and course
-#         Attendance.objects.filter(course=course, date=date).delete()
-#         Absence.objects.filter(course=course, date=date).delete()
+#     # 해당 course, date가 일치하는 출석 및 결석 기록을 초기화.
+#     Attendance.objects.filter(
+#         course=course, date=date
+#     ).delete()  # 해당 날짜와 Course에 대한 기존 출석 기록을 삭제
+#     Absence.objects.filter(
+#         course=course, date=date
+#     ).delete()  # 해당 날짜와 Course에 대한 기존 결석 기록을 삭제
 
-#         # Record new attendance
-#         for student_id in attendance_ids:
-#             student = course.course_students.get(id=student_id)
-#             Attendance.objects.create(course=course, student=student, date=date)
+#     # Record new attendance
+#     for student_id in attendance_ids:
+#         student = course.course_students.get(
+#             id=student_id
+#         )  # student_id에 해당하는 학생을 가져옴
+#         Attendance.objects.create(
+#             course=course, student=student, date=date
+#         )  # 새로운 출석 기록을 생성
 
-#         # Record new absence
-#         for student_id in absence_ids:
-#             student = course.course_students.get(id=student_id)
-#             Absence.objects.create(course=course, student=student, date=date)
+#     # Record new absence
+#     for student_id in absence_ids:
+#         student = course.course_students.get(
+#             id=student_id
+#         )  # student_id에 해당하는 학생을 가져옴
+#         Absence.objects.create(
+#             course=course, student=student, date=date
+#         )  # 새로운 결석 기록을 생성
 
-#         return redirect("management_studentlist_detail", course_id=course_id)
+#     return redirect(
+#         "management_studentlist_detail", course_id=course_id
+#     )  # 출석부 페이지로 리디렉션
 
-#     return redirect("management_home")
-
-
-# @login_required
-# def management_studentlist_detail(request, course_id):
-#     course = Course.objects.get(id=course_id)
-#     students = course.course_students.all()
-#     today = timezone.now().date()
-#     # 각 학생별로 출석체크 여부를 확인
-#     attendance_records = {
-#         attendance.student.id: attendance
-#         for attendance in Attendance.objects.filter(course=course, date=today)
-#     }
-#     absence_records = {
-#         absence.student.id: absence
-#         for absence in Absence.objects.filter(course=course, date=today)
-#     }
-#     return render(
-#         request,
-#         "management/management_studentlist_detail.html",
-#         {
-#             "course": course,
-#             "students": students,
-#             "attendance_records": attendance_records,
-#             "absence_records": absence_records,
-#         },
-#     )
+#     return redirect("management_home")  # 기본 리디렉션
 
 
 @login_required

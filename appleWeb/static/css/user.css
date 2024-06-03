@@ -1,3 +1,20 @@
+.btn-back{
+    position: relative;
+    left: 1rem;
+    top: -1.5rem;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.btn-back-img{
+    width: 2rem;
+    /* transition: all 0.5s linear;
+
+    &:hover{
+        background-color: tomato;
+    } */
+}
+
 .login-form{
     display: flex;
     flex-direction: column;
