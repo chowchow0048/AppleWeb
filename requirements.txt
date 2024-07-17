@@ -18,6 +18,7 @@ distlib==0.3.6
 Django==4.2.3
 psycopg2-binary==2.9.3
 gunicorn==20.1.0
+google-generativeai==0.1.0rc2
 django-widget-tweaks==1.5.0
 docutils==0.18.1
 et-xmlfile==1.1.0
@@ -33,7 +34,6 @@ google-api-core==2.19.0
 google-api-python-client==2.134.0
 google-auth==2.30.0
 google-auth-httplib2==0.2.0
-google-generativeai==0.7.0
 googleapis-common-protos==1.63.1
 greenlet==2.0.2
 grpcio==1.64.1
