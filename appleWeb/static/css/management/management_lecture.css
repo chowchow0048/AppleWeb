@@ -76,7 +76,7 @@
 }
 
 
-#selectAllAttendance, #selectAllAbsence{
+#selectAllAttendance, #selectAllAbsence, #selectAllPayments{
     text-decoration: none;
     font-size: large;
     font-weight: 350;
@@ -100,6 +100,17 @@
 
     &:hover{
         background-color: rgb(220, 61, 61);
+        color: white;
+    }
+}
+
+#selectAllPayments{
+    animation: 0.5s linear;
+
+    &:hover{
+        /* background-color: rgb(38, 107, 255); */
+        /* background-color: tomato; */
+        background-color: rgb(84, 196, 120);
         color: white;
     }
 }

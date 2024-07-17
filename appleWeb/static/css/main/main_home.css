@@ -1,385 +1,372 @@
+/* main_home.css */
 .nopadding {
-  padding:0 !important;
-}
-
-.mt-n3 {
-    margin-top: -2rem !important;
-}
-
-.t-n3{
-    position: relative;
-    top: -3rem;
-}
-
-.t-n2{
-    position: relative;
-    top: -2rem;
-}
-
-.t-n1{
-    position: relative;
-    top: -1rem;
-}
-
-.t-0{
-    position: relative;
-    top: 0;
-}
-
-.t-1{
-    position: relative;
-    top: 1rem;
-}
-
-.t-2{
-    position: relative;
-    top: 2rem;
-}
-
-.t-3{
-    position: relative;
-    top: 3rem;
-}
-
-.mb-n3{
-    margin-bottom: -3rem !important;
-}
-
-.nomargin{
-  margin: 0 !important;
-}
-
-.bigger-text{
-    font-size: 4rem;
-}
-
-.big-text{
-    font-size: 3rem;
-}
-
-.margin-bt-big{
-    margin-bottom: 3rem;
-}
-
-.component-flex{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    /* align-items: stretch; */
-}
-
-.component-height{
-    /* height: 90vh; */
-    height: 720px;
-    /* height: 100%; */
-    /* height: auto; */
-    /* height: 600px; */
-}
-
-.component-title{
-    position: relative;
-    top: 30px;
-}
-
-/* ======================================================================== */
-/* ================================ HEADER ================================ */
-/* ======================================================================== */
-
-/* 배경 */
-.backSky {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    /* background: linear-gradient(to right, #111, #0e0f19);   */
-    background-color: rgb(0, 0, 0);
-    overflow: hidden;
-}
+    padding:0 !important;
+  }
   
-/* 별을 감싼 부모 */
-.sky {
-    width: 100vw;
-    /* height: 100vw; */
-    height: 200vh;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: moveStar 240s linear infinite;
-}
+  .mt-n3 {
+      margin-top: -2rem !important;
+  }
   
+  .t-n3{
+      position: relative;
+      top: -3rem;
+  }
+  
+  .t-n2{
+      position: relative;
+      top: -2rem;
+  }
+  
+  .t-n1{
+      position: relative;
+      top: -1rem;
+  }
+  
+  .t-0{
+      position: relative;
+      top: 0;
+  }
+  
+  .t-1{
+      position: relative;
+      top: 1rem;
+  }
+  
+  .t-2{
+      position: relative;
+      top: 2rem;
+  }
+  
+  .t-3{
+      position: relative;
+      top: 3rem;
+  }
+  
+  .mb-n3{
+      margin-bottom: -3rem !important;
+  }
+  
+  .nomargin{
+    margin: 0 !important;
+  }
+  
+  .bigger-text{
+      font-size: 4rem;
+  }
+  
+  .big-text{
+      font-size: 3rem;
+  }
+  
+  .margin-bt-big{
+      margin-bottom: 3rem;
+  }
+  
+  .component-flex{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+  }
+  
+  .component-height{
+      height: 720px;
+  }
+  
+  .component-title{
+      position: relative;
+      top: 30px;
+  }
+  
+  @media (max-width: 576px) {
+      .header .container {
+          padding: 0 1rem;
+      }
+      .timetable-box, .review-box {
+          font-size: 0.875rem;
+      }
+      .way-info-title h2 {
+          font-size: 1.5rem;
+      }
+  
+      .timetable-box, .review-box {
+          font-size: 0.875rem;
+      }
+      .way-info-title h2 {
+          font-size: 1.5rem;
+      }
+  }
+  
+  /* ======================================================================== */
+  /* ================================ HEADER ================================ */
+  /* ======================================================================== */
+  
+  /* 배경 */
+  .backSky {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      background-color: rgb(0, 0, 0);
+      overflow: hidden;
+  }
+    
+  /* 별을 감싼 부모 */
+  .sky {
+      width: 100vw;
+      height: 200vh;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: moveStar 240s linear infinite;
+  }
+    
   /* 별 */
-.sky .star {
-    fill: #ffffff;
-    stroke: none;
-    stroke-width: 0;
-}
-  
+  .sky .star {
+      fill: #ffffff;
+      stroke: none;
+      stroke-width: 0;
+  }
+    
   /* 별 이동효과 */
-@keyframes moveStar {
-    from {
-      transform: translate(-50%, -50%) rotate(0);
-    }
+  @keyframes moveStar {
+      from {
+        transform: translate(-50%, -50%) rotate(0);
+      }
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+  }
   
-    to {
-      transform: translate(-50%, -50%) rotate(360deg);
-    }
-}
-
-.header-height{
-    height: 95vh;
-}
-
-.header{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.406);
-}
-
-/* ======================================================================== */
-/* =============================== TIMETABLE ============================== */
-/* ======================================================================== */
-
-.timetable-title{
-    margin-bottom: 3rem;
-}
-
-.timetable-container{
-    display: flex;
-    justify-content: space-evenly;
-    height: auto;
-}
-
-.timetable-box{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    height: 300px;
-    width: 25%;
-    border-radius: 25px;
-    background-color: #212529;
-    color: white;
-    margin-bottom: 0.5rem;
-
-    animation: slideUp 0.5s ease-out forwards;
-    opacity: 0;
-}
+  .header-height{
+      height: 95vh;
+  }
   
-.timetable-box:hover{
-    transition-duration: 0.3s;
-    background-color: white;
-    color: #212529;
-    outline: none;
-}
-
-.timetable-box.animate {
-    animation: slideUp 0.5s ease-out forwards;
-}
-
-@keyframes slideUp{
-    from {
-        transform: translateY((100%));
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);;
-        opacity: 1;
-    }
-}
-
-.modal-body-custom{
-    min-width: 70%;
-    height: auto;
-    margin: auto;
-}
-
-/* ======================================================================== */
-/* ================================ NOTICE ================================ */
-/* ======================================================================== */
-
-.table{
-    /* min-height: 400px; */
-    /* min-height: 50vh; */
-    margin-bottom: 50px;
-    border: 1px solid black;
-}
-
-.article-container{
-    min-height: 600px;
-    margin-bottom: 50px;
-    border: 1px solid black;
-}
-
-.article-header{
-    border-bottom: 1px solid rgba(33, 33, 33, 0.419)!important;
-}
-
-.article-header__title{
-    border-bottom: 1px solid rgba(33, 33, 33, 0.419)!important;
-    padding: 10px 5px;
-}
-
-.article-header__info{
-    padding: 10px 5px;
-}
-
-.article-body {
-    overflow-wrap: break-word; /* 긴 단어가 요소 경계를 넘어갈 때 자동으로 줄바꿈 */
-    word-break: break-word; /* 단어의 경계에서도 줄바꿈이 일어나도록 설정 (비표준 속성으로, 대부분의 브라우저에서는 'break-all'과 비슷하게 동작) */
-    min-height: 500px;
-}
-
-.col-no {
-    width: 5%;
-}
-
-.col-title {
-    width: 65%;
-}
-
-.col-author {
-    width: 15%;
-}
-
-.col-date {
-    width: 15%;
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.pagination .step-links {
-    font-size: 1.2rem;
-}
-
-.pagination .step-links a {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    color: #333;
-}
-
-.pagination .step-links .current {
-    margin: 0 5px;
-    padding: 5px 10px;
-    background: #eee;
-}
-
-/* .pagination .step {
-    text-decoration: none;
-    cursor: pointer;
-} */
-
-.pagination .step-links a {
-    padding: 5px 10px;
-    margin: 0 2px;
-    border: 1px solid #ddd;
-    text-decoration: none;
-}
-
-.pagination .step-links a.current {
-    font-weight: bold;
-    background-color: gray;  /* 회색 배경 */
-    color: white;  /* 텍스트 색상 */
-    border-radius: 50%;  /* 원형 디자인 */
-}
-
-
-/* ======================================================================== */
-/* ================================ REVIEW ================================ */
-/* ======================================================================== */
-.review-container {
-    display: flex;
-    flex-wrap: wrap;
-    /* overflow-x: auto; */
-    overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    margin: 2rem 0 2rem 0;
-    height: 50%;
-    max-height: 70vh;
-}
-
-.review-container::-webkit-scrollbar{
-    display: none;
-}
-
-.review-box {
-    flex: 0 0 auto; /* flex-basis를 auto로 설정하여 박스 크기가 내용에 따라 결정되도록 함 */
-    font-size: 1.3rem;
-    height: 200px;
-    width: 200px;
-    background-color: #212529;
-    border-radius: 25px;
-    color: white;
-    margin-right: 0.5rem; /* 좌우 스크롤을 위해 마진을 오른쪽에만 추가 */
-    /* overflow: auto; */
-}
-
-.review-box:hover{
-    transition-duration: 0.3s;
-    background-color: white;
-    color: #212529;
-    outline: none;
-}
-
-/* ======================================================================== */
-/* ================================== WAY ================================= */
-/* ======================================================================== */
-.way{
-    /* height: 720px; */
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-#map{
-    width: 100%;
-    height: 800px;
-}
-
-.way-container{
-    position: relative;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.way-info{
-    padding: 30px 15px;
-    width: 40%;
-    height: 100%;
-    /* display: flex;
-    flex-direction: column;
-    align-items: center; */
-}
-
-.way-info-title{
-    margin-bottom: 2rem;
-}
-
-.way-info-contents{
-    display: flex;
-    flex-direction: column;
-}
-
-.info-contents-content{
-    /* margin-top: 1rem;
-    margin-bottom: 2rem; */
-    margin: 1rem 0;
-    font-weight: 100;
-    /* position: relative; */
-
-}
-
-.iw_inner{
-    color: black;
-}
+  .header{
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.406);
+  }
+  
+  /* ======================================================================== */
+  /* =============================== TIMETABLE ============================== */
+  /* ======================================================================== */
+  
+  .timetable-title{
+      margin-bottom: 3rem;
+  }
+  
+  .timetable-container{
+      display: flex;
+      justify-content: space-evenly;
+      height: auto;
+  }
+  
+  .timetable-box{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      height: 300px;
+      width: 25%;
+      border-radius: 25px;
+      background-color: #212529;
+      color: white;
+      margin-bottom: 0.5rem;
+      animation: slideUp 0.5s ease-out forwards;
+      opacity: 0;
+  }
+    
+  .timetable-box:hover{
+      transition-duration: 0.3s;
+      background-color: white;
+      color: #212529;
+      outline: none;
+  }
+  
+  .timetable-box.animate {
+      animation: slideUp 0.5s ease-out forwards;
+  }
+  
+  @keyframes slideUp{
+      from {
+          transform: translateY((100%));
+          opacity: 0;
+      }
+      to {
+          transform: translateY(0);;
+          opacity: 1;
+      }
+  }
+  
+  .modal-body-custom{
+      min-width: 70%;
+      height: auto;
+      margin: auto;
+  }
+  
+  /* ======================================================================== */
+  /* ================================ NOTICE ================================ */
+  /* ======================================================================== */
+  
+  .table{
+      margin-bottom: 50px;
+      border: 1px solid black;
+  }
+  
+  .article-container{
+      min-height: 600px;
+      margin-bottom: 50px;
+      border: 1px solid black;
+  }
+  
+  .article-header{
+      border-bottom: 1px solid rgba(33, 33, 33, 0.419)!important;
+  }
+  
+  .article-header__title{
+      border-bottom: 1px solid rgba(33, 33, 33, 0.419)!important;
+      padding: 10px 5px;
+  }
+  
+  .article-header__info{
+      padding: 10px 5px;
+  }
+  
+  .article-body {
+      overflow-wrap: break-word;
+      word-break: break-word;
+      min-height: 500px;
+  }
+  
+  .col-no {
+      width: 5%;
+  }
+  
+  .col-title {
+      width: 65%;
+  }
+  
+  .col-author {
+      width: 15%;
+  }
+  
+  .col-date {
+      width: 15%;
+  }
+  
+  .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+  }
+  
+  .pagination .step-links {
+      font-size: 1.2rem;
+  }
+  
+  .pagination .step-links a {
+      margin: 0 5px;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      color: #333;
+  }
+  
+  .pagination .step-links .current {
+      margin: 0 5px;
+      padding: 5px 10px;
+      background: #eee;
+  }
+  
+  .pagination .step-links a.current {
+      font-weight: bold;
+      background-color: gray;
+      color: white;
+      border-radius: 50%;
+  }
+  
+  /* ======================================================================== */
+  /* ================================ REVIEW ================================ */
+  /* ======================================================================== */
+  .review-container {
+      display: flex;
+      flex-wrap: wrap;
+      overflow-y: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      margin: 2rem 0 2rem 0;
+      height: 50%;
+      max-height: 70vh;
+  }
+  
+  .review-container::-webkit-scrollbar{
+      display: none;
+  }
+  
+  .review-box {
+      flex: 0 0 auto;
+      font-size: 1.3rem;
+      height: 200px;
+      width: 200px;
+      background-color: #212529;
+      border-radius: 25px;
+      color: white;
+      margin-right: 0.5rem;
+  }
+  
+  .review-box:hover{
+      transition-duration: 0.3s;
+      background-color: white;
+      color: #212529;
+      outline: none;
+  }
+  
+  /* ======================================================================== */
+  /* ================================== WAY ================================= */
+  /* ======================================================================== */
+  .way{
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+  }
+  
+  #map{
+      width: 100%;
+      height: 800px;
+  }
+  
+  .way-container{
+      position: relative;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
+  
+  .way-info{
+      padding: 30px 15px;
+      width: 40%;
+      height: 100%;
+  }
+  
+  .way-info-title{
+      margin-bottom: 2rem;
+  }
+  
+  .way-info-contents{
+      display: flex;
+      flex-direction: column;
+  }
+  
+  .info-contents-content{
+      margin: 1rem 0;
+      font-weight: 100;
+  }
+  
+  .iw_inner{
+      color: black;
+  }
+  

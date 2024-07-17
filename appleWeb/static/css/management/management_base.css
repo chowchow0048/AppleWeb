@@ -20,6 +20,23 @@
   display: flex;
 }
 
+.btn-thd{
+  background-color:#D0E3F7 ;
+  color: #007AFF;
+}
+
+.btn.active {
+  background-color: #2e1cd0 !important;
+  border-color: rgba(0, 0, 119, 0.065) !important;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19) !important;
+  color: white !important;
+}
+
+.btn-second{
+  background-color: #E6E6E7;
+  color: #292929;
+}
+
 .disable{
   pointer-events: none;
 }
@@ -30,11 +47,6 @@
 
 .nopadding{
   padding: 0;
-}
-
-.btn.active {
-  background-color: #007B; /* 예시로 파란색 배경 설정 */
-  color: white;
 }
 
 /* 테이블 헤더 스타일 */

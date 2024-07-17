@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse, HttpResponse
-from django.contrib.auth.decorators import login_required
+from common.decorators import manager_required
 from common.models import Course, User, Attendance, Absence
 from django.utils import timezone
 from django.db import transaction
@@ -11,11 +10,9 @@ from openpyxl.styles import Alignment
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
 import pandas as pd
-import datetime
-import json
 
 
-@login_required
+@manager_required
 def api_students(request):
     school = request.GET.get("school")
     grade = request.GET.get("grade")
@@ -42,13 +39,18 @@ def api_students(request):
     return JsonResponse(students_data, safe=False)
 
 
-@login_required
+@manager_required
 def api_courses(request):
     day = request.GET.get("day")
     school = request.GET.get("school")
-    courses = Course.objects.filter(course_day=day, course_school=school)
-    # 시연용 일요일 수업 불러오기 코드
-    # courses = Course.objects.filter(course_day="일요일", course_school=school)
+    courses = Course.objects.filter(
+        course_day=day, course_school=school, is_active=True
+    )
+
+    # Testing: 일요일 수업만
+    # courses = Course.objects.filter(
+    #     course_day="일요일", course_school=school, is_active=True
+    # )
 
     data = [
         {
@@ -62,82 +64,7 @@ def api_courses(request):
     return JsonResponse(data, safe=False)
 
 
-@login_required
-@csrf_exempt
-def record_attendance(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            student_id = data.get("student_id")
-            course_id = data.get("course_id")
-
-            with transaction.atomic():  # Ensure the atomicity of the transaction
-                student = User.objects.select_for_update().get(id=student_id)
-                course = Course.objects.get(id=course_id)
-
-                # Update payment count and request
-                student.payment_count -= 1
-                if student.payment_count == 0:
-                    student.payment_request = True
-                student.save()
-
-                # Create attendance record
-                Attendance.objects.create(
-                    student=student, course=course, date=timezone.now().date()
-                )
-
-            return JsonResponse(
-                {
-                    "status": "success",
-                    "message": "Attendance recorded and payment count updated.",
-                }
-            )
-        except json.JSONDecodeError:
-            return JsonResponse(
-                {"status": "error", "message": "Invalid JSON"}, status=400
-            )
-        except User.DoesNotExist:
-            return JsonResponse(
-                {"status": "error", "message": "Student not found"}, status=404
-            )
-        except Course.DoesNotExist:
-            return JsonResponse(
-                {"status": "error", "message": "Course not found"}, status=404
-            )
-        except Exception as e:
-            return JsonResponse({"status": "error", "message": str(e)}, status=500)
-    else:
-        return JsonResponse(
-            {"status": "error", "message": "Invalid request"}, status=400
-        )
-
-
-@login_required
-@require_POST
-def record_absence(request):
-    try:
-        data = json.loads(request.body)
-        student_id = data["student_id"]
-        course_id = data["course_id"]
-
-        with transaction.atomic():
-            student = get_object_or_404(User, pk=student_id)
-            course = get_object_or_404(Course, pk=course_id)
-            Absence.objects.create(
-                student=student, course=course, date=timezone.now().date()
-            )
-
-        return JsonResponse({"status": "success", "message": "결석이 기록되었습니다."})
-    except json.JSONDecodeError as e:
-        return JsonResponse(
-            {"status": "error", "message": "잘못된 JSON 형식입니다: " + str(e)},
-            status=400,
-        )
-    except Exception as e:
-        return JsonResponse({"status": "error", "message": str(e)}, status=500)
-
-
-@login_required
+@manager_required
 def export_attendance_to_excel(request, course_id):
     course = Course.objects.get(id=course_id)
     students = course.course_students.all()  # 코스에 등록된 모든 학생들을 불러옴
@@ -188,42 +115,22 @@ def export_attendance_to_excel(request, course_id):
     return response
 
 
-@login_required
-@require_POST
-def confirm_payment(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
-    if user.grade == "1학년":
-        user.payment_count += 4
-    else:
-        user.payment_count += 12
-    user.payment_request = False
-    user.save()
-
-    return JsonResponse(
-        {
-            "message": "Payment confirmed successfully",
-            "payment_count": user.payment_count,
-        }
-    )
-
-
-@login_required
+@manager_required
 def management_home(request):
     return render(request, "management/management_home.html")
 
 
-@login_required
+@manager_required
 def management_studentlist(request):
     return render(request, "management/management_studentlist.html")
 
 
-@login_required
-def management_studentlist_detail(request, course_id):
+@manager_required
+def management_lecture(request, course_id):
     course = Course.objects.get(id=course_id)
     students = course.course_students.all()
     today = timezone.now().date()
 
-    print("STUDENTLIST DETAIL-------")
     print("course:", course)
     print("students:", students)
     print("course_id:", course_id)
@@ -239,10 +146,9 @@ def management_studentlist_detail(request, course_id):
         for absence in Absence.objects.filter(course=course, date=today)
     }
 
-    print("STUDENTLIST DETAIL END-------")
     return render(
         request,
-        "management/management_studentlist_detail.html",
+        "management/management_lecture.html",
         {
             "course": course,
             "students": students,
@@ -252,7 +158,7 @@ def management_studentlist_detail(request, course_id):
     )
 
 
-@login_required
+@manager_required
 @require_POST  # 이 뷰 함수는 POST 요청만 허용
 def bulk_attendance(request):
     date = timezone.now().date()  # 오늘 날짜를 가져옴
@@ -278,9 +184,9 @@ def bulk_attendance(request):
 
     # 기존 출석 기록을 삭제하고, 결제 횟수를 복구합니다
     for record in old_attendance_records:
-        user = record.student.user  # 학생의 User 객체를 가져옴
-        user.payment_count += 1  # 결제 횟수를 복구
-        user.save()
+        student = record.student  # 학생 객체를 가져옴
+        student.payment_count += 1  # 결제 횟수를 복구
+        student.save()
 
     old_attendance_records.delete()  # 기존 출석 기록 삭제
     old_absence_records.delete()  # 기존 결석 기록 삭제
@@ -293,9 +199,11 @@ def bulk_attendance(request):
         Attendance.objects.create(
             course=course, student=student, date=date
         )  # 새로운 출석 기록 생성
-        user = student.user  # 학생의 User 객체를 가져옴
-        user.payment_count -= 1  # 결제 횟수를 차감
-        user.save()
+        student.payment_count -= 1  # 결제 횟수를 차감
+        if student.payment_count <= 0:
+            student.payment_request = True
+
+        student.save()
 
     # 새로운 결석 기록을 생성
     for student_id in absence_ids:
@@ -307,74 +215,11 @@ def bulk_attendance(request):
         )  # 새로운 결석 기록 생성
 
     return redirect(
-        "management_studentlist_detail", course_id=course_id
+        "management_lecture", course_id=course_id
     )  # 출석부 페이지로 리디렉션
 
 
-# @login_required
-# @require_POST  # 이 뷰 함수는 POST 요청만 허용
-# def bulk_attendance(request):
-#     date = timezone.now().date()  # 오늘 날짜를 가져옴
-#     course_id = request.POST.get("course_id")  # POST 데이터에서 course_id를 가져옴
-
-#     # print("BULK ATTENDANCE-------0------")
-#     # print("course_id:", course_id, "date:", date)
-#     # print(
-#     #     "attendance_ids:", request.POST.getlist("attendance")
-#     # )  # POST 데이터에서 attendance 리스트를 가져옴
-#     # print(
-#     #     "absence_ids:", request.POST.getlist("absence")
-#     # )  # POST 데이터에서 absence 리스트를 가져옴
-#     # print("BULK ATTENDANCE ENDENDENDENEND-------0------")
-
-#     if not course_id:
-#         return redirect("management_home")  # course_id가 없으면 홈 페이지로 리디렉션
-
-#     course = get_object_or_404(
-#         Course, id=course_id
-#     )  # 주어진 course_id에 해당하는 Course 객체를 가져옴
-
-#     attendance_ids = request.POST.getlist(
-#         "attendance"
-#     )  # POST 데이터에서 attendance 리스트를 가져옴
-#     absence_ids = request.POST.getlist(
-#         "absence"
-#     )  # POST 데이터에서 absence 리스트를 가져옴
-
-#     # 해당 course, date가 일치하는 출석 및 결석 기록을 초기화.
-#     Attendance.objects.filter(
-#         course=course, date=date
-#     ).delete()  # 해당 날짜와 Course에 대한 기존 출석 기록을 삭제
-#     Absence.objects.filter(
-#         course=course, date=date
-#     ).delete()  # 해당 날짜와 Course에 대한 기존 결석 기록을 삭제
-
-#     # Record new attendance
-#     for student_id in attendance_ids:
-#         student = course.course_students.get(
-#             id=student_id
-#         )  # student_id에 해당하는 학생을 가져옴
-#         Attendance.objects.create(
-#             course=course, student=student, date=date
-#         )  # 새로운 출석 기록을 생성
-
-#     # Record new absence
-#     for student_id in absence_ids:
-#         student = course.course_students.get(
-#             id=student_id
-#         )  # student_id에 해당하는 학생을 가져옴
-#         Absence.objects.create(
-#             course=course, student=student, date=date
-#         )  # 새로운 결석 기록을 생성
-
-#     return redirect(
-#         "management_studentlist_detail", course_id=course_id
-#     )  # 출석부 페이지로 리디렉션
-
-#     return redirect("management_home")  # 기본 리디렉션
-
-
-@login_required
+@manager_required
 def management_student_detail(request, student_id):
     student = get_object_or_404(User, pk=student_id)
     attendances = Attendance.objects.filter(student=student).order_by("attended_at")
@@ -390,7 +235,47 @@ def management_student_detail(request, student_id):
     return render(request, "management/management_student_detail.html", context)
 
 
-@login_required
+@manager_required
+@require_POST  # 이 뷰 함수는 POST 요청만 허용
+def confirm_payment(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+
+    # 수강하고있는 강의 수 만큼 결제횟수 갱신
+    course_count = user.enrolled_courses.count()
+    user.payment_count += course_count * 4  # 기존 payment_count에 course 수 x 4를 더함
+    user.payment_request = False
+    user.latest_payment = timezone.now().date()  # 최근 결제 날짜를 오늘 날짜로 설정
+    user.save()
+
+    return JsonResponse(
+        {
+            "message": "결제 요청 완료",
+            "payment_count": user.payment_count,
+        }
+    )
+
+
+# @manager_required
+# @require_POST  # 이 뷰 함수는 POST 요청만 허용
+# def confirm_payment(request, user_id):
+#     user = get_object_or_404(User, pk=user_id)
+#     if user.grade == "1학년":
+#         user.payment_count = 4
+#     else:
+#         user.payment_count = 12
+#     user.payment_request = False
+#     user.latest_payment = timezone.now().date()  # 최근 결제 날짜를 오늘 날짜로 설정
+#     user.save()
+
+#     return JsonResponse(
+#         {
+#             "message": "결제 요청 완료",
+#             "payment_count": user.payment_count,
+#         }
+#     )
+
+
+@manager_required
 def management_paylist(request):
     users_with_payment_request = User.objects.filter(payment_request=True)
     users_with_payment_request = [
@@ -413,16 +298,72 @@ def management_paylist(request):
     )
 
 
+@manager_required
+def management_waitList(request):
+    return render(request, "management/management_waitlist.html")
+
+
+@manager_required
+def management_blacklist(request):
+    return render(request, "management/management_blacklist.html")
+
+
 # Not neccessary
 # def management_notice(request):
 #     return render(request, "management/management_notice.html")
 
 
-@login_required
-def management_waitList(request):
-    return render(request, "management/management_waitlist.html")
+# 보류
+# @login_required
+# def api_special_lecture_students(request):
+#     school = request.GET.get("school")
+#     grade = request.GET.get("grade")
+#     subject = request.GET.get("subject")
+#     print("--------------------", "\n", school, grade, subject)
+#     students_query = User.objects.filter(is_active=True)  # 활성화된 사용자만 조회
+
+#     if school:
+#         students_query = students_query.filter(school=school)
+#     if grade and grade != "전체":
+#         students_query = students_query.filter(grade=grade)
+#     if subject:
+#         students_query = students_query.filter(courses__course_subject=subject)
+
+#     students_data = [
+#         {
+#             "id": student.id,
+#             "school": student.school,
+#             "grade": student.grade,
+#             "name": student.name,
+#             "phone": student.phone,
+#             "parent_phone": student.parent_phone,
+#             "payment_count": student.payment_count,
+#         }
+#         for student in students_query
+#     ]
+
+#     return JsonResponse({"students": students_data}, safe=False)
 
 
-@login_required
-def management_blacklist(request):
-    return render(request, "management/management_blacklist.html")
+# 보류
+# @login_required
+# def management_special_lecture(request):
+#     school = request.user.school
+#     grade = request.user.grade
+#     students = User.objects.filter(school=school, grade=grade)
+#     return render(
+#         request, "management/management_special_lecture.html", {"students": students}
+#     )
+
+
+# 보류
+# @login_required
+# def record_special_lecture_attendance(request):
+#     if request.method == "POST":
+#         attendance_ids = request.POST.getlist("attendance")
+#         students = User.objects.filter(id__in=attendance_ids)
+#         for student in students:
+#             student.payment_count -= 1
+#             student.save()
+#         return redirect("management_home")
+#     return redirect("management_special_lecture")

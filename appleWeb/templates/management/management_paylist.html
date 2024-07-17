@@ -2,12 +2,12 @@
 {% load static %}
 
 {% block extra_css %}
-<link href="{% static 'css/management/management_studentlist.css' %}" rel="stylesheet" />
+<link href="{% static 'css/management/management_paylist.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1 class="my-4" >결제 요청 목록</h1>
+    <h1 class="my-4">결제 요청 목록</h1>
     <table class="table">
         <thead id="mngpl-thead">
             <tr>
@@ -17,7 +17,7 @@
                 <th>전화번호</th>
                 <th>부모님 전화번호</th>
                 <th>수업 초과 횟수</th>
-                <th>결제 확인</th>
+                <th><button type="button" id="selectAllPayments" class="btn btn-link">결제 확인</button></th>
             </tr>
         </thead>
         <tbody id="mngpl-tbody">
@@ -33,7 +33,7 @@
                 {% endif %}
                 <td>{{ user.parent_phone }}</td>
                 <td>{{ user.payment_count }}</td>
-                <td><button class="btn btn-primary" onclick="confirmPayment({{ user.id }}, '{{ user.school }}', '{{ user.grade }}', '{{ user.name }}', {{ user.payment_count }})">결제 확인</button></td>
+                <td><input type="checkbox" class="payment-checkbox" data-user-id="{{ user.id }}"></td>
             </tr>
             {% empty %}
             <tr>
@@ -42,6 +42,9 @@
             {% endfor %}
         </tbody>
     </table>
+    <div class="text-center mt-4">
+        <button type="button" class="btn btn-primary" id="processPayments">결제 확인 처리</button>
+    </div>
 </div>
 {% endblock %}
 

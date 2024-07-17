@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     updateTime();
+    updateTimer();
     setInterval(updateTimer, 1000);
     setInterval(updateTime, 1000);
 });
 
 
 document.addEventListener('DOMContentLoaded', event => {
-    // Toggle the side navigation
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
     if (sidebarToggle) {
         // Uncomment Below to persist sidebar toggle between refreshes
@@ -23,11 +23,14 @@ document.addEventListener('DOMContentLoaded', event => {
 
 });
 
+let sessionTime = 90 * 60;  // 90분을 초로 환산
+
 function updateTimer() {
-    var sessionTime = 90 * 60;  // 90분을 초로 환산
-    var timerElement = document.getElementById('sessionTimer');
-    var minutes = parseInt(sessionTime / 60, 10);
-    var seconds = parseInt(sessionTime % 60, 10);
+    const timerElement = document.getElementById('sessionTimer');
+    if (!timerElement) return;
+
+    let minutes = parseInt(sessionTime / 60, 10);
+    let seconds = parseInt(sessionTime % 60, 10);
 
     minutes = minutes < 10 ? "0" + minutes : minutes;
     seconds = seconds < 10 ? "0" + seconds : seconds;
@@ -41,11 +44,9 @@ function updateTimer() {
     if (sessionTime < 0) {
         clearInterval(timerInterval);
         alert('세션 만료되었습니다. 다시 로그인 해주세요.');
-        window.location = "{% url 'user_login' %}"; // 로그인 페이지로 리다이렉션
+        window.location = "{% url 'user_login' %}"; // 로그인 페이지로 리디렉션
     }
 }
-
-
 
 function updateTime() {
     const now = new Date();
@@ -54,14 +55,16 @@ function updateTime() {
     const date = ('0' + now.getDate()).slice(-2);
     const hours = ('0' + now.getHours()).slice(-2);
     const minutes = ('0' + now.getMinutes()).slice(-2);
-    const seconds = ('0' + now.getSeconds()).slice(-2);
     const day = now.toLocaleDateString('ko-KR', { weekday: 'long' });
 
     const formattedDate = `${year}-${month}-${date}`;
-    // const formattedTime = `${hours}:${minutes}:${seconds}`;
     const formattedTime = `${hours}:${minutes}`;
     const displayString = `${formattedDate} \t ${formattedTime} \t ${day}`;
-    // const displayString = `${formattedDate} \t ${formattedTime} 일요일`; // 시연용
     
-    document.getElementById('date-display').textContent = displayString;
-}
+    const dateDisplayElement = document.getElementById('date-display');
+    if (dateDisplayElement) {
+        dateDisplayElement.textContent = displayString;
+    }
+}x
+
+// const seconds = ('0' + now.getSeconds()).slice(-2);

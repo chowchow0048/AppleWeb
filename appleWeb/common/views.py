@@ -80,46 +80,6 @@ def login_view(request):
         return render(request, "user/user_login.html")
 
 
-# def login_view(request):
-#     # POST 요청일 때만 로그인 시도
-#     if request.method == "POST":
-#         # 폼으로부터 사용자 이름과 비밀번호 가져오기
-#         username = request.POST["username"]
-#         password = request.POST["password"]
-#         # authenticate 함수: req, username, password를 유효한지 확인
-#         user = authenticate(request, username=username, password=password)
-#         # 유효하다면
-#         if user is not None:
-#             # 계정이 활성화된 경우
-#             if user.is_active:
-#                 # 로그인
-#                 login(request, user)
-#                 # 지정한 페이지로 redirect
-#                 return redirect("community_home")
-#             # 계정이 활성화되지 않은 경우 (추가됨)
-#             else:
-#                 print("비활성", messages.error)
-#                 return render(
-#                     request,
-#                     "user/user_login.html",
-#                     {"error": "활성화되지 않은 계정입니다."},
-#                 )
-#         # 유효하지 않다면
-#         else:
-#             # 아이디 틀렸을 때, 비밀번호 틀렸을 때 추가?
-#             # 로그인 페이지로 redirect
-#             print("아이디비번에러", messages.error)
-#             return render(
-#                 request,
-#                 "user/user_login.html",
-#                 {"error": "아이디 혹은 비밀번호가 올바르지 않습니다"},
-#             )
-#     # GET 요청이 들어왔을 때
-#     else:
-#         # 로그인 페이지 render
-#         return render(request, "user/user_login.html")
-
-
 # 회원가입 뷰
 def signup_view(request):
     if request.method == "POST":

@@ -1,13 +1,78 @@
 {% extends 'main/main_base.html' %}
 {% load static %}
-{% block extra_css %}<link href="{% static 'css/main/main_home.css' %}" rel="stylesheet" />{% endblock %}
+{% block extra_css %}
+<link href="{% static 'css/main/main_home.css' %}" rel="stylesheet" />
+<style>
+    @media (max-width: 576px) {
+        .header .container {
+            padding: 0 1rem;
+        }
+        .timetable-box, .review-box {
+            font-size: 0.875rem;
+        }
+        .way-info-title h2 {
+            font-size: 1.5rem;
+        }
+        #map {
+            display: none;
+        }
+        .way-info {
+            flex: 1 1 100%;
+            max-width: 100%;
+        }
+        .timetable-container, .review-container {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    .timetable-container, .review-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .timetable-box, .review-box {
+        flex: 1 1 30%;
+        max-width: 100%;
+        cursor: pointer;
+        text-align: center;
+        padding: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+    }
+
+    .way-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .way-info {
+        flex: 1 1 45%;
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    #map {
+        flex: 1 1 45%;
+        max-width: 100%;
+        min-height: 300px;
+    }
+
+    @media (max-width: 768px) {
+        .way-info, #map {
+            flex: 1 1 100%;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<!-- 헤더 -->
 <div class="backSky">
     <svg class="sky">
     </svg>
-    <!-- Header --> 
     <header class="text-white py-5 header-height header">
         <div class="container px-5">
             <div class="row gx-5 justify-content-center">
@@ -33,7 +98,6 @@
     </header>
 </div>
 
-<!-- 시간표 -->
 <section class="py-5 border-bottom" id="timetable">
     <div class="container px-5 my-2 px-5 component-height component-flex">
         <div class="text-center margin-bt-big component-title">
@@ -47,23 +111,6 @@
     </div>
 </section>
 
-<!-- 클리닉 -->
-<!-- <section class="py-5 border-bottom" id="timetable">
-    <div class="container px-5 my-2 px-5 component-height component-flex">
-        <div class="text-center margin-bt-big component-title">
-            <h2 class="fw-bolder big-text">클리닉</h2>
-        </div>
-        <div class="timetable-container mt-4">
-            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="1학년"> 물리</div>
-            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="1학년"> 화학</div>
-            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="1학년"> 생물</div>
-            <div class="timetable-box" data-bs-toggle="modal" data-bs-target="#timetableModal" data-timetable="1학년"> 지구과학</div>
-            
-        </div>
-    </div>
-</section> -->
-
-<!-- 공지사항 -->
 <section class="py-5 px-3 border-bottom component-flex" id="notice">
     <div class="container mt-4">
         <div class="text-center margin-bt-big ">
@@ -83,7 +130,7 @@
                 <tr onclick="location.href='{% url 'notice_detail' article.id %}'">
                     <td class="col-no">{{ forloop.counter }}</td>
                     <td class="col-title">{{ article.title }}</td>
-                    <td class="col-author">{{ article.author }}</td>
+                    <td class="col-author"> 관리자 </td>
                     <td class="col-date">{{ article.created_at|date:"Y-m-d" }}</td>
                 </tr>
                 {% empty %}
@@ -115,10 +162,8 @@
         </span>
     </div>
     {% endif %}
-
 </section>
 
-<!-- 수강 후기 -->
 <section class="py-5 px-3 border-bottom component-flex" id="review">
     <div class="container mt-4">
         <div class="text-center margin-bt-big component-title">
@@ -139,11 +184,9 @@
     </div>
 </section>
 
-<!-- 오시는 길 -->
 <section class="mb-n3 border-bottom component-flex" id="way">
     <div class="way nomargin nopadding">
         <div class="way-container">
-            <div id="map"></div>
             <div class="way-info">
                 <div class="way-info-title mb-4">
                     <h2 class="t-0 fw-bolder border-bottom">오시는 길</h1>
@@ -151,12 +194,10 @@
                 <div class="way-info-contents">
                     <div class="info-contents-content">
                         <h4>주소</h4>
-                        <!-- <h5>서울특별시 서초구 신반포로 189 반포쇼핑타운 4동 402호</h5> -->
                         <p>서울특별시 서초구 신반포로 189 반포쇼핑타운 4동 402호</p>
                     </div>
                     <div class="info-contents-content">
                         <h4>연락처</h4>
-                        <!-- <h5>02-532-1706</h5> -->
                         <p>02-532-1706</p>
                     </div>
                     <div class="info-contents-content">
@@ -171,7 +212,6 @@
                         </ul>
                     </div>
                     <div class="info-contents-content">
-                        <!-- <li style="font-weight: bolder;">자가용 이용시 주차권 1시간 제공해 드립니다</li> -->
                         <h5>자가용 이용시 주차권 1시간 제공해 드립니다</h5>
                     </div>
                 </div>
@@ -180,7 +220,6 @@
     </div>
 </section>
 
-<!-- 시간표 모달 -->
 <div class="modal fade" id="timetableModal" tabindex="-1" aria-labelledby="timetableModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -188,15 +227,15 @@
         <h5 class="modal-title" id="timetableModalLabel"></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body-custom"></div> <!-- 이미지 들어갈 곳 -->
+        <div class="modal-body-custom"></div>
     </div>
     </div>
 </div>
-  
+
 {% endblock %}
 
 {% block extra_scripts %}
-<!-- Naver map API -->
-<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v2uy1n9cc7"></script>        
+<script type="text/javascript" 
+src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v2uy1n9cc7"></script>        
 <script type="module" src="{% static 'scripts/main/main_home.js' %}"></script>
 {% endblock %}

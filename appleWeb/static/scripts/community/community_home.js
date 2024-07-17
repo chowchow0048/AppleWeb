@@ -5,7 +5,6 @@ document.querySelectorAll('.school-button').forEach(button => {
         if (!alreadyActive) {
             this.classList.add('active');
         }
-
         filterCourses(this.getAttribute('data-school'));
     });
 });
@@ -19,7 +18,8 @@ const subjectTranslations = {
 };
 
 function filterCourses(school) {
-    const url = `/management/api/courses?day=${new Date().toLocaleDateString('ko-KR', { weekday: 'long' }).toLowerCase()}&school=${school}`;
+    // console.log('FILTER COURSES COMMUNITY');
+    const url = `/community/api/courses?day=${new Date().toLocaleDateString('ko-KR', { weekday: 'long' }).toLowerCase()}&school=${school}`;
 
     // Testing: 일요일 수업
     // const url = `/management/api/courses?day=일요일&school=${school}`;
@@ -27,12 +27,11 @@ function filterCourses(school) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            console.log("MANAGEHOME",data);
+            console.log(data);
             const coursesByGrade = {
                 '2학년': { '물리': [], '화학': [], '생명과학': [], '지구과학': [] },
                 '1학년': { '통합과학': [] }
             };
-        
             data.forEach(course => {
                 const subject = subjectTranslations[course.course_subject];
                 if (course.course_grade in coursesByGrade && subject in coursesByGrade[course.course_grade]) {
@@ -77,7 +76,7 @@ function displayCourses(coursesByGrade) {
                     const button = document.createElement('button');
                     button.className = 'btn btn-secondary m-2';
                     button.textContent = course.time;
-                    button.addEventListener('click', () => redirectToCourse(course.id));
+                    // button.addEventListener('click', () => redirectToCourse(course.id));
                     buttonsContainer.appendChild(button);
                 });
 
@@ -104,8 +103,4 @@ function displayCourses(coursesByGrade) {
         noCoursesHeader.textContent = '수업이 없습니다.';
         mainContainer.appendChild(noCoursesHeader);
     }
-}
-
-function redirectToCourse(courseId) {
-    window.location.href = `/management/lecture/${courseId}/`;  // 출석부 상세 페이지로 리디렉트
 }

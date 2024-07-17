@@ -20,10 +20,88 @@
   display: flex;
 }
 
+.btn-thd{
+  background-color:#D0E3F7 ;
+  color: #007AFF;
+}
+
+.btn.active {
+  background-color: #2e1cd0 !important;
+  border-color: rgba(0, 0, 119, 0.065) !important;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19) !important;
+  color: white !important;
+}
+
+.btn-second{
+  background-color: #E6E6E7;
+  color: #292929;
+}
+
+.disable{
+  pointer-events: none;
+}
+
 .nomargin{
   margin: 0;
 }
 
+.nopadding{
+  padding: 0;
+}
+
+/* 테이블 헤더 스타일 */
+.table thead th {
+  /* width: 16.66%; 예를 들어 테이블에 6개의 열이 있다고 가정 */
+  text-align: center;
+}
+
+/* 테이블 본문 셀 스타일 */
+.table tbody td {
+  text-align: center; /* 내용을 중앙에 정렬 */
+}
+
+#current-time{
+  position: relative;
+  top: 0.5rem;
+  left: 42%;
+}
+
+
+.wth-fl{
+  width: 100%;
+}
+
+.wth-hf{
+  width: 50%;
+}
+
+.wth-4 {
+  width: 4rem;
+}
+
+.wth-5 {
+  width: 5rem;
+}
+
+.wth-6 {
+  width: 6rem;
+}
+
+.site{
+  width: 100%;
+  height: 100vh;
+}
+
+.underconstruction{
+  font-size: xx-large;
+  font-weight: bolder;
+  position: relative;
+  top: 40%;
+  left: 45%;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+}
 
 
 .nav-btn-cst{
@@ -2879,13 +2957,13 @@ textarea.form-control-lg {
 .btn-check:checked + .btn:focus-visible, :not(.btn-check) + .btn:active:focus-visible, .btn:first-child:active:focus-visible, .btn.active:focus-visible, .btn.show:focus-visible {
   box-shadow: var(--bs-btn-focus-box-shadow);
 }
-.btn:disabled, .btn.disabled, fieldset:disabled .btn {
+/* .btn:disabled, .btn.disabled, fieldset:disabled .btn {
   color: var(--bs-btn-disabled-color);
   pointer-events: none;
   background-color: var(--bs-btn-disabled-bg);
   border-color: var(--bs-btn-disabled-border-color);
   opacity: var(--bs-btn-disabled-opacity);
-}
+} */
 
 .btn-primary {
   --bs-btn-color: #fff;
@@ -2936,6 +3014,15 @@ textarea.form-control-lg {
   --bs-btn-disabled-color: #fff;
   --bs-btn-disabled-bg: #198754;
   --bs-btn-disabled-border-color: #198754;
+}
+
+.btn-disabled{
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #414141;
+  --bs-btn-border-color: #414141;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #414141;
+  --bs-btn-hover-border-color: #414141;
 }
 
 .btn-info {

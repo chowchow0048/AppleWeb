@@ -19,11 +19,13 @@
         <div class="d-flex" id="wrapper">
             <!-- Sidebar-->
             <div class="border-end bg-white" id="sidebar-wrapper">
-                <div class="sidebar-heading border-bottom bg-light bg-gradient">행정 시스템</div>
+                <div class="sidebar-heading border-bottom bg-light bg-gradient">my page</div>
                 <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'management_home' %}">오늘의 수업</a>
+                    {% if request.user.is_manager or request.user.is_superuser %}
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'management_studentlist' %}">학생</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'management_paylist' %}">결제</a>
+                    {% endif %}
                     <!-- <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'management_waitlist' %}">대기</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'management_blacklist' %}">블랙리스트</a> -->
                 </div>

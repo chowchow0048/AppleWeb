@@ -53,6 +53,9 @@ class User(AbstractUser):
     )
     payment_count = models.IntegerField(default=12, verbose_name="결제 횟수")
     payment_request = models.BooleanField(default=False, verbose_name="결제 요청")
+    latest_payment = models.DateField(
+        blank=True, null=True, verbose_name="최근 결제 날짜"
+    )
     is_active = models.BooleanField(
         default=False, verbose_name="활성화"
     )  # 관리자 승인 전까지는 비활성화된 계정 처리
@@ -81,43 +84,6 @@ class User(AbstractUser):
         verbose_name = "회원"
         verbose_name_plural = "회원"
 
-    # def clean(self):
-    #     super().clean()
-    #     # '1학년'인 경우 통합과학 외 다른 과목 선택 불가
-    #     if self.grade == "1학년":
-    #         print(
-    #             "grade == 1:",
-    #             self.integrated_science,
-    #             self.physics,
-    #             self.chemistry,
-    #             self.biology,
-    #             self.earth_science,
-    #         )
-    #         if not self.integrated_science or any(
-    #             [self.physics, self.chemistry, self.biology, self.earth_science]
-    #         ):
-    #             raise ValidationError("1학년은 통합과학만 선택 가능합니다.")
-    #     # '2학년'과 '3학년'인 경우 세 과목을 선택해야 함
-    #     elif self.grade in ["2학년", "3학년"]:
-    #         print(
-    #             "grade != 1:",
-    #             self.integrated_science,
-    #             self.physics,
-    #             self.chemistry,
-    #             self.biology,
-    #             self.earth_science,
-    #         )
-    #         selected_subjects = [
-    #             self.physics,
-    #             self.chemistry,
-    #             self.biology,
-    #             self.earth_science,
-    #         ]
-    #         if selected_subjects.count(True) != 3:
-    #             raise ValidationError(
-    #                 "2학년 및 3학년은 정확히 세 과목을 선택해야 합니다."
-    #             )
-
 
 class Course(models.Model):
     DAY_CHOICES = (
@@ -143,22 +109,23 @@ class Course(models.Model):
         ("biology", "생명과학"),
         ("earth_science", "지구과학"),
         ("integrated_science", "통합과학"),
+        ("special_physics", "특강-물리"),
+        ("special_chemistry", "특강-화학"),
+        ("special_biology", "특강-생명과학"),
+        ("special_earth_science", "특강-지구과학"),
+        ("special_integrated_science", "특강-통합과학"),
     )
+    is_active = models.BooleanField(
+        default=False, verbose_name="활성화"
+    )  # 관리자 승인 전까지는 비활성화된 계정 처리
     course_school = models.CharField(
         max_length=50, choices=User.SCHOOL_CHOICES, verbose_name="학교"
     )
     course_grade = models.CharField(
         max_length=10, choices=User.GRADE_CHOICES, verbose_name="학년"
     )
-    # course_physics = models.BooleanField(default=False, verbose_name="물리")
-    # course_chemistry = models.BooleanField(default=False, verbose_name="화학")
-    # course_biology = models.BooleanField(default=False, verbose_name="생명과학")
-    # course_earth_science = models.BooleanField(default=False, verbose_name="지구과학")
-    # course_integrated_science = models.BooleanField(
-    #     default=False, verbose_name="통합과학"
-    # )
     course_subject = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=SUBJECT_CHOICES,
         default="선택과목",
         verbose_name="선택과목",
@@ -168,7 +135,11 @@ class Course(models.Model):
     )
     course_time = models.TimeField(verbose_name="수업 시작 시간")
     course_room = models.CharField(
-        max_length=10, choices=ROOM_CHOICES, null=True, verbose_name="강의실"
+        max_length=10,
+        choices=ROOM_CHOICES,
+        blank=True,
+        null=True,
+        verbose_name="강의실",
     )
     course_teacher = models.ForeignKey(
         User,
@@ -183,32 +154,8 @@ class Course(models.Model):
         verbose_name="학생",
     )
 
-    # def clean(self):
-    #     # 과목 필드의 상태를 검사
-    #     subject_fields = [
-    #         self.course_physics,
-    #         self.course_chemistry,
-    #         self.course_biology,
-    #         self.course_earth_science,
-    #         self.course_integrated_science,
-    #     ]
-    #     if subject_fields.count(True) != 1:
-    #         raise ValidationError("정확히 하나의 과목만 True로 설정해야 합니다.")
-
     def __str__(self):
-        # subject_names = []
-        # if self.course_physics:
-        #     subject_names.append("물리")
-        # if self.course_chemistry:
-        #     subject_names.append("화학")
-        # if self.course_biology:
-        #     subject_names.append("생명과학")
-        # if self.course_earth_science:
-        #     subject_names.append("지구과학")
-        # if self.course_integrated_science:
-        #     subject_names.append("통합과학")
-        # subjects = ", ".join(subject_names)
-        return f"{self.course_school} {self.course_grade} - {self.course_subject} {self.course_time}"
+        return f"{self.course_school} {self.course_grade} {self.course_subject} {self.course_time}"
 
     class Meta:
         verbose_name = "수업"

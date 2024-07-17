@@ -1,5 +1,45 @@
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# AWS CLI 설치 파일
+AWSCLIV2.pkg
+
+
+# Python 관련
+*.pyc
+__pycache__/
+
+# Virtual Environment
 .venv/
+env/
+venv/
+
+# AWS CLI 설치 파일
+AWSCLIV2.pkg
+
+# VSCode 설정
+.vscode/
+
+# 운영체제 별 설정 파일
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# 환경 파일
+.env
+
+# Node_modules
+node_modules/
+
+
 backup/
 blog.txt
 *.pyc
 appleWeb/db.sqlite3
+
+appleWeb/templates/management/(HOLD)management_special_lecture.html
+appleWeb/static/css/management/(HOLD)management_special_lecture.css

@@ -68,28 +68,3 @@ function fetchStudents(school, grade) {
     })
     .catch(error => console.error('Error fetching students:', error));
 }
-
-// function recordAttendance(studentId, courseId) {
-//     fetch(`/management/api/record_attendance/`, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': '{{ csrf_token }}'
-//         },
-//         body: JSON.stringify({ student_id: studentId, course_id: courseId })
-//     }).then(response => response.json())
-//     .then(data => {
-//         if (data.status === "success") {
-//             // alert('출석이 등록되었습니다!');
-//             // 버튼 비활성화 로직
-//             const attendanceButton = document.querySelector(`button[onclick='recordAttendance(${studentId}, ${courseId})']`);
-//             attendanceButton.disabled = true;
-//             attendanceButton.textContent = '출석 완료';
-//             attendanceButton.classList.remove('btn-primary');
-//             attendanceButton.classList.add('btn-success');
-//         } else {
-//             alert('오류 발생: ' + data.message);
-//         }
-//     })
-//     .catch(error => console.error('Error:', error));
-// }
