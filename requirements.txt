@@ -37,8 +37,6 @@ mdit-py-plugins==0.3.5
 mdurl==0.1.2
 mypy==1.2.0
 mypy-extensions==1.0.0
-mysql==0.0.3
-mysqlclient==2.1.1
 myst-parser==1.0.0
 numpy==1.26.4
 openpyxl==3.1.2
@@ -48,7 +46,6 @@ pathspec==0.10.1
 platformdirs==3.2.0
 Pygments==2.15.1
 PyJWT==2.6.0
-PyMySQL==1.0.3
 pyrsistent==0.19.3
 python-dateutil==2.9.0.post0
 pytz==2023.3
