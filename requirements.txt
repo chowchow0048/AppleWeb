@@ -15,7 +15,6 @@ colorama==0.4.3
 distlib==0.3.6
 Django==4.2.3
 gunicorn==20.1.0
-psycopg2-binary==2.9.3  # 필요 시 추가
 django-widget-tweaks==1.5.0
 docutils==0.18.1
 et-xmlfile==1.1.0
