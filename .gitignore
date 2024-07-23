@@ -12,12 +12,12 @@ AWSCLIV2.pkg
 __pycache__/
 
 # Virtual Environment
-.venv/
-env/
-venv/
+./.venv/
+./env/
+./venv/
 
 # AWS CLI 설치 파일
-AWSCLIV2.pkg
+./AWSCLIV2.pkg
 
 # VSCode 설정
 .vscode/
@@ -29,14 +29,10 @@ Thumbs.db
 # Logs
 *.log
 
-# 환경 파일
-.env
-
 # Node_modules
-node_modules/
+appleWeb/node_modules/
 
-
-backup/
+appleWeb/backup/
 blog.txt
 *.pyc
 appleWeb/db.sqlite3

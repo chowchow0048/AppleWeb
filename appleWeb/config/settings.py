@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-ebved*q!zji3wjbw8@!--f&wxra#oyn(9nqko1)@khxwm0vh$2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "13.124.187.120"]
 
 AUTH_USER_MODEL = "common.User"
 SESSION_COOKIE_AGE = 5400
