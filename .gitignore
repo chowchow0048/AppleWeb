@@ -35,7 +35,9 @@ appleWeb/node_modules/
 appleWeb/backup/
 blog.txt
 *.pyc
+./appleWeb/db.sqlite3
 appleWeb/db.sqlite3
+db.sqlite3
 
 appleWeb/templates/management/(HOLD)management_special_lecture.html
 appleWeb/static/css/management/(HOLD)management_special_lecture.css
