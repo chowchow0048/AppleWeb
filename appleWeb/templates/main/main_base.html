@@ -1,0 +1,144 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+
+        <title>애플과학</title>
+
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'css/base.css' %}" rel="stylesheet" />
+        {% block extra_css %}{% endblock %}
+
+        <style>
+            @media (max-width: 576px) {
+                .navbar {
+                    display: none;
+                }
+
+                main {
+                    padding: 0px;
+                }
+
+                .bigger-text{
+                    font-size: 2rem;
+                }
+
+                .big-text{
+                    font-size: 1.3rem;
+                }
+
+                .timetable-box{
+                    width: 100%;
+                }
+
+                .component-flex {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: normal;
+                }
+
+                .component-height{
+                    height: auto;
+                }
+
+                h4 {
+                    font-size: 1rem;
+                }
+
+                table{
+                    font-size: 0.9rem;
+                }
+
+                .col-no{
+                    width: 10%;
+                }
+
+                .col-title{
+                    width: 50%;
+
+                }
+
+                .col-author{
+                    width: 20%;
+                    
+                }
+
+                .col-date{
+                    width: 20%;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: clip;
+                }
+
+                #way{
+                    display: none;
+                }
+            }
+        </style>
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white fixed-top">
+            <div class="container d-flex">
+                <div>
+                    <a class="navbar-brand" href="{% url 'main_home' %}">애플 과학</a>
+                </div>
+                <div>
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="width: 50%;">
+                    </ul>
+                    <a class="navbar-brand pe-5" href="#timetable">시간표</a>
+                    <a class="navbar-brand pe-5" href="#notice">공지사항</a>
+                    <a class="navbar-brand pe-5" href="#review">수강후기</a>
+                    <a class="navbar-brand" href="#way">오시는 길</a>
+                </div>
+                <div>
+                    {% if request.user.is_authenticated %}
+                        <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                            <li class="nav-item dropdown">
+                                <div class="navbar-user-main">
+                                    <a class="nav-link dropdown-toggle nopadding ms-1" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ request.user.name }}
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{% url 'community_home' %}">커뮤니티</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'user_logout' %}">로그아웃</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <a class="navbar-brand" href="{% url 'user_login' %}">login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow-1">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer class="mt-auto">
+            <div class="container px-5">
+                <p class="m-0 text-center text-white">Copyright &copy; chowchow0048 2024</p>
+            </div>
+        </footer>        
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- SB Forms -->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <!-- Core theme JS-->
+        <script type="module" src="{% static 'scripts/main/main_base.js' %}"></script>
+        {% block extra_scripts %}{% endblock %}
+    </body>
+</html>

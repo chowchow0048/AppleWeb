@@ -1,0 +1,75 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+{% load filters %}
+
+{% block extra_css %}
+<link href="{% static 'css/management/management_student_detail.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container p-5">
+    <h1 class="mb-4 pb-2 border-bottom">{{ student.name }}의 정보</h1>
+    <div class="mb-1" style="display: flex;">
+        <span class="me-1" style="font-weight: bold;">학교: </span>
+        <p>{{ student.school }}</p>
+    </div>
+    <div class="mb-1" style="display: flex;">
+        <span class="me-1" style="font-weight: bold;">학년:</span>
+        <p>{{ student.grade }}</p>
+    </div>
+    {% if student.phone == None %}
+        <div class="mb-1" style="display: flex;">
+            <span class="me-1" style="font-weight: bold;">전화번호: </span>
+            <p> - </p>
+        </div>
+    {% else %}
+        <div class="mb-1" style="display: flex;">
+            <span class="me-1" style="font-weight: bold;">전화번호: </span>
+            <p>{{ student.phone }}</p>
+        </div>
+    {% endif %}
+    <div class="mb-1" style="display: flex;">
+        <span class="me-1" style="font-weight: bold;">부모님 전화번호: </span>
+        <p>{{ student.parent_phone }}</p>
+    </div>
+    <div class="mb-1" style="display: flex;">
+        <span class="me-1" style="font-weight: bold;">잔여 수업 횟수:</span>
+        <p>{{ student.payment_count }}</p>
+    </div>
+    {% if student.latest_payment != None %}
+        <div class="mb-1" style="display: flex;">
+            <span class="me-1" style="font-weight: bold;">최근 결제 날짜: </span>
+            <p>{{ student.latest_payment|date_kor }}</p>
+        </div>
+    {% endif %}
+    {% if student.payment_request %}
+    <div class="mb-2" style="display: flex;">
+        <span class="">결제 요청: 필요</span>
+    </div>
+    {% endif %}
+    <h3 class="mt-4 mb-4 py-2 border-bottom">수강 과목</h3>
+    <ul>
+        {% for course in courses %}
+            <p class="nomargin">{{ course.course_school }} {{ course.course_grade }} {{ course.course_subject|subject_kor }} {{ course.course_day }} {{ course.course_time|time_kor }}</p>
+        {% endfor %}
+    </ul>
+    <!-- <h3 class="mt-4 mb-4 py-2 border-bottom">결제 기록</h3>
+    <ul>
+        {% for absence in absences %}
+            <p class="nomargin">{{ absence.date|date_kor }} {{ absence.course.course_day }} {{ absence.course|course_kor }}</p>
+        {% endfor %}
+    </ul> -->
+    <h3 class="mt-4 mb-4 py-2 border-bottom">출석 기록</h3>
+    <ul>
+        {% for attendance in attendances %}
+            <p class="nomargin">{{ attendance.date|date_kor }} {{attendance.course.course_day}} {{ attendance.course|course_kor }}</p>
+        {% endfor %}
+    </ul>
+    <h3 class="mt-4 mb-4 py-2 border-bottom">결석 기록</h3>
+    <ul>
+        {% for absence in absences %}
+            <p class="nomargin">{{ absence.date|date_kor }} {{ absence.course.course_day }} {{ absence.course|course_kor }}</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

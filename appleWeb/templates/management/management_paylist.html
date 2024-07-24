@@ -1,0 +1,53 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/management/management_paylist.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">결제 요청 목록</h1>
+    <table class="table">
+        <thead id="mngpl-thead">
+            <tr>
+                <th>학교</th>
+                <th>학년</th>
+                <th>이름</th>
+                <th>전화번호</th>
+                <th>부모님 전화번호</th>
+                <th>수업 초과 횟수</th>
+                <th><button type="button" id="selectAllPayments" class="btn btn-link">결제 확인</button></th>
+            </tr>
+        </thead>
+        <tbody id="mngpl-tbody">
+            {% for user in users %}
+            <tr>
+                <td>{{ user.school }}</td>
+                <td>{{ user.grade }}</td>
+                <td>{{ user.name }}</td>
+                {% if user.phone != None %}
+                        <td>{{ user.phone }}</td>
+                {% else %}
+                        <td> - </td>
+                {% endif %}
+                <td>{{ user.parent_phone }}</td>
+                <td>{{ user.payment_count }}</td>
+                <td><input type="checkbox" class="payment-checkbox" data-user-id="{{ user.id }}"></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">결제 요청이 있는 회원이 없습니다.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-center mt-4">
+        <button type="button" class="btn btn-primary" id="processPayments">결제 확인 처리</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'scripts/management/management_paylist.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'user/user_login_singup_base.html' %}
+{% load static %}
+{% block extra_css %}
+<link href="{% static 'css/user.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<a class="btn-back" href="{% url 'user_login' %}">
+    <img class="btn-back-img" src="{% static 'images/arrow.png' %}" alt="뒤로가기">
+</a>
+<header class="py-1 mb-3">
+    <h1 class="text-center">회원가입</h1>
+    <p class="text-center text-muted">애플과학에 오신 것을 환영합니다.</p>
+</header>
+<div>
+    <form method="post" id="signupForm" class="signup-form" autocomplete="off">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <p class="text-danger"> {{error}} </p>
+            {% endfor %}
+        {% endif %}
+        <div class="mb-4 form-field">
+            {% for field in form %}
+            <div class="mb-4">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div>
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mb-5 d-flex flex-column align-items-center wth-fl">
+            <button type="submit" class="btn btn-primary my-4 wth-hf">회원가입</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function logFormData() {
+        const form = document.getElementById('signupForm');
+        const formData = new FormData(form);
+
+        console.log("----- DATA TEST START -----");
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+        console.log("----- DATA TEST END -----");
+    }
+</script>
+{% endblock %}
