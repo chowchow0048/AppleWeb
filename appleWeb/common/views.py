@@ -194,3 +194,12 @@ def get_coordinates(request):
 
 def page_not_found(request, exception):
     return render(request, "main/404.html", {})
+
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def log_view(request):
+    logger.info("INFO 레벨로 출력")

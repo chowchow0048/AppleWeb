@@ -16,6 +16,8 @@ Thumbs.db
 
 # Logs
 *.log
+appleWeb/logs
+./appleWeb/logs
 
 # Node_modules
 ./appleWeb/node_modules/
