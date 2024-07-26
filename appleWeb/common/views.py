@@ -190,3 +190,7 @@ def get_coordinates(request):
                 "error": "Location data could not be retrieved due to an unspecified Error."
             },
         )
+
+
+def page_not_found(request, exception):
+    return render(request, "main/404.html", {})
