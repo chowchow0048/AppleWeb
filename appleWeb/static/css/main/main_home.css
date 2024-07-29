@@ -332,8 +332,16 @@
   }
   
   #map{
-      width: 100%;
-      height: 800px;
+      width: 90%;
+      height: auto;
+  }
+  
+  .map-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 700px;
   }
   
   .way-container{
@@ -353,7 +361,10 @@
   }
   
   .way-info-title{
-      margin-bottom: 2rem;
+      margin-bottom: -2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
   }
   
   .way-info-contents{
@@ -368,5 +379,14 @@
   
   .iw_inner{
       color: black;
+  }
+
+  .w1{
+    font-size: 1.3rem;
+    font-weight: 110;
+  }
+
+  .ratio-169{
+    --bs-aspect-ratio: 56.25%;
   }
   

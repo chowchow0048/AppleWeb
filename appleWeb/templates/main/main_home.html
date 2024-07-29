@@ -13,9 +13,9 @@
         .way-info-title h2 {
             font-size: 1.5rem;
         }
-        #map {
+        /* #map {
             display: none;
-        }
+        } */
         .way-info {
             flex: 1 1 100%;
             max-width: 100%;
@@ -52,13 +52,13 @@
     .way-info {
         flex: 1 1 45%;
         max-width: 100%;
-        padding: 1rem;
     }
 
     #map {
         flex: 1 1 45%;
         max-width: 100%;
         min-height: 300px;
+        max-height: 1000px;
     }
 
     @media (max-width: 768px) {
@@ -184,36 +184,18 @@
     </div>
 </section>
 
-<section class="mb-n3 border-bottom component-flex" id="way">
+<section class="mb-n3 border-bottom component-flex mt-4" id="way">
     <div class="way nomargin nopadding">
         <div class="way-container">
             <div class="way-info">
-                <div class="way-info-title mb-4">
-                    <h2 class="t-0 fw-bolder border-bottom">오시는 길</h1>
+                <div class="way-info-title mt-4">
+                    <p class="big-text t-0 fw-bolder mb-4">오시는 길</p>
+                        <p class="w1">서울특별시 서초구 신반포로 189 반포쇼핑타운 4동 402호 / 02-532-1706</p>
+                        <div class="info-contents-content">
+                        </div>
                 </div>
-                <div class="way-info-contents">
-                    <div class="info-contents-content">
-                        <h4>주소</h4>
-                        <p>서울특별시 서초구 신반포로 189 반포쇼핑타운 4동 402호</p>
-                    </div>
-                    <div class="info-contents-content">
-                        <h4>연락처</h4>
-                        <p>02-532-1706</p>
-                    </div>
-                    <div class="info-contents-content">
-                        <h4>대중교통</h4>
-                        <ul>
-                            <li>버스</li>
-                            <li class="nomargin">정류장 번호: 22019, 22020</li>
-                            <li class="mb-2">정류장 하차 후 횡단보도를 건너시면 학원이 보입니다.</li>
-                            <li>지하철</li>
-                            <li class="nomargin">고속터미널역 8-2번 출구</li>
-                            <li>8-2번 출구에서 도보 1분 이내</li>
-                        </ul>
-                    </div>
-                    <div class="info-contents-content">
-                        <h5>자가용 이용시 주차권 1시간 제공해 드립니다</h5>
-                    </div>
+                <div class="p-4 map-container">
+                    <div id="map" class="ratio-169"></div>
                 </div>
             </div>
         </div>

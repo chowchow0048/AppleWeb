@@ -187,7 +187,7 @@ LOGGING = {
             "level": "INFO",
             "filters": ["require_debug_false"],
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs/mysite.log",
+            "filename": BASE_DIR / "logs/appleWeb.log",
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
             "backupCount": 5,
             "formatter": "standard",
@@ -198,14 +198,14 @@ LOGGING = {
             "handlers": ["console", "mail_admins", "file"],
             "level": "INFO",
         },
-        "appleWeb": {
-            "handlers": ["console", "file"],
-            "level": "INFO",
-        },
         "django.server": {
             "handlers": ["django.server"],
             "level": "INFO",
             "propagate": False,
+        },
+        "appleWeb": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
         },
     },
 }

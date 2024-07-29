@@ -113,7 +113,7 @@ function initMap() {
         '   <p>서울특별시 서초구 신반포로 189 반포 쇼핑타운 4동 402호<br />',
         '   02-532-1706 |',
         // '       <img src="'+ HOME_PATH +'/img/example/hi-seoul.jpg" width="55" height="55" alt="서울시청" class="thumb" /><br />',
-        '       <a href="http://www.apple-science.co.kr" target="_blank">www.apple-science.co.kr</a>',
+        '       <a href="https://www.banpo-applecom" target="_blank">www.banpo-apple.com</a>',
         '   </p>',
         '</div>'
     ].join('');

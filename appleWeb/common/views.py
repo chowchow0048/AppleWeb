@@ -198,7 +198,7 @@ def page_not_found(request, exception):
 
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("appleWeb")
 
 
 def log_view(request):
