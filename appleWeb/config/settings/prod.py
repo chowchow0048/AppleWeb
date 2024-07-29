@@ -20,3 +20,5 @@ DATABASES = {
         "PORT": "5432",
     }
 }
+
+CSRF_TRUSTED_ORIGINS = ["https://banpo-apple.com", "https://www.banpo-apple.com"]
