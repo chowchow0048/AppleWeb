@@ -196,6 +196,18 @@ def page_not_found(request, exception):
     return render(request, "main/404.html", {})
 
 
+def server_error(request):
+    return render(request, "main/500.html", {})
+
+
+def forbidden_error(request, exception):
+    return render(request, "main/403.html", {})
+
+
+def bad_request(request, exception):
+    return render(request, "main/400.html", {})
+
+
 import logging
 
 logger = logging.getLogger("appleWeb")

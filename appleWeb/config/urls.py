@@ -15,6 +15,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.conf.urls import handler404, handler400, handler403, handler500
 from django.urls import path, include
 
 urlpatterns = [
@@ -26,3 +27,6 @@ urlpatterns = [
 ]
 
 handler404 = "common.views.page_not_found"
+handler500 = "common.views.server_error"
+handler403 = "common.views.forbidden_error"
+handler400 = "common.views.bad_request"
