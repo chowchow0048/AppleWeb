@@ -30,6 +30,7 @@ itsdangerous==2.1.2
 Jinja2==3.1.2
 jmespath==1.0.1
 jsonschema==4.17.3
+Markdown==3.6
 markdown-it-py==2.2.0
 MarkupSafe==2.1.2
 mdit-py-plugins==0.3.5
