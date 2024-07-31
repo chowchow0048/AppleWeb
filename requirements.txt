@@ -24,6 +24,7 @@ Flask-RESTful==0.3.9
 flask-restx==1.1.0
 Flask-SQLAlchemy==3.0.3
 greenlet==2.0.2
+gunicorn==22.0.0
 idna==3.7
 imagesize==1.4.1
 itsdangerous==2.1.2
