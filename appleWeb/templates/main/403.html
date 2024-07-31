@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'main/main_base.html' %}
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
@@ -9,4 +9,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block extra_scripts %}
+<script type="text/javascript" 
+src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v2uy1n9cc7"></script>        
+<script type="module" src="{% static 'scripts/main/main_home.js' %}"></script>
 {% endblock %}
