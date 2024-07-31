@@ -1,18 +1,44 @@
-{% extends 'community/community_base.html' %}
-{% load static %}
-{% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12 text-center">
-            <span class="display-1 d-block">500</span>
-            <div class="mb-4 lead">서버에 문제가 발생했습니다.</div>
-            <a href="/" class="btn btn-link">홈으로 돌아가기</a>
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Internal Server Error</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            text-align: center;
+            padding-top: 20%;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .display-1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        .lead {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            font-size: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="display-1">500</span>
+        <div class="mb-4 lead">서버에 오류가 발생했습니다.</div>
+        <a href="javascript:history.back()" class="btn">뒤로 가기</a>
     </div>
-</div>
-{% endblock %}
-{% block extra_scripts %}
-<script type="text/javascript" 
-src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v2uy1n9cc7"></script>        
-<script type="module" src="{% static 'scripts/main/main_home.js' %}"></script>
-{% endblock %}
+</body>
+</html>
