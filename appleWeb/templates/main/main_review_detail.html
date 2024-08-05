@@ -1,7 +1,15 @@
 {% extends 'main/main_base.html' %}
 {% load static %}
 
-{% block extra_css %}<link href="{% static 'css/main/main_home.css' %}" rel="stylesheet" />{% endblock %}
+{% block extra_css %}<link href="{% static 'css/main/main_home.css' %}" rel="stylesheet" />
+<style>
+    .review-image {
+        width: 15%; /* 이미지의 너비를 화면의 15%로 설정 */
+        height: auto; /* 비율을 유지하며 높이 조절 */
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="article-container container mt-5">
@@ -16,7 +24,18 @@
         </div>
     </div>
     <div class="article-body" style="white-space: pre-wrap;">
+        {% if review.image %}
+            <img src="{{ review.image.url }}" class="review-image" alt="{{ review.title }}" onclick="openImageInNewWindow('{{ review.image.url }}')">
+        {% endif %}
         <p>{{ review.content }}</p>
     </div>
 </div>
+
+
+<script>
+    function openImageInNewWindow(url) {
+        window.open(url, '_blank', 'width=800,height=600');
+    }
+</script>
 {% endblock %}
+

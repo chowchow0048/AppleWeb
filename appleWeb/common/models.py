@@ -273,6 +273,9 @@ class Board(models.Model):
         verbose_name_plural = "게시판"
 
 
+# from PIL import Image
+
+
 class Review(models.Model):
     SCHOOL_CHOICES = (
         ("세화고", "세화고"),
@@ -297,8 +300,22 @@ class Review(models.Model):
     title = models.CharField(
         max_length=100, verbose_name="제목", default="애플과학 수강후기"
     )
-    content = models.TextField(max_length=1500, verbose_name="수강 후기")
+    content = models.TextField(max_length=3000, verbose_name="수강 후기")
     created_at = models.DateTimeField(default=timezone.now, verbose_name="작성 시간")
+    image = models.ImageField(
+        upload_to="review_images/", null=True, blank=True, verbose_name="이미지"
+    )
+
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
+
+    #     if self.image:
+    #         img = Image.open(self.image.path)
+
+    #         if img.height > 800 or img.width > 800:
+    #             output_size = (800, 800)
+    #             img.thumbnail(output_size)
+    #             img.save(self.image.path)
 
     def __str__(self):
         return f"{self.name}"
