@@ -210,27 +210,34 @@
   /* ======================================================================== */
   
   .table{
-      margin-bottom: 50px;
-      border: 1px solid black;
+    margin-bottom: 50px;
+    border: 1px solid black;
   }
   
   .article-container{
-      min-height: 600px;
-      margin-bottom: 50px;
-      border: 1px solid black;
+    min-height: 600px;
+    /* margin: 0px 20px 40px 20px; */
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   
   .article-header{
-      border-bottom: 1px solid rgba(33, 33, 33, 0.419)!important;
+    border-bottom: 1px solid rgba(33, 33, 33, 0.419)!important;
   }
   
   .article-header__title{
-      border-bottom: 1px solid rgba(33, 33, 33, 0.419)!important;
-      padding: 10px 5px;
+    border-bottom: 1px solid rgba(33, 33, 33, 0.419)!important;
+    padding: 10px 5px;
   }
   
   .article-header__info{
-      padding: 10px 5px;
+    padding: 10px 5px;
+  }
+
+  .article-header__info p{
+    font-size: 1rem;
   }
   
   .article-body {

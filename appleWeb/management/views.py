@@ -1,17 +1,20 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
-from common.decorators import manager_required
-from common.models import Course, User, Attendance, Absence
 from django.utils import timezone
 from django.db import transaction
 from openpyxl import Workbook
 from openpyxl.styles import Alignment
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
+from common.models import Course, User, Attendance, Absence
+from common.decorators import manager_required
 import pandas as pd
 
 
+@login_required
 @manager_required
 def api_students(request):
     school = request.GET.get("school")
@@ -39,6 +42,7 @@ def api_students(request):
     return JsonResponse(students_data, safe=False)
 
 
+@login_required
 @manager_required
 def api_courses(request):
     day = request.GET.get("day")
@@ -64,6 +68,7 @@ def api_courses(request):
     return JsonResponse(data, safe=False)
 
 
+@login_required
 @manager_required
 def export_attendance_to_excel(request, course_id):
     course = Course.objects.get(id=course_id)
@@ -115,16 +120,19 @@ def export_attendance_to_excel(request, course_id):
     return response
 
 
+@login_required
 @manager_required
 def management_home(request):
     return render(request, "management/management_home.html")
 
 
+@login_required
 @manager_required
 def management_studentlist(request):
     return render(request, "management/management_studentlist.html")
 
 
+@login_required
 @manager_required
 def management_lecture(request, course_id):
     course = Course.objects.get(id=course_id)
@@ -158,6 +166,7 @@ def management_lecture(request, course_id):
     )
 
 
+@login_required
 @manager_required
 @require_POST  # 이 뷰 함수는 POST 요청만 허용
 def bulk_attendance(request):
@@ -182,10 +191,18 @@ def bulk_attendance(request):
     old_attendance_records = Attendance.objects.filter(course=course, date=date)
     old_absence_records = Absence.objects.filter(course=course, date=date)
 
+    print("OLD ATTENDANCE RECORD:", old_attendance_records)
+    print("OLD ABSENCE RECORD:", old_absence_records)
+
     # 기존 출석 기록을 삭제하고, 결제 횟수를 복구합니다
     for record in old_attendance_records:
         student = record.student  # 학생 객체를 가져옴
         student.payment_count += 1  # 결제 횟수를 복구
+        student.save()
+
+    for record in old_absence_records:
+        student = record.student
+        student.payment_count += 1
         student.save()
 
     old_attendance_records.delete()  # 기존 출석 기록 삭제
@@ -213,18 +230,38 @@ def bulk_attendance(request):
         Absence.objects.create(
             course=course, student=student, date=date
         )  # 새로운 결석 기록 생성
+        student.payment_count -= 1  # 결제 횟수를 차감
+        if student.payment_count <= 0:
+            student.payment_request = True
+
+        student.save()
 
     return redirect(
         "management_lecture", course_id=course_id
     )  # 출석부 페이지로 리디렉션
 
 
-@manager_required
+@login_required
 def management_student_detail(request, student_id):
+    user = request.user
     student = get_object_or_404(User, pk=student_id)
     attendances = Attendance.objects.filter(student=student).order_by("attended_at")
     absences = Absence.objects.filter(student=student).order_by("absent_at")
     courses = student.enrolled_courses.all()
+
+    if not (user.is_superuser or user.is_manager or user.id == student_id):
+        messages.error(request, "접근 권한이 없습니다.")
+        return redirect("main/403.html")  # 접근 권한이 없을 때 리디렉션할 뷰
+
+    if request.method == "POST":
+        password1 = request.POST.get("password1")
+        password2 = request.POST.get("password2")
+        if password1 and password2 and password1 == password2:
+            student.set_password(password1)
+            student.save()
+            messages.success(request, "비밀번호가 성공적으로 변경되었습니다.")
+        else:
+            messages.error(request, "비밀번호가 일치하지 않습니다.")
 
     context = {
         "student": student,
@@ -232,9 +269,11 @@ def management_student_detail(request, student_id):
         "absences": absences,
         "courses": courses,
     }
+
     return render(request, "management/management_student_detail.html", context)
 
 
+@login_required
 @manager_required
 @require_POST  # 이 뷰 함수는 POST 요청만 허용
 def confirm_payment(request, user_id):
@@ -255,26 +294,7 @@ def confirm_payment(request, user_id):
     )
 
 
-# @manager_required
-# @require_POST  # 이 뷰 함수는 POST 요청만 허용
-# def confirm_payment(request, user_id):
-#     user = get_object_or_404(User, pk=user_id)
-#     if user.grade == "1학년":
-#         user.payment_count = 4
-#     else:
-#         user.payment_count = 12
-#     user.payment_request = False
-#     user.latest_payment = timezone.now().date()  # 최근 결제 날짜를 오늘 날짜로 설정
-#     user.save()
-
-#     return JsonResponse(
-#         {
-#             "message": "결제 요청 완료",
-#             "payment_count": user.payment_count,
-#         }
-#     )
-
-
+@login_required
 @manager_required
 def management_paylist(request):
     users_with_payment_request = User.objects.filter(payment_request=True)
@@ -298,19 +318,16 @@ def management_paylist(request):
     )
 
 
+@login_required
 @manager_required
 def management_waitList(request):
     return render(request, "management/management_waitlist.html")
 
 
+@login_required
 @manager_required
 def management_blacklist(request):
     return render(request, "management/management_blacklist.html")
-
-
-# Not neccessary
-# def management_notice(request):
-#     return render(request, "management/management_notice.html")
 
 
 # 보류

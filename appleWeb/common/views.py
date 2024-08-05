@@ -80,45 +80,45 @@ def login_view(request):
         return render(request, "user/user_login.html")
 
 
-# 회원가입 뷰
-def signup_view(request):
-    if request.method == "POST":
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
+# 회원가입 뷰 일단 보류
+# def signup_view(request):
+#     if request.method == "POST":
+#         form = SignUpForm(request.POST)
+#         if form.is_valid():
+#             user = form.save(commit=False)
 
-            user.integrated_science = request.POST.get("integrated_science") == "on"
-            user.physics = request.POST.get("physics") == "on"
-            user.chemistry = request.POST.get("chemistry") == "on"
-            user.biology = request.POST.get("biology") == "on"
-            user.earth_science = request.POST.get("earth_science") == "on"
+#             user.integrated_science = request.POST.get("integrated_science") == "on"
+#             user.physics = request.POST.get("physics") == "on"
+#             user.chemistry = request.POST.get("chemistry") == "on"
+#             user.biology = request.POST.get("biology") == "on"
+#             user.earth_science = request.POST.get("earth_science") == "on"
 
-            user.save()
+#             user.save()
 
-            # 성공 메시지
-            messages.success(
-                request,
-                "회원가입에 성공하였습니다. 관리자의 승인 후 계정이 활성화됩니다.",
-            )
-            return redirect("user_login")
-        else:
-            # 폼 전체 에러 메시지 추가
-            for error in form.non_field_errors():
-                messages.error(request, error)
-            # 폼 필드별 에러 메시지 추가
-            for field, errors in form.errors.items():
-                if field != "__all__":
-                    for error in errors:
-                        field_label = (
-                            form.fields[field].label
-                            if field in form.fields
-                            else "Error"
-                        )
-                        messages.error(request, f"{field_label}: {error}")
-            return render(request, "user/user_signup.html", {"form": form})
-    else:
-        form = SignUpForm()
-        return render(request, "user/user_signup.html", {"form": form})
+#             # 성공 메시지
+#             messages.success(
+#                 request,
+#                 "회원가입에 성공하였습니다. 관리자의 승인 후 계정이 활성화됩니다.",
+#             )
+#             return redirect("user_login")
+#         else:
+#             # 폼 전체 에러 메시지 추가
+#             for error in form.non_field_errors():
+#                 messages.error(request, error)
+#             # 폼 필드별 에러 메시지 추가
+#             for field, errors in form.errors.items():
+#                 if field != "__all__":
+#                     for error in errors:
+#                         field_label = (
+#                             form.fields[field].label
+#                             if field in form.fields
+#                             else "Error"
+#                         )
+#                         messages.error(request, f"{field_label}: {error}")
+#             return render(request, "user/user_signup.html", {"form": form})
+#     else:
+#         form = SignUpForm()
+#         return render(request, "user/user_signup.html", {"form": form})
 
 
 # 사용자 목록 뷰

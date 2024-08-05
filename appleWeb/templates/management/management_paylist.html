@@ -22,7 +22,7 @@
         </thead>
         <tbody id="mngpl-tbody">
             {% for user in users %}
-            <tr>
+            <tr onclick="location.href='{% url 'management_student_detail' user.id %}'" style="cursor: pointer;">
                 <td>{{ user.school }}</td>
                 <td>{{ user.grade }}</td>
                 <td>{{ user.name }}</td>
