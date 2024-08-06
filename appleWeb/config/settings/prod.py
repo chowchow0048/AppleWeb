@@ -20,6 +20,3 @@ DATABASES = {
         "PORT": "5432",
     }
 }
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "static/images/review"
