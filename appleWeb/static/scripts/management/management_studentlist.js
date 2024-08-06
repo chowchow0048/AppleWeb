@@ -45,8 +45,12 @@ document.querySelectorAll('.school-button').forEach(button => {
 function fetchStudents(school, grade) {
     // AJAX를 사용하여 서버에서 학생 데이터를 가져오고 테이블에 표시
     fetch(`/management/api/students?school=${school}&grade=${grade}`)
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response:', response);
+        return response.json();
+    })
     .then(data => {
+        console.log('Data:', data);
         const tableBody = document.getElementById('student-table').getElementsByTagName('tbody')[0];
         tableBody.innerHTML = ''; // Clear existing rows
         data.forEach(student => {
@@ -66,5 +70,7 @@ function fetchStudents(school, grade) {
         });
         document.getElementById('student-table').style.display = 'table';
     })
-    .catch(error => console.error('Error fetching students:', error));
+    .catch(error => {
+        console.error('Error fetching students:', error);
+    });
 }
