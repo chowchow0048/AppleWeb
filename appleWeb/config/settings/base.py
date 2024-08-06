@@ -192,7 +192,7 @@ LOGGING = {
             "class": "django.utils.log.AdminEmailHandler",
         },
         "file": {
-            "level": "INFO",
+            "level": "DEBUG",
             "filters": ["require_debug_false"],
             "class": "logging.handlers.RotatingFileHandler",
             "filename": BASE_DIR / "logs/appleWeb.log",
@@ -204,16 +204,16 @@ LOGGING = {
     "loggers": {
         "django": {
             "handlers": ["console", "mail_admins", "file"],
-            "level": "INFO",
+            "level": "DEBUG",
         },
         "django.server": {
             "handlers": ["django.server"],
-            "level": "INFO",
+            "level": "DEBUG",
             "propagate": False,
         },
         "appleWeb": {
             "handlers": ["console", "file"],
-            "level": "INFO",
+            "level": "DEBUG",
         },
     },
 }

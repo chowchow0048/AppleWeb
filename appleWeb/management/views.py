@@ -17,9 +17,10 @@ import pandas as pd
 @login_required
 @manager_required
 def api_students(request):
+    print("Request received with params:", request.GET)
     school = request.GET.get("school")
     grade = request.GET.get("grade")
-    students_query = User.objects.filter(is_active=True)  # 활성화된 사용자만 조회
+    students_query = User.objects.filter(is_active=True)
 
     if school:
         students_query = students_query.filter(school=school)
