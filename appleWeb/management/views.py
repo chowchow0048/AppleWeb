@@ -10,7 +10,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
-from common.models import Course, User, Attendance, Absence
+from common.models import Course, Attendance, Absence  # User 모델 제외
 from common.decorators import manager_required
 import pandas as pd
 
@@ -19,10 +19,10 @@ import pandas as pd
 @manager_required
 def api_students(request):
     print("Request received with params:", request.GET)
-    user_model = get_user_model()
+    user_model = get_user_model()  # User 모델 가져오기
     school = request.GET.get("school")
     grade = request.GET.get("grade")
-    students_query = get_user_model.objects.filter(is_active=True)
+    students_query = user_model.objects.filter(is_active=True)
 
     if school:
         students_query = students_query.filter(school=school)
@@ -63,7 +63,7 @@ def api_courses(request):
         {
             "id": course.id,
             "course_grade": course.course_grade,
-            "course_subject": course.course_subject,  # 직접 과목 이름을 사용
+            "course_subject": course.course_subject,
             "course_time": course.course_time.strftime("%H:%M"),
         }
         for course in courses
