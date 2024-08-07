@@ -13,13 +13,16 @@ from openpyxl.utils import get_column_letter
 from common.models import Course, Attendance, Absence  # User 모델 제외
 from common.decorators import manager_required
 import pandas as pd
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
 @manager_required
 def api_students(request):
-    print("Request received with params:", request.GET)
-    user_model = get_user_model()  # User 모델 가져오기
+    logger.debug("Request received with params: %s", request.GET)
+    user_model = get_user_model()
     school = request.GET.get("school")
     grade = request.GET.get("grade")
     students_query = user_model.objects.filter(is_active=True)
@@ -42,6 +45,7 @@ def api_students(request):
         for student in students_query
     ]
 
+    logger.debug("Students data: %s", students_data)
     return JsonResponse(students_data, safe=False)
 
 
