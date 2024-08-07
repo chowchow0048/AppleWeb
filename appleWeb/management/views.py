@@ -10,7 +10,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
-from common.models import Course, Attendance, Absence  # User 모델 제외
+from common.models import User, Course, Attendance, Absence
 from common.decorators import manager_required
 import pandas as pd
 import logging
@@ -30,10 +30,11 @@ def api_students(request):
     logger_server.debug("SVDB: Request received with params: %s", request.GET)
     logger_server.info("SVIF: Request received with params: %s", request.GET)
 
-    user_model = get_user_model()
+    users = User.objects.all()
     school = request.GET.get("school")
     grade = request.GET.get("grade")
-    students_query = user_model.objects.filter(is_active=True)
+    # students_query = users.objects.filter(is_active=True)
+    students_query = users
 
     if school:
         students_query = students_query.filter(school=school)
