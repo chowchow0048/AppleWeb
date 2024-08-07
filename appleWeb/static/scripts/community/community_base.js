@@ -67,6 +67,6 @@ function updateTime() {
     if (dateDisplayElement) {
         dateDisplayElement.textContent = displayString;
     }
-}x
+}
 
 // const seconds = ('0' + now.getSeconds()).slice(-2);
