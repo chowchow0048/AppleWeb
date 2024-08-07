@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
@@ -18,9 +19,10 @@ import pandas as pd
 @manager_required
 def api_students(request):
     print("Request received with params:", request.GET)
+    user_model = get_user_model()
     school = request.GET.get("school")
     grade = request.GET.get("grade")
-    students_query = User.objects.filter(is_active=True)
+    students_query = get_user_model.objects.filter(is_active=True)
 
     if school:
         students_query = students_query.filter(school=school)
