@@ -154,7 +154,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 NAVER_CLIENT_ID = "v2uy1n9cc7"
 NAVER_CLIENT_SECRET = "SgFqv8FBOrYyCjmym4InxD6Daig1yHvhDr68F2vz"
 
-
 # 로깅설정
 LOGGING = {
     "version": 1,
@@ -177,12 +176,12 @@ LOGGING = {
     },
     "handlers": {
         "console": {
-            "level": "INFO",
+            "level": "DEBUG",  # 'INFO'에서 'DEBUG'로 변경
             "filters": ["require_debug_true"],
             "class": "logging.StreamHandler",
         },
         "django.server": {
-            "level": "INFO",
+            "level": "DEBUG",  # 'INFO'에서 'DEBUG'로 변경
             "class": "logging.StreamHandler",
             "formatter": "django.server",
         },
