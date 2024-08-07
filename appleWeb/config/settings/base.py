@@ -176,12 +176,12 @@ LOGGING = {
     },
     "handlers": {
         "console": {
-            "level": "DEBUG",  # 'INFO'에서 'DEBUG'로 변경
+            "level": "INFO",
             "filters": ["require_debug_true"],
             "class": "logging.StreamHandler",
         },
         "django.server": {
-            "level": "DEBUG",  # 'INFO'에서 'DEBUG'로 변경
+            "level": "INFO",
             "class": "logging.StreamHandler",
             "formatter": "django.server",
         },
@@ -191,10 +191,10 @@ LOGGING = {
             "class": "django.utils.log.AdminEmailHandler",
         },
         "file": {
-            "level": "DEBUG",
+            "level": "INFO",
             "filters": ["require_debug_false"],
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs/appleWeb.log",
+            "filename": BASE_DIR / "appleWeb/logs/appleWeb.log",
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
             "backupCount": 5,
             "formatter": "standard",
@@ -203,16 +203,16 @@ LOGGING = {
     "loggers": {
         "django": {
             "handlers": ["console", "mail_admins", "file"],
-            "level": "DEBUG",
+            "level": "INFO",
         },
         "django.server": {
             "handlers": ["django.server"],
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": False,
         },
         "appleWeb": {
             "handlers": ["console", "file"],
-            "level": "DEBUG",
+            "level": "INFO",
         },
     },
 }
