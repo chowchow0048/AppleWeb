@@ -175,14 +175,20 @@ LOGGING = {
         "standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},
     },
     "handlers": {
-        "console": {
-            "level": "INFO",
-            "filters": ["require_debug_true"],
-            "class": "logging.StreamHandler",
+        "console_file": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "logs/console.log",
+            "maxBytes": 1024 * 1024 * 5,  # 5 MB
+            "backupCount": 5,
+            "formatter": "standard",
         },
-        "django.server": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
+        "django_server_file": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "logs/django_server.log",
+            "maxBytes": 1024 * 1024 * 5,  # 5 MB
+            "backupCount": 5,
             "formatter": "django.server",
         },
         "mail_admins": {
@@ -202,11 +208,11 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["console", "mail_admins", "file"],
+            "handlers": ["console_file", "mail_admins", "file"],
             "level": "INFO",
         },
         "django.server": {
-            "handlers": ["django.server"],
+            "handlers": ["django.server_file"],
             "level": "INFO",
             "propagate": False,
         },
