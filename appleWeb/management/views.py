@@ -15,7 +15,7 @@ from common.decorators import manager_required
 import pandas as pd
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("appleWeb")
 
 
 @login_required
