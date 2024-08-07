@@ -15,13 +15,21 @@ from common.decorators import manager_required
 import pandas as pd
 import logging
 
-logger = logging.getLogger("appleWeb")
+logger_appleWeb = logging.getLogger("appleWeb")
+logger_django = logging.getLogger("django")
+logger_server = logging.getLogger("django.server")
 
 
 @login_required
 @manager_required
 def api_students(request):
-    logger.debug("Request received with params: %s", request.GET)
+    logger_appleWeb.debug("AWDB: Request received with params: %s", request.GET)
+    logger_appleWeb.info("AWIF: Request received with params: %s", request.GET)
+    logger_django.debug("DJDB: Request received with params: %s", request.GET)
+    logger_django.info("DJIF: Request received with params: %s", request.GET)
+    logger_server.debug("SVDB: Request received with params: %s", request.GET)
+    logger_server.info("SVIF: Request received with params: %s", request.GET)
+
     user_model = get_user_model()
     school = request.GET.get("school")
     grade = request.GET.get("grade")
@@ -45,13 +53,19 @@ def api_students(request):
         for student in students_query
     ]
 
-    logger.debug("Students data: %s", students_data)
     return JsonResponse(students_data, safe=False)
 
 
 @login_required
 @manager_required
 def api_courses(request):
+    logger_appleWeb.debug("AWDB: Request received with params: %s", request.GET)
+    logger_appleWeb.info("AWIF: Request received with params: %s", request.GET)
+    logger_django.debug("DJDB: Request received with params: %s", request.GET)
+    logger_django.info("DJIF: Request received with params: %s", request.GET)
+    logger_server.debug("SVDB: Request received with params: %s", request.GET)
+    logger_server.info("SVIF: Request received with params: %s", request.GET)
+
     day = request.GET.get("day")
     school = request.GET.get("school")
     courses = Course.objects.filter(
