@@ -18,21 +18,22 @@ const subjectTranslations = {
     integrated_science: '통합과학'
 };
 
+
 function filterCourses(school) {
-    const url = `/management/api/courses?day=${new Date().toLocaleDateString('ko-KR', { weekday: 'long' }).toLowerCase()}&school=${school}`;
+    const day = new Date().toLocaleDateString('ko-KR', { weekday: 'long' }).toLowerCase();
+    const url = `/management/api/courses/?day=${day}&school=${school}`;
 
-    // Testing: 일요일 수업
-    // const url = `/management/api/courses?day=일요일&school=${school}`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            console.log("MANAGEHOME",data);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            console.log('MANAGEHOME', data);
             const coursesByGrade = {
                 '2학년': { '물리': [], '화학': [], '생명과학': [], '지구과학': [] },
                 '1학년': { '통합과학': [] }
             };
-        
+
             data.forEach(course => {
                 const subject = subjectTranslations[course.course_subject];
                 if (course.course_grade in coursesByGrade && subject in coursesByGrade[course.course_grade]) {
@@ -43,9 +44,49 @@ function filterCourses(school) {
                 }
             });
             displayCourses(coursesByGrade);
-        })
-        .catch(error => console.error('Error loading the courses:', error));
+        },
+        beforeSend: function() {
+            console.log('I am waiting');
+        },
+        complete: function() {
+            console.log('I am done');
+        },
+        error: function(request, status, error) {
+            console.log('I am failed');
+            console.error('Error loading the courses:', error);
+        }
+    });
 }
+
+// 원본 코드
+// function filterCourses(school) {
+//     const url = `/management/api/courses?day=${new Date().toLocaleDateString('ko-KR', { weekday: 'long' }).toLowerCase()}&school=${school}`;
+
+//     // Testing: 일요일 수업
+//     // const url = `/management/api/courses?day=일요일&school=${school}`;
+
+//     fetch(url)
+//         .then(response => response.json())
+//         .then(data => {
+//             console.log("MANAGEHOME",data);
+//             const coursesByGrade = {
+//                 '2학년': { '물리': [], '화학': [], '생명과학': [], '지구과학': [] },
+//                 '1학년': { '통합과학': [] }
+//             };
+        
+//             data.forEach(course => {
+//                 const subject = subjectTranslations[course.course_subject];
+//                 if (course.course_grade in coursesByGrade && subject in coursesByGrade[course.course_grade]) {
+//                     coursesByGrade[course.course_grade][subject].push({
+//                         id: course.id,
+//                         time: course.course_time
+//                     });
+//                 }
+//             });
+//             displayCourses(coursesByGrade);
+//         })
+//         .catch(error => console.error('Error loading the courses:', error));
+// }
 
 function displayCourses(coursesByGrade) {
     let allEmpty = true;

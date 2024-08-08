@@ -27,18 +27,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
-//test
-// document.addEventListener('DOMContentLoaded', function() {
-//     // 모든 timetable-box 요소에 대해 이벤트 리스너를 추가
-//     document.querySelectorAll('.timetable-box').forEach(box => {
-//         box.addEventListener('click', function() {
-//             // data-timetable 속성 값을 콘솔에 출력
-//             const timetable = this.getAttribute('data-timetable');
-//             console.log('Clicked timetable:', timetable);
-//         });
-//     });
-// });
-
 // makeStars: header background module
 const makeStars = () => {
     const $sky = document.querySelector(".sky");
@@ -67,27 +55,6 @@ const makeStars = () => {
     
     $sky.innerHTML = htmlDummy;
 }
-
-// AJAX 처리: 로그인
-// document.addEventListener('DOMContentLoaded', function() {
-//     const loginForm = document.getElementById('loginForm');
-//     loginForm.addEventListener('submit', function(e) {
-//         e.preventDefault();
-//         const formData = new FormData(loginForm);
-//         fetch('/path/to/login/', {
-//             method: 'POST',
-//             body: formData
-//         }).then(response => response.json())
-//           .then(data => {
-//               if (data.success) {
-//                   $('#loginModal').modal('hide');
-//                   console.log('로그인 성공');
-//               } else {
-//                   console.log('로그인 실패');
-//               }
-//           }).catch(error => console.error('Error:', error));
-//     });
-// });
 
 // Naver map API options
 function initMap() {

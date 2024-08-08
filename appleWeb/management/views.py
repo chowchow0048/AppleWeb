@@ -33,8 +33,8 @@ def api_students(request):
     users = User.objects.all()
     school = request.GET.get("school")
     grade = request.GET.get("grade")
-    # students_query = users.objects.filter(is_active=True)
-    students_query = users
+    students_query = users.objects.filter(is_active=True)
+    # students_query = users
 
     if school:
         students_query = students_query.filter(school=school)
