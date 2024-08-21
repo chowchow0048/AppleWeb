@@ -5,6 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.core.exceptions import ValidationError
 from django.db.models import F
 from django.forms import CheckboxSelectMultiple, ModelForm
+import re
 
 from .models import (
     Absence,
@@ -108,23 +109,28 @@ class UserAdmin(BaseUserAdmin):
     actions = [
         "activate_users",
         "deactivate_users",
+        "format_phone_numbers",
         "set_payment_request_true",
         "set_payment_request_false",
-        "add_payment_count_12",
-        "set_payment_count_12",
+        "sub_payment_count_1",
+        "add_payment_count_1",
         "add_payment_count_4",
-        "set_payment_count_4",
+        "add_payment_count_8",
+        "add_payment_count_12",
         "set_payment_count_1",
-        "set_physics_true",
-        "set_physics_false",
-        "set_chemistry_true",
-        "set_chemistry_false",
-        "set_biology_true",
-        "set_biology_false",
-        "set_earth_science_true",
-        "set_earth_science_false",
-        "set_integrated_science_true",
-        "set_integrated_science_false",
+        "set_payment_count_4",
+        "set_payment_count_8",
+        "set_payment_count_12",
+        # "set_physics_true",
+        # "set_physics_false",
+        # "set_chemistry_true",
+        # "set_chemistry_false",
+        # "set_biology_true",
+        # "set_biology_false",
+        # "set_earth_science_true",
+        # "set_earth_science_false",
+        # "set_integrated_science_true",
+        # "set_integrated_science_false",
     ]
 
     def activate_users(self, request, queryset):
@@ -139,6 +145,34 @@ class UserAdmin(BaseUserAdmin):
 
     deactivate_users.short_description = "회원 비활성화"
 
+    def format_phone_numbers(modeladmin, request, queryset):
+        formatted_count = 0
+
+        for user in queryset:
+            # 전화번호에서 숫자 이외의 문자를 제거
+            if user.phone:
+                digits = re.sub(r"\D", "", user.phone)
+
+                user.phone = f"{digits[:3]}-{digits[3:7]}-{digits[7:11]}"
+                formatted_count += 1
+
+            if user.parent_phone:
+                parent_digits = re.sub(r"\D", "", user.parent_phone)
+
+                user.parent_phone = (
+                    f"{parent_digits[:3]}-{parent_digits[3:7]}-{parent_digits[7:11]}"
+                )
+                formatted_count += 1
+
+            user.save()
+
+        modeladmin.message_user(
+            request,
+            f"{formatted_count}명의 사용자의 전화번호가 형식에 맞게 수정되었습니다.",
+        )
+
+    format_phone_numbers.short_description = "전화번호 정규화"
+
     def set_payment_request_true(self, request, queryset):
         count = queryset.update(payment_request=True)
         self.message_user(request, ("%d 결제요청 ON" % count))
@@ -151,17 +185,17 @@ class UserAdmin(BaseUserAdmin):
 
     set_payment_request_false.short_description = "결제요청 OFF"
 
-    def add_payment_count_12(self, request, queryset):
-        count = queryset.update(payment_count=F("payment_count") + 12)
-        self.message_user(request, ("%d 결제횟수 12회 추가" % count))
+    def sub_payment_count_1(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") - 1)
+        self.message_user(request, ("%d 결제횟수 1회 감소" % count))
 
-    add_payment_count_12.short_description = "결제횟수 12회 추가"
+    sub_payment_count_1.short_description = "결제횟수 1회 감소"
 
-    def set_payment_count_12(self, request, queryset):
-        count = queryset.update(payment_count=12)
-        self.message_user(request, ("%d 결제횟수 12회로 변경" % count))
+    def add_payment_count_1(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") + 1)
+        self.message_user(request, ("%d 결제횟수 1회 추가" % count))
 
-    set_payment_count_12.short_description = "결제횟수 12회로 변경"
+    add_payment_count_1.short_description = "결제횟수 1회 추가"
 
     def add_payment_count_4(self, request, queryset):
         count = queryset.update(payment_count=F("payment_count") + 4)
@@ -169,11 +203,17 @@ class UserAdmin(BaseUserAdmin):
 
     add_payment_count_4.short_description = "결제횟수 4회 추가"
 
-    def set_payment_count_4(self, request, queryset):
-        count = queryset.update(payment_count=4)
-        self.message_user(request, ("%d 결제횟수 4회로 변경" % count))
+    def add_payment_count_8(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") + 8)
+        self.message_user(request, ("%d 결제횟수 8회 추가" % count))
 
-    set_payment_count_4.short_description = "결제횟수 4회로 변경"
+    add_payment_count_8.short_description = "결제횟수 8회 추가"
+
+    def add_payment_count_12(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") + 12)
+        self.message_user(request, ("%d 결제횟수 12회 추가" % count))
+
+    add_payment_count_12.short_description = "결제횟수 12회 추가"
 
     def set_payment_count_1(self, request, queryset):
         count = queryset.update(payment_count=1)
@@ -181,65 +221,83 @@ class UserAdmin(BaseUserAdmin):
 
     set_payment_count_1.short_description = "결제횟수 1회로 변경"
 
-    def set_physics_true(self, request, queryset):
-        count = queryset.update(physics=True)
-        self.message_user(request, ("%d 선택과목 물리 ON" % count))
+    def set_payment_count_4(self, request, queryset):
+        count = queryset.update(payment_count=4)
+        self.message_user(request, ("%d 결제횟수 4회로 변경" % count))
 
-    set_physics_true.short_description = "선택과목 물리 ON"
+    set_payment_count_4.short_description = "결제횟수 4회로 변경"
 
-    def set_physics_false(self, request, queryset):
-        count = queryset.update(physics=False)
-        self.message_user(request, ("%d 선택과목 물리 OFF" % count))
+    def set_payment_count_8(self, request, queryset):
+        count = queryset.update(payment_count=8)
+        self.message_user(request, ("%d 결제횟수 8회로 변경" % count))
 
-    set_physics_false.short_description = "선택과목 물리 OFF"
+    set_payment_count_8.short_description = "결제횟수 8회로 변경"
 
-    def set_chemistry_true(self, request, queryset):
-        count = queryset.update(chemistry=True)
-        self.message_user(request, ("%d 선택과목 화학 ON" % count))
+    def set_payment_count_12(self, request, queryset):
+        count = queryset.update(payment_count=12)
+        self.message_user(request, ("%d 결제횟수 12회로 변경" % count))
 
-    set_chemistry_true.short_description = "선택과목 화학 ON"
+    set_payment_count_12.short_description = "결제횟수 12회로 변경"
 
-    def set_chemistry_false(self, request, queryset):
-        count = queryset.update(chemistry=False)
-        self.message_user(request, ("%d 선택과목 화학 OFF" % count))
+    # def set_physics_true(self, request, queryset):
+    #     count = queryset.update(physics=True)
+    #     self.message_user(request, ("%d 선택과목 물리 ON" % count))
 
-    set_chemistry_false.short_description = "선택과목 화학 OFF"
+    # set_physics_true.short_description = "선택과목 물리 ON"
 
-    def set_biology_true(self, request, queryset):
-        count = queryset.update(biology=True)
-        self.message_user(request, ("%d 선택과목 생명과학 ON" % count))
+    # def set_physics_false(self, request, queryset):
+    #     count = queryset.update(physics=False)
+    #     self.message_user(request, ("%d 선택과목 물리 OFF" % count))
 
-    set_biology_true.short_description = "선택과목 생명과학 ON"
+    # set_physics_false.short_description = "선택과목 물리 OFF"
 
-    def set_biology_false(self, request, queryset):
-        count = queryset.update(biology=False)
-        self.message_user(request, ("%d 선택과목 생명과학 OFF" % count))
+    # def set_chemistry_true(self, request, queryset):
+    #     count = queryset.update(chemistry=True)
+    #     self.message_user(request, ("%d 선택과목 화학 ON" % count))
 
-    set_biology_false.short_description = "선택과목 생명과학 OFF"
+    # set_chemistry_true.short_description = "선택과목 화학 ON"
 
-    def set_earth_science_true(self, request, queryset):
-        count = queryset.update(earth_science=True)
-        self.message_user(request, ("%d 선택과목 지구과학 ON" % count))
+    # def set_chemistry_false(self, request, queryset):
+    #     count = queryset.update(chemistry=False)
+    #     self.message_user(request, ("%d 선택과목 화학 OFF" % count))
 
-    set_earth_science_true.short_description = "선택과목 지구과학 ON"
+    # set_chemistry_false.short_description = "선택과목 화학 OFF"
 
-    def set_earth_science_false(self, request, queryset):
-        count = queryset.update(earth_science=False)
-        self.message_user(request, ("%d 선택과목 지구과학 OFF" % count))
+    # def set_biology_true(self, request, queryset):
+    #     count = queryset.update(biology=True)
+    #     self.message_user(request, ("%d 선택과목 생명과학 ON" % count))
 
-    set_earth_science_false.short_description = "선택과목 지구과학 OFF"
+    # set_biology_true.short_description = "선택과목 생명과학 ON"
 
-    def set_integrated_science_true(self, request, queryset):
-        count = queryset.update(integrated_science=True)
-        self.message_user(request, ("%d 선택과목 통합과학 ON" % count))
+    # def set_biology_false(self, request, queryset):
+    #     count = queryset.update(biology=False)
+    #     self.message_user(request, ("%d 선택과목 생명과학 OFF" % count))
 
-    set_integrated_science_true.short_description = "선택과목 통합과학 ON"
+    # set_biology_false.short_description = "선택과목 생명과학 OFF"
 
-    def set_integrated_science_false(self, request, queryset):
-        count = queryset.update(integrated_science=False)
-        self.message_user(request, ("%d 선택과목 통합과학 OFF" % count))
+    # def set_earth_science_true(self, request, queryset):
+    #     count = queryset.update(earth_science=True)
+    #     self.message_user(request, ("%d 선택과목 지구과학 ON" % count))
 
-    set_integrated_science_false.short_description = "선택과목 통합과학 OFF"
+    # set_earth_science_true.short_description = "선택과목 지구과학 ON"
+
+    # def set_earth_science_false(self, request, queryset):
+    #     count = queryset.update(earth_science=False)
+    #     self.message_user(request, ("%d 선택과목 지구과학 OFF" % count))
+
+    # set_earth_science_false.short_description = "선택과목 지구과학 OFF"
+
+    # def set_integrated_science_true(self, request, queryset):
+    #     count = queryset.update(integrated_science=True)
+    #     self.message_user(request, ("%d 선택과목 통합과학 ON" % count))
+
+    # set_integrated_science_true.short_description = "선택과목 통합과학 ON"
+
+    # def set_integrated_science_false(self, request, queryset):
+    #     count = queryset.update(integrated_science=False)
+    #     self.message_user(request, ("%d 선택과목 통합과학 OFF" % count))
+
+    # set_integrated_science_false.short_description = "선택과목 통합과학 OFF"
 
 
 class CourseAdminForm(forms.ModelForm):
@@ -296,7 +354,16 @@ class CourseAdmin(admin.ModelAdmin):
         "course_subject",
         "course_day",
     )
-    actions = ("activate_course", "deactivate_course")
+    actions = (
+        "activate_course",
+        "deactivate_course",
+        "set_day_wed",
+        "set_day_thu",
+        "set_day_fri",
+        "set_day_sat",
+        "set_day_sun",
+        "set_time_1200",
+    )
     filter_horizontal = ("course_students",)
 
     def activate_course(self, request, queryset):
@@ -310,6 +377,42 @@ class CourseAdmin(admin.ModelAdmin):
         self.message_user(request, ("%d 강의 비활성화" % count))
 
     deactivate_course.short_description = "강의 비활성화"
+
+    def set_day_wed(self, request, queryset):
+        count = queryset.update(course_day="수요일")
+        self.message_user(request, ("%d 수업요일 == 수요일" % count))
+
+    set_day_wed.short_description = "수업요일을 수요일로"
+
+    def set_day_thu(self, request, queryset):
+        count = queryset.update(course_day="목요일")
+        self.message_user(request, ("%d 수업요일 == 목요일" % count))
+
+    set_day_thu.short_description = "수업요일을 목요일로"
+
+    def set_day_fri(self, request, queryset):
+        count = queryset.update(course_day="금요일")
+        self.message_user(request, ("%d 수업요일 == 금요일" % count))
+
+    set_day_fri.short_description = "수업요일을 금요일로"
+
+    def set_day_sat(self, request, queryset):
+        count = queryset.update(course_day="토요일")
+        self.message_user(request, ("%d 수업요일 == 토요일" % count))
+
+    set_day_sat.short_description = "수업요일을 토요일로"
+
+    def set_day_sun(self, request, queryset):
+        count = queryset.update(course_day="일요일")
+        self.message_user(request, ("%d 수업요일 == 일요일" % count))
+
+    set_day_sun.short_description = "수업요일을 일요일로"
+
+    def set_time_1200(self, request, queryset):
+        count = queryset.update(course_time="12:00:00")
+        self.message_user(request, ("%d 수업시간==1200" % count))
+
+    set_time_1200.short_description = "수업시간 1200"
 
 
 # AttendanceAdmin 클래스

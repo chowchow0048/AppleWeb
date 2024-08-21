@@ -131,9 +131,9 @@ class Course(models.Model):
         verbose_name="선택과목",
     )
     course_day = models.CharField(
-        max_length=10, choices=DAY_CHOICES, verbose_name="수업 요일"
+        max_length=10, choices=DAY_CHOICES, verbose_name="수업 요일", default="일요일"
     )
-    course_time = models.TimeField(verbose_name="수업 시작 시간")
+    course_time = models.TimeField(verbose_name="수업 시작 시간", default="10:00")
     course_room = models.CharField(
         max_length=10,
         choices=ROOM_CHOICES,
