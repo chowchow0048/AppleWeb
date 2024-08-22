@@ -149,10 +149,10 @@ def management_lecture(request, course_id):
     students = course.course_students.all()
     today = timezone.now().date()
 
-    print("course:", course)
-    print("students:", students)
-    print("course_id:", course_id)
-    print("today:", today)
+    # print("course:", course)
+    # print("students:", students)
+    # print("course_id:", course_id)
+    # print("today:", today)
 
     attendance_records = {
         attendance.student.id: attendance
@@ -201,8 +201,8 @@ def bulk_attendance(request):
     old_attendance_records = Attendance.objects.filter(course=course, date=date)
     old_absence_records = Absence.objects.filter(course=course, date=date)
 
-    print("OLD ATTENDANCE RECORD:", old_attendance_records)
-    print("OLD ABSENCE RECORD:", old_absence_records)
+    # print("OLD ATTENDANCE RECORD:", old_attendance_records)
+    # print("OLD ABSENCE RECORD:", old_absence_records)
 
     # 기존 출석 기록을 삭제하고, 결제 횟수를 복구합니다
     for record in old_attendance_records:

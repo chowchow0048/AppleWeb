@@ -31,7 +31,7 @@ function filterCourses(school) {
             console.log('MANAGEHOME', data);
             const coursesByGrade = {
                 '2학년': { '물리': [], '화학': [], '생명과학': [], '지구과학': [] },
-                '1학년': { '통합과학': [] }
+                '1학년': { '통합과학': [], '물리': [], '화학': [], '생명과학': [], '지구과학': [] }
             };
 
             data.forEach(course => {
