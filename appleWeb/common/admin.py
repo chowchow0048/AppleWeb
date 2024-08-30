@@ -73,10 +73,10 @@ class UserAdmin(BaseUserAdmin):
                 )
             },
         ),
-        (
-            "출석 및 결석",
-            {"fields": ("attended_dates", "absent_dates")},
-        ),
+        # (
+        #     "출석 및 결석",
+        #     {"fields": ("attended_dates", "absent_dates")},
+        # ),
         # (
         #     "강의",
         #     {"fields": "courses"},
@@ -91,6 +91,8 @@ class UserAdmin(BaseUserAdmin):
         "school",
         "grade",
     )
+    filter_horizontal = ("courses",)
+
     list_filter = (
         "is_active",
         "school",
@@ -121,6 +123,7 @@ class UserAdmin(BaseUserAdmin):
         "set_payment_count_4",
         "set_payment_count_8",
         "set_payment_count_12",
+        "sync_courses",
         # "set_physics_true",
         # "set_physics_false",
         # "set_chemistry_true",
@@ -132,6 +135,35 @@ class UserAdmin(BaseUserAdmin):
         # "set_integrated_science_true",
         # "set_integrated_science_false",
     ]
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        # 사용자 업데이트 시 관련된 Course의 course_students 필드를 업데이트
+        for course in obj.courses.all():
+            if obj not in course.course_students.all():
+                course.course_students.add(obj)
+            course.save()
+
+    def sync_courses(self, request, queryset):
+        for user in queryset:
+            # 현재 사용자가 등록된 수업들
+            user_courses = set(user.courses.all())
+            # 현재 사용자가 course_students에 포함된 수업들
+            correct_courses = set(Course.objects.filter(course_students=user))
+
+            # course_students에는 있지만 user의 courses에 없는 경우 추가
+            for course in correct_courses - user_courses:
+                user.courses.add(course)
+
+            # user의 courses에는 있지만 course_students에 없는 경우 제거
+            for course in user_courses - correct_courses:
+                user.courses.remove(course)
+
+            user.save()
+
+        self.message_user(request, "선택된 사용자들의 courses 필드가 동기화되었습니다.")
+
+    sync_courses.short_description = "선택된 사용자들의 courses 필드 동기화"
 
     def activate_users(self, request, queryset):
         count = queryset.update(is_active=True)
@@ -365,6 +397,14 @@ class CourseAdmin(admin.ModelAdmin):
         "set_time_1200",
     )
     filter_horizontal = ("course_students",)
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        # 수업 업데이트 시 관련된 User의 courses 필드를 업데이트
+        for student in obj.course_students.all():
+            if obj not in student.courses.all():
+                student.courses.add(obj)
+            student.save()
 
     def activate_course(self, request, queryset):
         count = queryset.update(is_active=True)
