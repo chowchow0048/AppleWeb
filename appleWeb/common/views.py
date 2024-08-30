@@ -43,7 +43,8 @@ def login_view(request):
                 # 로그인
                 login(request, user)
                 # 지정한 페이지로 redirect
-                return redirect("community_home")
+                # return redirect("community_home")
+                return redirect("management_home")
             # 계정이 활성화되지 않은 경우
             else:
                 print("비활성화게정")
