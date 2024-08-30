@@ -108,6 +108,8 @@
                                         {{ request.user.name }}
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{% url 'management_home' %}">행정 페이지</a>
+                                        <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{% url 'user_logout' %}">로그아웃</a>
                                     </div>
                                 </div>
