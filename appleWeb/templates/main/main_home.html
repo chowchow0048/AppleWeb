@@ -130,7 +130,7 @@
                 <tr onclick="location.href='{% url 'notice_detail' article.id %}'">
                     <td class="col-no">{{ forloop.counter }}</td>
                     <td class="col-title">{{ article.title }}</td>
-                    <td class="col-author"> 관리자 </td>
+                    <td class="col-author"> 애플과학 </td>
                     <td class="col-date">{{ article.created_at|date:"Y-m-d" }}</td>
                 </tr>
                 {% empty %}
