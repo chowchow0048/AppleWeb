@@ -23,7 +23,7 @@
             <p class="col nomargin"><strong>작성일:</strong> {{ review.created_at|date:"Y-m-d" }}</p>
         </div>
     </div>
-    <div class="article-body" style="white-space: pre-wrap;">
+    <div class="article-body" style="white-space: pre-line; margin-top: -100px;">
         {% if review.image %}
             <img src="{{ review.image.url }}" class="review-image" alt="{{ review.title }}" onclick="openImageInNewWindow('{{ review.image.url }}')">
         {% endif %}

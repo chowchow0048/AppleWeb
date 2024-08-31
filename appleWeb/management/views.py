@@ -256,7 +256,7 @@ def management_student_detail(request, student_id):
     student = get_object_or_404(User, pk=student_id)
     attendances = Attendance.objects.filter(student=student).order_by("attended_at")
     absences = Absence.objects.filter(student=student).order_by("absent_at")
-    courses = student.enrolled_courses.all()
+    courses = student.enrolled_courses.filter(is_active=True).all()
 
     if not (user.is_superuser or user.is_manager or user.id == student_id):
         messages.error(request, "접근 권한이 없습니다.")
@@ -289,7 +289,7 @@ def confirm_payment(request, user_id):
     user = get_object_or_404(User, pk=user_id)
 
     # 수강하고있는 강의 수 만큼 결제횟수 갱신
-    course_count = user.enrolled_courses.count()
+    course_count = user.enrolled_courses.filter(is_active=True).count()
     user.payment_count += course_count * 4  # 기존 payment_count에 course 수 x 4를 더함
     user.payment_request = False
     user.latest_payment = timezone.now().date()  # 최근 결제 날짜를 오늘 날짜로 설정
