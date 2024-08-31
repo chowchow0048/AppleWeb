@@ -93,7 +93,7 @@ def export_attendance_to_excel(request, course_id):
     wb = Workbook()
     ws = wb.active
     ws.title = "Attendance"
-    ws.append(["학교", "학년", "이름", "전화번호", "부모님 전화번호", "출석", "결석"])
+    ws.append(["학교", "학년", "이름", "전화번호", "부모님 전화번호", "출석"])
 
     # 학생 데이터 추가
     for student in students:
@@ -105,7 +105,6 @@ def export_attendance_to_excel(request, course_id):
                 student.phone if student.phone else "-",
                 student.parent_phone if student.parent_phone else "-",
                 "",  # 출석
-                "",  # 결석
             ]
         )
 
@@ -115,7 +114,7 @@ def export_attendance_to_excel(request, course_id):
 
     # 제목 행 병합 및 스타일 설정
     ws.insert_rows(1)
-    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=7)
+    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=6)
     ws.cell(row=1, column=1).value = title
     ws.cell(row=1, column=1).alignment = Alignment(horizontal="center")
 

@@ -109,11 +109,11 @@ class Course(models.Model):
         ("biology", "생명과학"),
         ("earth_science", "지구과학"),
         ("integrated_science", "통합과학"),
-        ("special_physics", "특강-물리"),
-        ("special_chemistry", "특강-화학"),
-        ("special_biology", "특강-생명과학"),
-        ("special_earth_science", "특강-지구과학"),
-        ("special_integrated_science", "특강-통합과학"),
+        # ("special_physics", "특강-물리"),
+        # ("special_chemistry", "특강-화학"),
+        # ("special_biology", "특강-생명과학"),
+        # ("special_earth_science", "특강-지구과학"),
+        # ("special_integrated_science", "특강-통합과학"),
     )
     is_active = models.BooleanField(
         default=False, verbose_name="활성화"
@@ -155,7 +155,20 @@ class Course(models.Model):
     )
 
     def __str__(self):
-        return f"{self.course_school} {self.course_grade} {self.course_subject} {self.course_time}"
+        subject = self.course_subject
+
+        if subject == "physics":
+            subject = "물리"
+        elif subject == "chemistry":
+            subject = "화학"
+        elif subject == "biology":
+            subject = "생명과학"
+        elif subject == "earth_science":
+            subject = "지구과학"
+        else:
+            subject = "통합과학"
+
+        return f"{self.course_school} {self.course_grade} {subject} {self.course_day} {self.course_time}"
 
     class Meta:
         verbose_name = "수업"
