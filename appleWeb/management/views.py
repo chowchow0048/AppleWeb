@@ -14,6 +14,8 @@ from common.models import User, Course, Attendance, Absence
 from common.decorators import manager_required
 import pandas as pd
 import logging
+import urllib.parse
+
 
 logger_appleWeb = logging.getLogger("appleWeb")
 # logger_django = logging.getLogger("django")
@@ -86,8 +88,21 @@ def export_attendance_to_excel(request, course_id):
 
     # 엑셀 파일 제목 줄 설정
     today = timezone.now().strftime("%Y-%m-%d")
-    subject = course.course_subject.capitalize()  # 과목명을 적절히 포맷팅
+    subject = course.course_subject
+    if subject == "physics":
+        subject = "물리"
+    elif subject == "chemistry":
+        subject = "화학"
+    elif subject == "biology":
+        subject = "생명과학"
+    elif subject == "earth_science":
+        subject = "지구과학"
+    else:
+        subject = "통합과학"
+
     title = f"{course.course_school} {course.course_grade} {subject} / {course.course_day} {course.course_time.strftime('%H:%M')} / {today}"
+    filename = f"{course.course_school}{course.course_grade}_{subject}_{course.course_day}_{course.course_time.strftime('%H')}시_출석부.xlsx"
+    encoded_filename = urllib.parse.quote(filename.encode("utf-8"))
 
     # 워크북 생성
     wb = Workbook()
@@ -110,7 +125,7 @@ def export_attendance_to_excel(request, course_id):
 
     # 열 너비 조정
     for col in range(1, 8):  # 열 A부터 G까지
-        ws.column_dimensions[get_column_letter(col)].width = 20
+        ws.column_dimensions[get_column_letter(col)].width = 15
 
     # 제목 행 병합 및 스타일 설정
     ws.insert_rows(1)
@@ -122,7 +137,9 @@ def export_attendance_to_excel(request, course_id):
     response = HttpResponse(
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
-    response["Content-Disposition"] = f'attachment; filename="{title}.xlsx"'
+
+    # UTF-8로 인코딩된 파일 이름 적용
+    response["Content-Disposition"] = f"attachment; filename*=UTF-8''{encoded_filename}"
 
     # 엑셀 파일 저장 및 전송
     wb.save(response)
