@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils import timezone
+from django_ckeditor_5.fields import CKEditor5Field  # CKEditor 5 필드 추가
 
 
 class User(AbstractUser):
@@ -257,6 +258,7 @@ class Blacklist(models.Model):
         return f"블랙리스트: {self.school} {self.grade} - {self.name}"
 
 
+# after CKEditor5
 class Board(models.Model):
     POSTED_IN_CHOICES = (
         ("community", "커뮤니티"),
@@ -265,7 +267,7 @@ class Board(models.Model):
     )
 
     title = models.CharField(max_length=100, verbose_name="제목")
-    content = models.TextField(verbose_name="내용")
+    content = CKEditor5Field("내용", config_name="default")  # CKEditor 5 필드로 변경
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="작성자"
     )
@@ -284,6 +286,36 @@ class Board(models.Model):
     class Meta:
         verbose_name = "게시판"
         verbose_name_plural = "게시판"
+
+
+# before CKEditor
+# class Board(models.Model):
+#     POSTED_IN_CHOICES = (
+#         ("community", "커뮤니티"),
+#         ("main", "메인"),
+#         ("management", "행정"),
+#     )
+
+#     title = models.CharField(max_length=100, verbose_name="제목")
+#     content = models.TextField(verbose_name="내용")
+#     author = models.ForeignKey(
+#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="작성자"
+#     )
+#     posted_in = models.CharField(
+#         max_length=10,
+#         choices=POSTED_IN_CHOICES,
+#         default="main",
+#         verbose_name="종류",
+#     )
+#     created_at = models.DateTimeField(auto_now_add=True, verbose_name="작성 날짜")
+#     updated_at = models.DateTimeField(auto_now=True, verbose_name="수정 날짜")
+
+#     def __str__(self):
+#         return self.title
+
+#     class Meta:
+#         verbose_name = "게시판"
+#         verbose_name_plural = "게시판"
 
 
 # from PIL import Image

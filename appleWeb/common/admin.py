@@ -5,6 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.core.exceptions import ValidationError
 from django.db.models import F
 from django.forms import CheckboxSelectMultiple, ModelForm
+from django_ckeditor_5.widgets import CKEditor5Widget  # CKEditor 5 위젯 추가
 import re
 
 from .models import (
@@ -19,14 +20,16 @@ from .models import (
 )
 
 
-# Custom AdminSite을 정의하여 superuser만 접근할 수 있도록 함
 class MyAdminSite(admin.AdminSite):
+    site_header = "애플과학 관리 시스템"
+    site_title = "애플과학 관리자"
+    site_name = "애플과학 관리 시스템"
+    index_title = "관리자 대시보드"
+
     def has_permission(self, request):
-        # superuser만 관리자 페이지에 접근할 수 있도록 설정
         return request.user.is_active and request.user.is_superuser
 
 
-# 기존의 admin.site 인스턴스를 custom AdminSite 인스턴스로 대체
 admin_site = MyAdminSite(name="myadmin")
 
 
@@ -468,6 +471,19 @@ class AbsenceAdmin(admin.ModelAdmin):
     search_fields = ("student__username", "course__title")
 
 
+class BoardAdminForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditor5Widget(config_name="default"))
+
+    class Meta:
+        model = Board
+        fields = "__all__"
+
+
+class BoardAdmin(admin.ModelAdmin):
+    form = BoardAdminForm
+    list_display = ("title", "author", "created_at", "updated_at")
+
+
 # WaitlistAdmin 클래스
 class WaitlistAdmin(admin.ModelAdmin):
     list_display = ("name", "school", "grade", "parent_phone", "note")
@@ -488,5 +504,5 @@ admin.site.register(Review)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Attendance, AttendanceAdmin)
 admin.site.register(Absence, AbsenceAdmin)
-admin.site.register(Waitlist, WaitlistAdmin)
-admin.site.register(Blacklist, BlacklistAdmin)
+# admin.site.register(Waitlist, WaitlistAdmin)
+# admin.site.register(Blacklist, BlacklistAdmin)

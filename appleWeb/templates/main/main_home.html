@@ -7,22 +7,81 @@
         .header .container {
             padding: 0 1rem;
         }
-        .timetable-box, .review-box {
+        .timetable-box{
             font-size: 0.875rem;
+            width: auto;
+            height: 5rem;
+            border-radius: 15px;
         }
+
+        .table{
+            width: 100%;
+            height: auto;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+
+            .th-no{
+                display: none;
+            }
+
+            .th-title{
+                width: 90%;
+            }
+
+            .th-date{
+                /* display: none; */
+                width: 10%;
+            }
+
+            .col-no{
+                display: none;
+            }
+
+            .col-title{
+                width: 90%;
+            }
+
+            .col-date{
+                /* display: none; */
+                width: 10%;
+            }
+        }
+
+        tbody.col-title{
+            overflow: hidden;
+        }
+
         .way-info-title h2 {
             font-size: 1.5rem;
         }
+
         /* #map {
             display: none;
         } */
+
         .way-info {
             flex: 1 1 100%;
             max-width: 100%;
         }
+
         .timetable-container, .review-container {
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
+
+            .col {
+                width: 100%;
+            }
+        }
+
+        .review-box {
+            font-size: 0.875rem;
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
+
+        footer{
+            display: none;
         }
     }
 
@@ -84,19 +143,24 @@
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">제목</th>
-                    <th scope="col">작성자</th>
-                    <th scope="col">작성일</th>
+                    <th scope="col" class="th-no" >No</th>
+                    <th scope="col" class="th-title">제목</th>
+                    <th scope="col" class="th-date">작성일</th>
                 </tr>
             </thead>
             <tbody>
                 {% for article in articles %}
-                <tr onclick="location.href='{% url 'notice_detail' article.id %}'">
+                <!-- <tr onclick="location.href='{% url 'notice_detail' article.id %}'">
                     <td class="col-no">{{ forloop.counter }}</td>
                     <td class="col-title">{{ article.title }}</td>
                     <td class="col-author"> 애플과학 </td>
                     <td class="col-date">{{ article.created_at|date:"Y-m-d" }}</td>
+                </tr> -->
+
+                <tr onclick="location.href='{% url 'notice_detail' article.id %}'">
+                    <td class="col-no">{{ forloop.counter }}</td>
+                    <td class="col-title">{{ article.title }}</td>
+                    <td class="col-date">{{ article.created_at|date:"Y.m.d" }}</td>
                 </tr>
                 {% empty %}
                 {% for _ in articles.paginator.page_range|slice:":10" %}

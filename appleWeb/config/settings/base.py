@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_ckeditor_5",  # CKEditor 5 추가
 ]
 
 MIDDLEWARE = [
@@ -221,5 +222,34 @@ LOGGING = {
             "handlers": ["file"],
             "level": "DEBUG",
         },
+    },
+}
+
+
+# CKEditor 5 설정
+CKEDITOR_5_CONFIGS = {
+    "default": {
+        "toolbar": [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "link",
+            "bulletedList",
+            "numberedList",
+            "blockQuote",
+        ],
+        "height": 300,
+        "width": "auto",
+        "image": {
+            "toolbar": ["imageTextAlternative", "imageStyle:full", "imageStyle:side"],
+        },
+        "link": {
+            "addTargetToExternalLinks": True,
+        },
+    },
+    "extends": {
+        "toolbar": "full",  # 전체 툴바 사용 시
+        "width": "100%",
     },
 }

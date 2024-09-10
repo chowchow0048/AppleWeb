@@ -19,6 +19,10 @@ from django.urls import path, include
 from django.contrib import admin
 from django.conf.urls import handler404, handler400, handler403, handler500
 from django.conf.urls.static import static
+from django_ckeditor_5 import urls as ckeditor_5_urls
+
+admin.site.site_header = "애플과학 관리 시스템"
+admin.site.site_title = "애플과학 관리 시스템"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -26,6 +30,7 @@ urlpatterns = [
     # path("community/", include("community.urls")),
     path("user/", include("common.urls")),
     path("management/", include("management.urls")),
+    path("ckeditor5/", include(ckeditor_5_urls)),  # CKEditor 5 URL 패턴 추가
 ]
 
 handler404 = "common.views.page_not_found"

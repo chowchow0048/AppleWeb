@@ -62,7 +62,7 @@
         {% if review.image %}
             <img src="{{ review.image.url }}" class="review-image" alt="{{ review.title }}" onclick="openImageInNewWindow('{{ review.image.url }}')">
         {% endif %}
-        <p>{{ review.content }}</p>
+        <p>{{ review.content|safe }}</p>
     </div>
 </div>
 

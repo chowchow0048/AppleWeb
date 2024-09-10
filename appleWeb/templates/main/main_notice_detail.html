@@ -6,15 +6,15 @@
 {% block content %}
 <div class="article-container container mt-5">
     <div class="article-header mb-3">
-        <h2 class="article-header__title nomargin" >{{ article.title }}</h2>
+        <h2 class="article-header__title" >{{ article.title }}</h2>
         
         <div class="article-header__info row">
             <p class="col nomargin"><strong>작성자:</strong> 애플과학 </p>
             <p class="col nomargin"><strong>작성일:</strong> {{ article.created_at|date:"Y-m-d" }}</p>
         </div>
     </div>
-    <div class="article-body" style="white-space: pre-line; margin-top: -100px;">
-        <p>{{ article.content }}</p>
-    </div>
+    <div class="article-body" style="white-space: inherit;">
+        <p>{{ article.content|safe }}</p>
+    </div>    
 </div>
 {% endblock %}

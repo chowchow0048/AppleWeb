@@ -63,6 +63,55 @@ html[data-theme="dark"] {
 
     --close-button-bg: #333333;
     --close-button-hover-bg: #666666;
+
+    .ck.ck-toolbar{
+        background-color: #1f1f1f !important;
+        color: #f5f5f5 !important;
+    }
+
+    .ck.ck-editor__editable {
+        background-color: #2c2c2c !important;  /* 다크 모드 배경 */
+        color: #f5f5f5 !important;            /* 다크 모드 글자 색 */
+    }
+
+    .ck.ck-editor__top {
+        background-color: #1f1f1f !important; /* 툴바 배경 색상 */
+        color: #f5f5f5 !important;            /* 툴바 글자 색상 */
+    }
+
+    .ck.ck-button.ck-on{
+        background-color: #2c2c2c !important;
+        color: #f5f5f5 !important;
+    }
+
+    .ck.ck-button__label {
+        color: #f5f5f5 !important;            /* 툴바 버튼 텍스트 */
+    }
+
+    .ck.ck-button:not(.ck-disabled):hover, a.ck.ck-button:not(.ck-disabled):hover {
+        background-color: #666666 !important;
+    }
+
+    .ck.ck-list{
+        background-color: #000000 !important;
+    }
+
+
+    .ck.ck-dropdown__panel {
+        background-color: #2c2c2c !important; /* 드롭다운 메뉴 배경 색상 */
+        color: #f5f5f5 !important;            /* 드롭다운 메뉴 텍스트 색상 */
+        transition: all 0.5s linear;
+
+        &:hover{
+            background-color: #000000 !important; 
+            color: #f5f5f5 !important;
+        }
+
+        &:focus{
+            background-color: #1f1f1f !important;
+            color: #f5f5f5 !important;
+        }
+    }
 }
 
 /* THEME SWITCH */
