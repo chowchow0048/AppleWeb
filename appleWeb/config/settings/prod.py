@@ -20,3 +20,10 @@ DATABASES = {
         "PORT": "5432",
     }
 }
+
+# CKEditor에서 파일을 업로드하는 경로 (미디어 파일)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media/"
+
+# CKEditor 업로드 경로
+CKEDITOR_UPLOAD_PATH = "uploads/"
