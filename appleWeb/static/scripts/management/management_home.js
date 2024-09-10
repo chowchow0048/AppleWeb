@@ -58,36 +58,6 @@ function filterCourses(school) {
     });
 }
 
-// 원본 코드
-// function filterCourses(school) {
-//     const url = `/management/api/courses?day=${new Date().toLocaleDateString('ko-KR', { weekday: 'long' }).toLowerCase()}&school=${school}`;
-
-//     // Testing: 일요일 수업
-//     // const url = `/management/api/courses?day=일요일&school=${school}`;
-
-//     fetch(url)
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log("MANAGEHOME",data);
-//             const coursesByGrade = {
-//                 '2학년': { '물리': [], '화학': [], '생명과학': [], '지구과학': [] },
-//                 '1학년': { '통합과학': [] }
-//             };
-        
-//             data.forEach(course => {
-//                 const subject = subjectTranslations[course.course_subject];
-//                 if (course.course_grade in coursesByGrade && subject in coursesByGrade[course.course_grade]) {
-//                     coursesByGrade[course.course_grade][subject].push({
-//                         id: course.id,
-//                         time: course.course_time
-//                     });
-//                 }
-//             });
-//             displayCourses(coursesByGrade);
-//         })
-//         .catch(error => console.error('Error loading the courses:', error));
-// }
-
 function displayCourses(coursesByGrade) {
     let allEmpty = true;
     Object.entries(coursesByGrade).forEach(([grade, subjects]) => {

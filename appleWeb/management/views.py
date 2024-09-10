@@ -36,18 +36,21 @@ def api_students(request):
     if grade and grade != "전체":
         students_query = students_query.filter(grade=grade)
 
-    students_data = [
-        {
-            "id": student.id,
-            "school": student.school,
-            "grade": student.grade,
-            "name": student.name,
-            "phone": student.phone,
-            "parent_phone": student.parent_phone,
-            "payment_count": student.payment_count,
-        }
-        for student in students_query
-    ]
+    students_data = sorted(
+        [
+            {
+                "id": student.id,
+                "school": student.school,
+                "grade": student.grade,
+                "name": student.name,
+                "phone": student.phone,
+                "parent_phone": student.parent_phone,
+                "payment_count": student.payment_count,
+            }
+            for student in students_query
+        ],
+        key=lambda student: student["name"],  # name을 기준으로 오름차순 정렬
+    )
 
     return JsonResponse(students_data, safe=False)
 
@@ -354,59 +357,3 @@ def management_waitList(request):
 @manager_required
 def management_blacklist(request):
     return render(request, "management/management_blacklist.html")
-
-
-# 보류
-# @login_required
-# def api_special_lecture_students(request):
-#     school = request.GET.get("school")
-#     grade = request.GET.get("grade")
-#     subject = request.GET.get("subject")
-#     print("--------------------", "\n", school, grade, subject)
-#     students_query = User.objects.filter(is_active=True)  # 활성화된 사용자만 조회
-
-#     if school:
-#         students_query = students_query.filter(school=school)
-#     if grade and grade != "전체":
-#         students_query = students_query.filter(grade=grade)
-#     if subject:
-#         students_query = students_query.filter(courses__course_subject=subject)
-
-#     students_data = [
-#         {
-#             "id": student.id,
-#             "school": student.school,
-#             "grade": student.grade,
-#             "name": student.name,
-#             "phone": student.phone,
-#             "parent_phone": student.parent_phone,
-#             "payment_count": student.payment_count,
-#         }
-#         for student in students_query
-#     ]
-
-#     return JsonResponse({"students": students_data}, safe=False)
-
-
-# 보류
-# @login_required
-# def management_special_lecture(request):
-#     school = request.user.school
-#     grade = request.user.grade
-#     students = User.objects.filter(school=school, grade=grade)
-#     return render(
-#         request, "management/management_special_lecture.html", {"students": students}
-#     )
-
-
-# 보류
-# @login_required
-# def record_special_lecture_attendance(request):
-#     if request.method == "POST":
-#         attendance_ids = request.POST.getlist("attendance")
-#         students = User.objects.filter(id__in=attendance_ids)
-#         for student in students:
-#             student.payment_count -= 1
-#             student.save()
-#         return redirect("management_home")
-#     return redirect("management_special_lecture")

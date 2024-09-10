@@ -16,6 +16,31 @@
 ============================ custom ============================
 ================================================================
 */
+#search-form {
+  display: none;  /* 기본값을 none으로 설정하여 보이지 않게 */
+}
+
+#search-form.flex-row {
+  display: flex;
+  justify-content: space-between;  /* 자식 div들을 한 줄에 배치 */
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+#search-form div {
+  margin-right: 10px;
+}
+
+#sort-buttons button {
+  flex-grow: 1; /* 버튼들이 동일한 너비를 가지도록 */
+  width: 100%;  /* 추가적인 너비 설정 */
+}
+
+.search-form_half {
+  width: 40%;
+}
+
+
 .navbar-user{
   display: flex;
 }
@@ -33,8 +58,13 @@
 }
 
 .btn-second{
-  background-color: #E6E6E7;
-  color: #292929;
+  background-color: #4b4bad !important; 
+  color: #292929 !important;
+}
+
+.btn-third{
+  background-color: #8d8df8 !important;
+  color: #292929 !important;
 }
 
 .disable{
