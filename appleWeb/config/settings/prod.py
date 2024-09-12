@@ -4,7 +4,12 @@ from .base import *
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / ".env")
 
-ALLOWED_HOSTS = ["3.37.147.68", "banpo-apple.com", "www.banpo-apple.com"]
+ALLOWED_HOSTS = [
+    "3.37.147.68",
+    "banpo-apple.com",
+    "www.banpo-apple.com",
+    "ec2-3-37-147-68.ap-northeast-2.compute.amazonaws.com",
+]
 STATIC_ROOT = BASE_DIR / "static/"
 STATICFILES_DIRS = []
 
