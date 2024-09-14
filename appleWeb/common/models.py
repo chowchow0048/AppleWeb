@@ -52,8 +52,10 @@ class User(AbstractUser):
         blank=True,
         verbose_name="수업 시간표",
     )
+    courses_count = models.IntegerField(default=0, verbose_name="선택과목수")
     payment_count = models.IntegerField(default=12, verbose_name="결제 횟수")
     payment_request = models.BooleanField(default=False, verbose_name="결제 요청")
+
     latest_payment = models.DateField(
         blank=True, null=True, verbose_name="최근 결제 날짜"
     )

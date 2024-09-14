@@ -36,10 +36,20 @@ admin_site = MyAdminSite(name="myadmin")
 # UserAdmin 클래스 확장
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
+        ("로그인 정보", {"fields": ("username", "password")}),
         (
             "회원 정보",
-            {"fields": ("name", "phone", "parent_phone", "school", "grade", "courses")},
+            {
+                "fields": (
+                    "name",
+                    "phone",
+                    "parent_phone",
+                    "school",
+                    "grade",
+                    "courses",
+                    "courses_count",
+                )
+            },
         ),
         (
             "권환 및 활성화",
@@ -48,10 +58,6 @@ class UserAdmin(BaseUserAdmin):
                     "is_active",
                     "is_teacher",
                     "is_manager",
-                    # "is_staff",
-                    # "is_superuser",
-                    # "groups",
-                    # "user_permissions",
                 )
             },
         ),
@@ -61,18 +67,6 @@ class UserAdmin(BaseUserAdmin):
                 "fields": (
                     "payment_count",
                     "payment_request",
-                )
-            },
-        ),
-        (
-            "선택과목",
-            {
-                "fields": (
-                    "physics",
-                    "chemistry",
-                    "biology",
-                    "earth_science",
-                    "integrated_science",
                 )
             },
         ),
@@ -89,10 +83,10 @@ class UserAdmin(BaseUserAdmin):
     list_display = (
         "is_active",
         "name",
-        "is_teacher",
-        "is_manager",
         "school",
         "grade",
+        "courses_count",
+        "id",
     )
     filter_horizontal = ("courses",)
 
@@ -102,10 +96,7 @@ class UserAdmin(BaseUserAdmin):
         "grade",
         "is_teacher",
         "is_manager",
-        # "physics",
-        # "chemistry",
-        # "biology",
-        # "earth_science",
+        "courses_count",
     )
     search_fields = (
         "username",
@@ -115,6 +106,7 @@ class UserAdmin(BaseUserAdmin):
         "activate_users",
         "deactivate_users",
         "sync_payment_request",
+        "sync_courses_count",
         "format_phone_numbers",
         "set_payment_request_true",
         "set_payment_request_false",
@@ -167,9 +159,20 @@ class UserAdmin(BaseUserAdmin):
 
             user.save()
 
-        self.message_user(request, "선택된 사용자들의 수업이 동기화되었습니다.")
+        self.message_user(request, "선택된 사용자들의 수업이 동기화 되었습니다.")
 
-    sync_courses.short_description = "수업 동기화 완료"
+    sync_courses.short_description = "수업 동기화"
+
+    def sync_courses_count(self, request, queryset):
+        for user in queryset:
+            user.courses_count = user.courses.count()
+            user.save()
+
+        self.message_user(
+            request, "선택된 사용자들의 선택과목 수 가 동기화 되었습니다."
+        )
+
+    sync_courses_count.short_description = "선택과목 수 동기화"
 
     def activate_users(self, request, queryset):
         count = queryset.update(is_active=True)
