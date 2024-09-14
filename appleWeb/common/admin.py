@@ -107,6 +107,7 @@ class UserAdmin(BaseUserAdmin):
         "deactivate_users",
         "sync_payment_request",
         "sync_courses_count",
+        "sync_courses",
         "format_phone_numbers",
         "set_payment_request_true",
         "set_payment_request_false",
@@ -119,7 +120,6 @@ class UserAdmin(BaseUserAdmin):
         "set_payment_count_4",
         "set_payment_count_8",
         "set_payment_count_12",
-        "sync_courses",
     ]
 
     def save_model(self, request, obj, form, change):
@@ -144,22 +144,26 @@ class UserAdmin(BaseUserAdmin):
 
     def sync_courses(self, request, queryset):
         for user in queryset:
-            # 현재 사용자가 등록된 수업들
-            user_courses = set(user.courses.all())
-            # 현재 사용자가 course_students에 포함된 수업들
-            correct_courses = set(Course.objects.filter(course_students=user))
+            # 현재 사용자가 등록된 활성화된 수업들 (course.is_active=True)
+            user_courses = set(user.courses.filter(is_active=True))
 
-            # course_students에는 있지만 user의 courses에 없는 경우 추가
+            # 현재 사용자가 course_students에 포함된 활성화된 수업들
+            correct_courses = set(
+                Course.objects.filter(course_students=user, is_active=True)
+            )
+
+            # 활성화된 course_students에는 있지만 user의 courses에 없는 경우 추가
             for course in correct_courses - user_courses:
                 user.courses.add(course)
 
-            # user의 courses에는 있지만 course_students에 없는 경우 제거
-            for course in user_courses - correct_courses:
-                user.courses.remove(course)
+            # user의 courses에 있지만 course_students에 없는 경우 제거 (비활성화된 수업 포함)
+            for course in user.courses.all():
+                if not course.is_active or course not in correct_courses:
+                    user.courses.remove(course)
 
             user.save()
 
-        self.message_user(request, "선택된 사용자들의 수업이 동기화 되었습니다.")
+        self.message_user(request, "선택된 사용자들의 수업이 동기화되었습니다.")
 
     sync_courses.short_description = "수업 동기화"
 
@@ -398,6 +402,7 @@ class CourseAdmin(admin.ModelAdmin):
     actions = (
         "activate_course",
         "deactivate_course",
+        "sync_active_students",
         "set_day_wed",
         "set_day_thu",
         "set_day_fri",
@@ -426,6 +431,22 @@ class CourseAdmin(admin.ModelAdmin):
         self.message_user(request, ("%d 강의 비활성화" % count))
 
     deactivate_course.short_description = "강의 비활성화"
+
+    def sync_active_students(self, request, queryset):
+        for course in queryset:
+            # 활성화된 학생 중, user.courses에 해당 course가 포함된 학생만 추가
+            active_students = User.objects.filter(is_active=True, courses=course)
+
+            for student in active_students:
+                # course.course_students에 학생이 없으면 추가
+                if student not in course.course_students.all():
+                    course.course_students.add(student)
+
+            course.save()
+
+        self.message_user(request, "선택된 코스에 활성화된 학생들이 추가되었습니다.")
+
+    sync_active_students.short_description = "활성화된 학생들 추가"
 
     def set_day_wed(self, request, queryset):
         count = queryset.update(course_day="수요일")
