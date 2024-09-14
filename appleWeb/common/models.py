@@ -345,7 +345,8 @@ class Review(models.Model):
     title = models.CharField(
         max_length=100, verbose_name="제목", default="애플과학 수강후기"
     )
-    content = models.TextField(max_length=3000, verbose_name="수강 후기")
+    # content = models.TextField(max_length=3000, verbose_name="수강 후기")
+    content = CKEditor5Field("내용", config_name="default")  # CKEditor 5 필드로 변경
     created_at = models.DateTimeField(default=timezone.now, verbose_name="작성 시간")
     image = models.ImageField(
         upload_to="review_images/", null=True, blank=True, verbose_name="이미지"

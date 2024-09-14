@@ -39,3 +39,8 @@ AWSCLIV2.pkg
 # 백업
 appleWeb/templates/management/(HOLD)management_special_lecture.html
 appleWeb/static/css/management/(HOLD)management_special_lecture.css
+
+# migrations
+
+appleWeb/common/migrations/*
+./appleWeb/common/migrations/*

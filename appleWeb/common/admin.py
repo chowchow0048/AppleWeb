@@ -484,6 +484,28 @@ class BoardAdmin(admin.ModelAdmin):
     list_display = ("title", "author", "created_at", "updated_at")
 
 
+class ReviewAdminForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditor5Widget(config_name="default"))
+
+    class Meta:
+        model = Review
+        fields = "__all__"
+
+
+class ReviewAdmin(admin.ModelAdmin):
+    form = ReviewAdminForm
+    list_display = (
+        "school",
+        "name",
+        "university",
+        "major",
+        "title",
+        "content",
+        "created_at",
+        "image",
+    )
+
+
 # WaitlistAdmin 클래스
 class WaitlistAdmin(admin.ModelAdmin):
     list_display = ("name", "school", "grade", "parent_phone", "note")
