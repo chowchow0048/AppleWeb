@@ -114,6 +114,7 @@ class UserAdmin(BaseUserAdmin):
     actions = [
         "activate_users",
         "deactivate_users",
+        "sync_payment_request",
         "format_phone_numbers",
         "set_payment_request_true",
         "set_payment_request_false",
@@ -127,16 +128,6 @@ class UserAdmin(BaseUserAdmin):
         "set_payment_count_8",
         "set_payment_count_12",
         "sync_courses",
-        # "set_physics_true",
-        # "set_physics_false",
-        # "set_chemistry_true",
-        # "set_chemistry_false",
-        # "set_biology_true",
-        # "set_biology_false",
-        # "set_earth_science_true",
-        # "set_earth_science_false",
-        # "set_integrated_science_true",
-        # "set_integrated_science_false",
     ]
 
     def save_model(self, request, obj, form, change):
@@ -146,6 +137,18 @@ class UserAdmin(BaseUserAdmin):
             if obj not in course.course_students.all():
                 course.course_students.add(obj)
             course.save()
+
+    def sync_payment_request(self, request, queryset):
+        for user in queryset:
+            if user.payment_count <= 0:
+                user.payment_request = True
+            else:
+                user.payment_request = False
+            user.save()
+
+        self.message_user(request, "선택된 사용자들의 결제요청이 동기화 되었습니다.")
+
+    sync_payment_request.short_description = "결제요청 동기화"
 
     def sync_courses(self, request, queryset):
         for user in queryset:
@@ -164,9 +167,9 @@ class UserAdmin(BaseUserAdmin):
 
             user.save()
 
-        self.message_user(request, "선택된 사용자들의 courses 필드가 동기화되었습니다.")
+        self.message_user(request, "선택된 사용자들의 수업이 동기화되었습니다.")
 
-    sync_courses.short_description = "선택된 사용자들의 courses 필드 동기화"
+    sync_courses.short_description = "수업 동기화 완료"
 
     def activate_users(self, request, queryset):
         count = queryset.update(is_active=True)
