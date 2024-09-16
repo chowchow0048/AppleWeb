@@ -86,6 +86,7 @@ class UserAdmin(BaseUserAdmin):
         "school",
         "grade",
         "courses_count",
+        "payment_count",
         "id",
     )
     filter_horizontal = ("courses",)
@@ -97,6 +98,7 @@ class UserAdmin(BaseUserAdmin):
         "is_teacher",
         "is_manager",
         "courses_count",
+        "payment_count",
     )
     search_fields = (
         "username",
@@ -402,7 +404,7 @@ class CourseAdmin(admin.ModelAdmin):
     actions = (
         "activate_course",
         "deactivate_course",
-        "sync_students",
+        "only_active_students",
         "set_day_wed",
         "set_day_thu",
         "set_day_fri",
@@ -432,7 +434,7 @@ class CourseAdmin(admin.ModelAdmin):
 
     deactivate_course.short_description = "강의 비활성화"
 
-    def sync_students(self, request, queryset):
+    def only_active_students(self, request, queryset):
         for course in queryset:
             # 활성화된 학생 중, user.courses에 해당 course가 포함된 학생만 추가
             active_students = User.objects.filter(is_active=True, courses=course)
@@ -444,9 +446,9 @@ class CourseAdmin(admin.ModelAdmin):
 
             course.save()
 
-        self.message_user(request, "선택된 코스에 활성화된 학생들이 추가되었습니다.")
+        self.message_user(request, "비활성 학생 삭제")
 
-    sync_students.short_description = "학생명단 동기화"
+    only_active_students.short_description = "비활성 학생 삭제"
 
     def set_day_wed(self, request, queryset):
         count = queryset.update(course_day="수요일")
