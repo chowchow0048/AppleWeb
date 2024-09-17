@@ -436,13 +436,9 @@ class CourseAdmin(admin.ModelAdmin):
 
     def only_active_students(self, request, queryset):
         for course in queryset:
-            # 활성화된 학생 중, user.courses에 해당 course가 포함된 학생만 추가
-            active_students = User.objects.filter(is_active=True, courses=course)
-
-            for student in active_students:
-                # course.course_students에 학생이 없으면 추가
-                if student not in course.course_students.all():
-                    course.course_students.add(student)
+            for student in course.course_students.all():
+                if not student.is_active:
+                    course.course_students.remove(student)
 
             course.save()
 
