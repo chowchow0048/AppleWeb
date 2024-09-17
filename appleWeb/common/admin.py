@@ -490,13 +490,13 @@ class CourseAdmin(admin.ModelAdmin):
 # AttendanceAdmin 클래스
 class AttendanceAdmin(admin.ModelAdmin):
     list_display = ("student", "course", "date")
-    list_filter = ("course", "student")
+    list_filter = ("course", "date")
     search_fields = ("student__username", "course__title")
 
 
 class AbsenceAdmin(admin.ModelAdmin):
     list_display = ("student", "course", "date")
-    list_filter = ("course", "student")
+    list_filter = ("course", "date")
     search_fields = ("student__username", "course__title")
 
 
@@ -529,23 +529,22 @@ class ReviewAdmin(admin.ModelAdmin):
         "university",
         "major",
         "title",
-        "content",
         "created_at",
-        "image",
     )
+    list_filter = ("school",)
 
 
 # WaitlistAdmin 클래스
-class WaitlistAdmin(admin.ModelAdmin):
-    list_display = ("name", "school", "grade", "parent_phone", "note")
-    list_filter = ("school", "grade")
-    search_fields = ("name", "school")
+# class WaitlistAdmin(admin.ModelAdmin):
+#     list_display = ("name", "school", "grade", "parent_phone", "note")
+#     list_filter = ("school", "grade")
+#     search_fields = ("name", "school")
 
 
-class BlacklistAdmin(admin.ModelAdmin):
-    list_display = ("name", "school", "grade", "parent_phone", "note")
-    list_filter = ("school", "grade")
-    search_fields = ("name", "school")
+# class BlacklistAdmin(admin.ModelAdmin):
+#     list_display = ("name", "school", "grade", "parent_phone", "note")
+#     list_filter = ("school", "grade")
+#     search_fields = ("name", "school")
 
 
 # 모델을 admin 사이트에 등록

@@ -165,7 +165,7 @@ def management_studentlist(request):
 @manager_required
 def management_lecture(request, course_id):
     course = Course.objects.get(id=course_id)
-    students = course.course_students.all()
+    students = course.course_students.all().order_by("name")
     today = timezone.now().date()
 
     # print("course:", course)
