@@ -271,6 +271,7 @@ def bulk_attendance(request):
 
 
 @login_required
+@manager_required
 def management_student_detail(request, student_id):
     user = request.user
     student = get_object_or_404(User, pk=student_id)
@@ -300,6 +301,12 @@ def management_student_detail(request, student_id):
     }
 
     return render(request, "management/management_student_detail.html", context)
+
+
+@login_required
+@manager_required
+def management_manage_journal(request):
+    return render(request, "management/management_manage_journal.html")
 
 
 @login_required

@@ -8,6 +8,7 @@ from django_ckeditor_5.fields import CKEditor5Field  # CKEditor 5 필드 추가
 
 class User(AbstractUser):
     GRADE_CHOICES = (
+        ("에비고1", "예비고1"),
         ("1학년", "1학년"),
         ("2학년", "2학년"),
         ("3학년", "3학년"),
@@ -178,6 +179,34 @@ class Course(models.Model):
         verbose_name_plural = "수업"
 
 
+class ManageJournal(models.Model):
+    title = models.CharField(max_length=300, verbose_name="제목", default="")
+    content = CKEditor5Field("내용", config_name="default")
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="작성자",
+        default=1,
+    )
+
+    def __str__(self):
+        return self.title
+
+    @staticmethod
+    def default_title():
+        today = timezone.now().strftime("%Y-%m-%d")
+        return f"{today} 행정일지"
+
+    def save(self, *args, **kwargs):
+        if not self.title:
+            self.title = self.default_title()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "행정일지"
+        verbose_name_plural = "행정일지"
+
+
 class Attendance(models.Model):
     student = models.ForeignKey(
         "User",
@@ -237,11 +266,22 @@ class Waitlist(models.Model):
     )
     name = models.CharField(max_length=20, verbose_name="이름")
     parent_phone = models.CharField(max_length=20, verbose_name="부모님 전화번호")
-    note = models.TextField(max_length=500, verbose_name="비고")
+    note = CKEditor5Field("비고", config_name="default")
     applying_date = models.DateField(auto_now_add=True, verbose_name="대기등록 날짜")
+    waitlist_author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="등록한 관리자",
+        related_name="waitlists",
+        default=1,
+    )
 
     def __str__(self):
         return f"대기: {self.school} {self.grade} - {self.name}"
+
+    class Meta:
+        verbose_name = "대기리스트"
+        verbose_name_plural = "대기리스트"
 
 
 class Blacklist(models.Model):
@@ -253,14 +293,24 @@ class Blacklist(models.Model):
     )
     name = models.CharField(max_length=20, verbose_name="이름")
     parent_phone = models.CharField(max_length=20, verbose_name="부모님 전화번호")
-    note = models.TextField(max_length=500, verbose_name="비고")
+    note = CKEditor5Field("비고", config_name="default")
     applying_date = models.DateField(auto_now_add=True, verbose_name="대기등록 날짜")
+    blacklist_author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="등록한 관리자",
+        related_name="blacklists",
+        default=1,
+    )
 
     def __str__(self):
         return f"블랙리스트: {self.school} {self.grade} - {self.name}"
 
+    class Meta:
+        verbose_name = "블랙리스트"
+        verbose_name_plural = "블랙리스트"
 
-# after CKEditor5
+
 class Board(models.Model):
     POSTED_IN_CHOICES = (
         ("community", "커뮤니티"),
@@ -288,39 +338,6 @@ class Board(models.Model):
     class Meta:
         verbose_name = "게시판"
         verbose_name_plural = "게시판"
-
-
-# before CKEditor
-# class Board(models.Model):
-#     POSTED_IN_CHOICES = (
-#         ("community", "커뮤니티"),
-#         ("main", "메인"),
-#         ("management", "행정"),
-#     )
-
-#     title = models.CharField(max_length=100, verbose_name="제목")
-#     content = models.TextField(verbose_name="내용")
-#     author = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="작성자"
-#     )
-#     posted_in = models.CharField(
-#         max_length=10,
-#         choices=POSTED_IN_CHOICES,
-#         default="main",
-#         verbose_name="종류",
-#     )
-#     created_at = models.DateTimeField(auto_now_add=True, verbose_name="작성 날짜")
-#     updated_at = models.DateTimeField(auto_now=True, verbose_name="수정 날짜")
-
-#     def __str__(self):
-#         return self.title
-
-#     class Meta:
-#         verbose_name = "게시판"
-#         verbose_name_plural = "게시판"
-
-
-# from PIL import Image
 
 
 class Review(models.Model):

@@ -17,6 +17,7 @@ from .models import (
     Review,
     User,
     Waitlist,
+    ManageJournal,
 )
 
 
@@ -33,7 +34,6 @@ class MyAdminSite(admin.AdminSite):
 admin_site = MyAdminSite(name="myadmin")
 
 
-# UserAdmin 클래스 확장
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
         ("로그인 정보", {"fields": ("username", "password")}),
@@ -362,7 +362,6 @@ class CourseAdminForm(forms.ModelForm):
         )
 
 
-# CourseAdmin 클래스
 class CourseAdmin(admin.ModelAdmin):
     form = CourseAdminForm
     fieldsets = (
@@ -483,7 +482,10 @@ class CourseAdmin(admin.ModelAdmin):
     set_time_1200.short_description = "수업시간 1200"
 
 
-# AttendanceAdmin 클래스
+# class ManageJournalAdmin(admin.ModelAdmin):
+#     list_display = "title"
+
+
 class AttendanceAdmin(admin.ModelAdmin):
     list_display = ("student", "course", "date")
     list_filter = ("course", "date")
@@ -507,6 +509,14 @@ class BoardAdminForm(forms.ModelForm):
 class BoardAdmin(admin.ModelAdmin):
     form = BoardAdminForm
     list_display = ("title", "author", "created_at", "updated_at")
+
+
+class WaitlistAdmin(admin.ModelAdmin):
+    list_display = ("school", "grade", "name", "parent_phone", "applying_date")
+
+
+class BlacklistAdmin(admin.ModelAdmin):
+    list_display = ("school", "grade", "name", "parent_phone", "applying_date")
 
 
 class ReviewAdminForm(forms.ModelForm):
@@ -545,10 +555,11 @@ class ReviewAdmin(admin.ModelAdmin):
 
 # 모델을 admin 사이트에 등록
 admin.site.register(User, UserAdmin)
-admin.site.register(Board)
-admin.site.register(Review)
+admin.site.register(Board, BoardAdmin)
+admin.site.register(Review, ReviewAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Attendance, AttendanceAdmin)
 admin.site.register(Absence, AbsenceAdmin)
-# admin.site.register(Waitlist, WaitlistAdmin)
-# admin.site.register(Blacklist, BlacklistAdmin)
+admin.site.register(Waitlist, WaitlistAdmin)
+admin.site.register(Blacklist, BlacklistAdmin)
+admin.site.register(ManageJournal)

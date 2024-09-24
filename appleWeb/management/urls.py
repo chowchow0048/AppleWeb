@@ -11,6 +11,11 @@ urlpatterns = [
         views.management_lecture,
         name="management_lecture",
     ),
+    path(  # 행정 일지
+        "manage-journal/",
+        views.management_manage_journal,
+        name="management_manage_journal",
+    ),
     path(  # 학생 상세정보 페이지
         "student_detail/<int:student_id>/",
         views.management_student_detail,
