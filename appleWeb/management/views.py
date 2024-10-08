@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
@@ -435,27 +435,6 @@ def management_handover_update(request, handover_id):
 
 @login_required
 @manager_required
-@require_POST  # 이 뷰 함수는 POST 요청만 허용
-def confirm_payment(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
-
-    # 수강하고있는 강의 수 만큼 결제횟수 갱신
-    course_count = user.enrolled_courses.filter(is_active=True).count()
-    user.payment_count += course_count * 4  # 기존 payment_count에 course 수 x 4를 더함
-    user.payment_request = False
-    user.latest_payment = timezone.now().date()  # 최근 결제 날짜를 오늘 날짜로 설정
-    user.save()
-
-    return JsonResponse(
-        {
-            "message": "결제 요청 완료",
-            "payment_count": user.payment_count,
-        }
-    )
-
-
-@login_required
-@manager_required
 def management_paylist(request):
     users_with_payment_request = User.objects.filter(payment_request=True)
     users_with_payment_request = [
@@ -475,6 +454,53 @@ def management_paylist(request):
         request,
         "management/management_paylist.html",
         {"users": users_with_payment_request},
+    )
+
+
+@login_required
+@manager_required
+@require_GET  # 이 뷰는 GET 요청만 허용
+def fetch_paylist(request):
+    school = request.GET.get("school", None)
+    query = request.GET.get("query", "")
+
+    users = User.objects.filter(payment_request=True)
+
+    # 학교 필터 적용
+    if school:
+        users = users.filter(school=school)
+
+    # 이름 검색 필터 적용
+    if query:
+        users = users.filter(name__icontains=query)
+
+    # 필요한 필드만 JSON으로 반환
+    data = list(
+        users.values(
+            "id", "school", "grade", "name", "phone", "parent_phone", "payment_count"
+        )
+    )
+    return JsonResponse(data, safe=False)
+
+
+@login_required
+@manager_required
+@require_POST  # 이 뷰 함수는 POST 요청만 허용
+def confirm_payment(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+
+    # 수강하고있는 강의 수 만큼 결제횟수 갱신
+    course_count = user.enrolled_courses.filter(is_active=True).count()
+    user.payment_count += course_count * 4  # 기존 payment_count에 course 수 x 4를 더함
+    user.payment_request = False
+    user.latest_payment = timezone.now().date()  # 최근 결제 날짜를 오늘 날짜로 설정
+    user.save()
+
+    return JsonResponse(
+        {
+            "message": "결제 요청 완료",
+            "payment_count": user.payment_count,
+        }
     )
 
 

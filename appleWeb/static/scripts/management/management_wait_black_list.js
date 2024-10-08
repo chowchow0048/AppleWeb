@@ -92,18 +92,28 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function getFirstLineFromHtml(html, maxLength = 15) {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;  // HTML을 div에 삽입
+        let firstLine = tempDiv.innerText.split('\n')[0];  // 첫 번째 줄만 가져옴
+        if (firstLine.length > maxLength) {
+            firstLine = firstLine.substring(0, maxLength) + '...';  // 최대 20글자만
+        }
+        return firstLine;
+    }
+    
     function renderTable(data) {
         console.log(data);  // 데이터를 확인
         tableBody.innerHTML = '';
         data.forEach(item => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td class="wb-td">${item.school}</td>
-                <td class="wb-td">${item.grade}</td>
-                <td class="wb-td">${item.name}</td>
-                <td class="wb-td">${item.phone}</td>
-                <td class="wb-td">${item.date}</td>
-                <td class="wb-td">${item.note}</td>
+                <td class="td-wb-school">${item.school}</td>
+                <td class="td-wb-grade">${item.grade}</td>
+                <td class="td-wb-name">${item.name}</td>
+                <td class="td-wb-phone">${item.phone}</td>
+                <td class="td-wb-date">${item.date}</td>
+                <td class="td-wb-note">${getFirstLineFromHtml(item.note)}</td> <!-- 첫 줄만 가져옴 -->
             `;
             row.style.cursor = 'pointer';  
             row.onclick = () => {
@@ -113,10 +123,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     : `/management/wait-blacklist/black-detail/${item.id}/`;
                 window.location.href = detailUrl;
             };
-    
+        
             tableBody.appendChild(row);
         });
     }
+    
     
     
 

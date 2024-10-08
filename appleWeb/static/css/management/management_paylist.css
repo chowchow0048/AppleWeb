@@ -1,8 +1,61 @@
+.pl-head{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* padding: 10px; */
+}
+
 #course-title{
     font-size: x-large;
     font-weight: 350;
     padding: 25px 0px;
     /* margin: 20px 0px; */
+}
+
+.pl-head-title{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.pl-head-btn{
+    border: none;
+    background-color: white;
+    font-weight: 300;
+    color: #323131be;
+    /* transition: all 0.2s linear; */
+
+    &:focus{
+        color: rgb(0, 0, 0);
+        font-weight: bold;
+        font-size: larger;
+        text-decoration-line: underline;
+    }
+}
+
+.pl-head-features{
+    display: flex;
+    /* justify-content: center; */
+    /* justify-content: flex-end; */
+    padding: 10px 15px;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.pl-search-form{
+    width: 50%;
+}
+
+#pl-search{
+    width: 100%;
+}
+
+.pl-btn-container{
+    width: 50%;
+}
+
+.pl-btn-school{
+    width: 30%;
 }
 
 .decorate-none{
@@ -13,11 +66,6 @@
     background-color: #007B; /* 예시로 파란색 배경 설정 */
     color: white;
 }
-
-/* .table thead th {
-    width: auto;
-    text-align: center;
-} */
 
 .d-flex-ni{
     display: flex;
@@ -118,4 +166,33 @@
 .slbtn{
     width: 10%;
     justify-content: center;
+}
+
+
+.pl-th-school, .pl-td-school{
+    width: 8% !important;   
+}
+
+.pl-th-grade, .pl-td-grade{
+    width: 8% !important;   
+}
+
+.pl-th-name, .pl-td-name{
+    width: 8% !important;   
+}
+
+.pl-th-phone, .pl-td-phone{
+    width: 20% !important;   
+}
+
+.pl-th-parentphone, .pl-td-parentphone{
+    width: 20% !important;   
+}
+
+.pl-th-paymentcount, .pl-td-paymentcount{
+    width: 20% !important;   
+}
+
+.pl-th-checkbox, .pl-td-checkbox{
+    width: auto !important;   
 }

@@ -7,17 +7,29 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="my-4 text-center">결제 요청 목록</h1>
+    <div class="pl-head">
+        <h1 class="my-4 text-center">결제 요청 목록</h1>
+        <div class="pl-head-features">
+            <div class="pl-search-form">
+                <input type="text" id="pl-search" class="form-control" placeholder="이름 검색">
+            </div>
+            <div class="pl-btn-container d-flex justify-content-evenly mx-3">
+                <button class="pl-btn-school btn btn-primary mx-1">세화고</button>
+                <button class="pl-btn-school btn btn-primary mx-1">세화여고</button>
+                <button class="pl-btn-school btn btn-primary mx-1">연합반</button>
+            </div>
+        </div>
+    </div>
     <table class="table">
         <thead id="mngpl-thead">
             <tr>
-                <th>학교</th>
-                <th>학년</th>
-                <th>이름</th>
-                <th>전화번호</th>
-                <th>부모님 전화번호</th>
-                <th>수업 초과 횟수</th>
-                <th><button type="button" id="selectAllPayments" class="btn btn-link">결제 확인</button></th>
+                <th class='pl-th-school'>학교</th>
+                <th class='pl-th-grade'>학년</th>
+                <th class='pl-th-name'>이름</th>
+                <th class='pl-th-phone'>전화번호</th>
+                <th class='pl-th-parentphone'>부모님 전화번호</th>
+                <th class='pl-th-paymentcount'>수업 초과 횟수</th>
+                <th class='pl-th-checkbox'><button type="button" id="selectAllPayments" class="btn btn-link">결제 확인</button></th>
             </tr>
         </thead>
         <tbody id="mngpl-tbody">

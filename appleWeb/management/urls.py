@@ -44,9 +44,15 @@ urlpatterns = [
         views.management_student_detail,
         name="management_student_detail",
     ),
-    path(  # 결제요청 페이지
-        "paylist/", views.management_paylist, name="management_paylist"
+    path(  # 필터 및 검색 요청을 처리하는 뷰
+        "paylist/fetch/", views.fetch_paylist, name="fetch_paylist"
     ),
+    path(  # 필터 및 검색
+        "confirm-payment/<int:user_id>/",
+        views.confirm_payment,
+        name="confirm_payment",
+    ),
+    path("paylist/", views.management_paylist, name="management_paylist"),
     path(  # 대기&블랙 페이지
         "wait-blacklist/",
         views.management_wait_black_list,

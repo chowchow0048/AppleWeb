@@ -79,34 +79,41 @@
     height: auto;
 }
 
-.th-wb-school{
+.th-wb-school, .td-wb-school{
     width: 10%;
     min-width: fit-content;
 }
 
-.th-wb-grade{
+.th-wb-grade, .td-wb-grade{
     width: 10%;
     min-width: fit-content;
 }
 
-.th-wb-name{
+.th-wb-name, .td-wb-name{
     width: 10%;
     min-width: fit-content;
 }
 
-.th-wb-phone{
+.th-wb-phone, .td-wb-phone{
     width: 25%;
     min-width: fit-content;
 }
 
-.th-wb-date{
+.th-wb-date, .td-wb-date{
     width: 20%;
     min-width: fit-content;
 }
 
-.th-wb-note{
+.th-wb-note, .td-wb-note {
     width: 35%;
-    min-width: fit-content
+    min-width: fit-content;
+    overflow: hidden !important;
+}
+
+
+.td-wb-note > p{
+    margin-bottom: 0 !important;
+
 }
 
 .td-wb{
