@@ -1,0 +1,79 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+{% block extra_css %}
+<link href="{% static 'css/management/management_handover.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="handover-head">
+        <h1 class="handover-head-title my-4">인수인계</h1>
+        <div class="handover-head-features">
+            <!-- <div class="search-form">
+                <input type="text" id="handover-search" class="form-control" placeholder="날짜 검색">
+            </div> -->
+            <button class="btn btn-primary btn-write-handover" onclick="window.location.href='{% url 'management_handover_add' %}'"> 인수인계 작성 </button>
+        </div>
+    </div>
+
+    <table class="table" id="handover-table">
+        <thead id="handover-thead">
+            <tr>
+                <th class="th-handover-title">제목</th>
+                <th class="th-handover-author">작성자</th>
+                <th class="th-handover-date">작성일</th>
+            </tr>
+        </thead>
+        <tbody id="handover-tbody">
+            {% for handover in page_obj %}
+            <tr onclick="window.location.href='{% url 'management_handover_detail' handover.id %}'" style="cursor: pointer;" >
+                <td>{{ handover.created_date|date:"Y-m-d" }} {{ handover.created_date|date:"l" }} {{ handover.shift }} 행정</td>
+                <td>{{ handover.author }}</td>
+                <td>{{ handover.created_date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">인수인계가 없습니다.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination-container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">처음</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">이전</a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">다음</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">마지막</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'scripts/management/management_handover.js' %}"></script>
+{% endblock %}

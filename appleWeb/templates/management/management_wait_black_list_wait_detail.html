@@ -1,0 +1,44 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+{% block extra_css %}
+<link href="{% static 'css/management/management_wait_black_list.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="wb-detail-container mt-4">
+        <label class="form-label" for="wb-wait-date">대기</label>
+        <div class="d-flex flex-row align-items-center">
+            <p id="wb-wait-date" class="form-control nomargin">{{ wait.date|date:"Y-m-d" }} {{ wait.date|date:"l" }} 대기 명단</p>
+            {% if wait.author == user %}
+            <div class="wb-actions d-flex flex-row justify-content-end nomargin">
+                <form method="post" action="{% url 'management_wait_black_list_delete' 'wait' wait.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger ms-4" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                </form>            
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="wb-detail-container">
+        <label for="" class="form-label">학교</label>
+        <p class="form-control"> {{wait.school}}</p>
+    </div>
+    <div class="wb-detail-container">
+        <label for="" class="form-label">학년</label>
+        <p class="form-control"> {{wait.grade}}</p>
+    </div>
+    <div class="wb-detail-container">
+        <label for="" class="form-label">이름</label>
+        <p class="form-control"> {{wait.name}}</p>
+    </div>
+    <div class="wb-detail-container">
+        <label for="" class="form-label">연락처</label>
+        <p class="form-control"> {{wait.phone}}</p>
+    </div>
+    <div class="wb-detail-container">
+        <label for="" class="form-label">비고</label>
+        <div class="form-control" style="min-height: 150px;">{{ wait.note|safe }}</div>
+    </div>    
+</div>
+{% endblock %}

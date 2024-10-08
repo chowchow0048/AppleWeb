@@ -1,0 +1,34 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+{% block extra_css %}
+<link href="{% static 'css/management/management_handover.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="handover-detail-head d-flex flex-row justify-content-between align-items-center">
+        <div class="handover-detail-h-da d-flex flex-column">
+            <p class="handover-detail-date mt-4">{{ black.date|date:"Y-m-d" }} {{ black.date|date:"l" }} 블랙 명단</p>
+            <p class="handover-detail-author">등록자: {{ black.author }}</p>
+        </div>
+        {% if black.author == user %}
+        <div class="handover-actions mt-4 d-flex flex-row justify-content-between">
+            <form method="post" action="{% url 'management_wait_black_list_delete' 'black' black.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger mx-3" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="handover-detail-body">
+        <div class="handover-detail-content px-3 py-4">
+            <p><strong>학교:</strong> {{ black.school }}</p>
+            <p><strong>학년:</strong> {{ black.grade }}</p>
+            <p><strong>이름:</strong> {{ black.name }}</p>
+            <p><strong>연락처:</strong> {{ black.phone }}</p>
+            <p><strong>비고:</strong> {{ black.note|safe }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

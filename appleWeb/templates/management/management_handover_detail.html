@@ -1,0 +1,31 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+{% block extra_css %}
+<link href="{% static 'css/management/management_handover.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="handover-detail-head d-flex flex-row justify-content-between align-items-center">
+        <div class="handover-detail-h-da d-flex flex-column">
+            <p class="handover-detail-date mt-4">{{ handover.created_date|date:"Y-m-d" }} {{ handover.created_date|date:"l" }} {{ handover.shift }} 행정 인수인계 사항</p>
+            <p class="handover-detail-author">작성자: {{ handover.author }}</p>
+        </div>
+        {% if handover.author == user %}
+        <div class="handover-actions mt-4 d-flex flex-row justify-content-between">
+            <form method="post" action="{% url 'management_handover_delete' handover.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger mx-3" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+            </form>
+            <a href="{% url 'management_handover_update' handover.id %}" class="btn btn-primary ml-2">수정</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="handover-detail-body">
+        <div class="handover-detail-content px-3 py-4">
+            {{ handover.content|safe }}
+        </div>
+    </div>
+</div>
+{% endblock %}

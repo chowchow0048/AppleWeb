@@ -1,0 +1,47 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+{% block extra_css %}
+<link href="{% static 'css/management/management_wait_black_list.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="wb-head">
+        <h1 class="wb-head-title my-4">
+            <button class="wb-head-btn mx-1 focused" id="wb-wait">대기</button>
+            /
+            <button class="wb-head-btn mx-1" id="wb-black">블랙</button>
+        </h1>
+        <div class="wb-head-features">
+            <div class="wb-search-form">
+                <input type="text" id="wb-search" class="form-control" placeholder="이름 검색">
+            </div>
+            <div class="wb-btn-container d-flex justify-content-evenly mx-3">
+                <button class="wb-btn-school btn btn-primary mx-1">세화고</button>
+                <button class="wb-btn-school btn btn-primary mx-1">세화여고</button>
+                <button class="wb-btn-school btn btn-primary mx-1">연합반</button>
+            </div>
+            <button class="btn btn-primary btn-write-wb" onclick="window.location.href='{% url 'management_wait_black_list_add' %}'"> 명단 추가 </button>
+        </div>
+    </div>
+
+    <table class="table" id="wb-table">
+        <thead id="wb-thead">
+            <tr>
+                <th class="th-wb-school">학교</th>
+                <th class="th-wb-grade">학년</th>
+                <th class="th-wb-name">이름</th>
+                <th class="th-wb-phone">연락처</th>
+                <th class="th-wb-date">등록 날짜</th>
+                <th class="th-wb-note">비고</th>
+            </tr>
+        </thead>
+        <tbody id="wb-tbody">
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'scripts/management/management_wait_black_list.js' %}"></script>
+{% endblock %}

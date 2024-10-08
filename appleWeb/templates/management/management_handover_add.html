@@ -1,0 +1,53 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+{% block extra_css %}
+<link href="{% static 'css/management/management_handover.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Date (자동으로 입력되는 날짜) -->
+        <div class="handover-add-head my-4">
+            <label for="handover-date" class="form-label">작성 날짜</label>
+            <input type="text" id="handover-date" class="form-control" value="{{ today }}" readonly>
+        </div>
+
+        <!-- Shift 선택 -->
+        <div class="handover-add-shift mb-4">
+            <label for="handover-shift" class="form-label">근무 시간</label>
+            <select id="handover-shift" class="form-select" name="shift">
+                <option value="오전">오전</option>
+                <option value="오후">오후</option>
+            </select>
+        </div>
+
+        <!-- CKEditor5 Text Editor -->
+        <div class="handover-add-body mb-4">
+            <label for="handover-content" class="form-label">내용</label>
+            <textarea id="handover-content" class="form-control" name="content"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">글 작성</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#handover-content'), {
+            placeholder: '다음 행정 근무자에게 인수인계할 사항들을 적어주세요!  ex) 전화받은 내용, 원장선생님이 지시하신 업무, 기타 특이사항 등등...'
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+{% endblock %}
+

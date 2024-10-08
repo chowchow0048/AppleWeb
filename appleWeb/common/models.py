@@ -179,8 +179,11 @@ class Course(models.Model):
         verbose_name_plural = "수업"
 
 
-class ManageJournal(models.Model):
-    title = models.CharField(max_length=300, verbose_name="제목", default="")
+class Handover(models.Model):
+    SHIFT_CHOICES = (("오전", "오전"), ("오후", "오후"))
+    shift = models.CharField(
+        max_length=5, verbose_name="제목-시간", choices=SHIFT_CHOICES, default="오전"
+    )
     content = CKEditor5Field("내용", config_name="default")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -188,23 +191,16 @@ class ManageJournal(models.Model):
         verbose_name="작성자",
         default=1,
     )
+    created_date = models.DateTimeField(
+        auto_now_add=True, verbose_name="작성날짜"
+    )  # DateTimeField로 수정
 
     def __str__(self):
-        return self.title
-
-    @staticmethod
-    def default_title():
-        today = timezone.now().strftime("%Y-%m-%d")
-        return f"{today} 행정일지"
-
-    def save(self, *args, **kwargs):
-        if not self.title:
-            self.title = self.default_title()
-        super().save(*args, **kwargs)
+        return f"{self.created_date} {self.shift} - {self.author}"
 
     class Meta:
-        verbose_name = "행정일지"
-        verbose_name_plural = "행정일지"
+        verbose_name = "인수인계"
+        verbose_name_plural = "인수인계"
 
 
 class Attendance(models.Model):
@@ -265,10 +261,10 @@ class Waitlist(models.Model):
         max_length=10, choices=User.GRADE_CHOICES, verbose_name="학년"
     )
     name = models.CharField(max_length=20, verbose_name="이름")
-    parent_phone = models.CharField(max_length=20, verbose_name="부모님 전화번호")
+    phone = models.CharField(max_length=20, verbose_name="연락처", blank=True)
     note = CKEditor5Field("비고", config_name="default")
-    applying_date = models.DateField(auto_now_add=True, verbose_name="대기등록 날짜")
-    waitlist_author = models.ForeignKey(
+    date = models.DateField(auto_now_add=True, verbose_name="대기등록 날짜")
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name="등록한 관리자",
@@ -292,10 +288,10 @@ class Blacklist(models.Model):
         max_length=10, choices=User.GRADE_CHOICES, verbose_name="학년"
     )
     name = models.CharField(max_length=20, verbose_name="이름")
-    parent_phone = models.CharField(max_length=20, verbose_name="부모님 전화번호")
+    phone = models.CharField(max_length=20, verbose_name="연락처", blank=True)
     note = CKEditor5Field("비고", config_name="default")
-    applying_date = models.DateField(auto_now_add=True, verbose_name="대기등록 날짜")
-    blacklist_author = models.ForeignKey(
+    date = models.DateField(auto_now_add=True, verbose_name="대기등록 날짜")
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         verbose_name="등록한 관리자",
@@ -364,23 +360,11 @@ class Review(models.Model):
     title = models.CharField(
         max_length=100, verbose_name="제목", default="애플과학 수강후기"
     )
-    # content = models.TextField(max_length=3000, verbose_name="수강 후기")
-    content = CKEditor5Field("내용", config_name="default")  # CKEditor 5 필드로 변경
+    content = CKEditor5Field("내용", config_name="default")
     created_at = models.DateTimeField(default=timezone.now, verbose_name="작성 시간")
     image = models.ImageField(
         upload_to="review_images/", null=True, blank=True, verbose_name="이미지"
     )
-
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)
-
-    #     if self.image:
-    #         img = Image.open(self.image.path)
-
-    #         if img.height > 800 or img.width > 800:
-    #             output_size = (800, 800)
-    #             img.thumbnail(output_size)
-    #             img.save(self.image.path)
 
     def __str__(self):
         return f"{self.name}"

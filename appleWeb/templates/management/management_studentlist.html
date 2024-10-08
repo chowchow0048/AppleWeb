@@ -4,20 +4,20 @@
 <div class="container">
     <h1 class="my-4 text-center">학생 명단</h1>
     <div id="school-buttons" class="row d-flex justify-content-center mb-3">
-        <button class="btn btn-primary school-button col-sm mx-3 mb-1" data-school="세화고">세화고</button>
-        <button class="btn btn-primary school-button col-sm mx-3 mb-1" data-school="세화여고">세화여고</button>
+        <button class="btn btn-primary school-button col-sm-4 mx-4 mb-1" data-school="세화고">세화고</button>
+        <button class="btn btn-primary school-button col-sm-4 mx-4 mb-1" data-school="세화여고">세화여고</button>
     </div>
     <div id="grade-buttons" class="row justify-content-center mb-3" style="display:none;">
-        <button class="btn btn-secondary grade-button col-sm mx-3" data-grade="1학년">1학년</button>
-        <button class="btn btn-secondary grade-button col-sm mx-3" data-grade="2학년">2학년</button>
-        <button class="btn btn-secondary grade-button col-sm mx-3" data-grade="전체">전체</button>
+        <button class="btn btn-secondary grade-button col-sm-3 mx-4" data-grade="1학년">1학년</button>
+        <button class="btn btn-secondary grade-button col-sm-3 mx-4" data-grade="2학년">2학년</button>
+        <button class="btn btn-secondary grade-button col-sm-3 mx-4" data-grade="전체">전체</button>
     </div>
-    <div class="justify-content-between mb-3" id="search-form" style="display: none;">
-        <div class="search-form_half">
+    <div class="justify-content-center mb-3" id="search-form" style="display: none;">
+        <div class="search-form_half me-5">
             <input type="text" id="student-search" class="form-control" placeholder="이름 검색">
         </div>
         <!-- 오른쪽: 정렬 버튼 -->
-        <div class="search-form_half d-flex flex-row align-items-center" id="sort-buttons">
+        <div class="search-form_half d-flex flex-row align-items-center ms-5" id="sort-buttons">
             <button class="mx-2 d-flex justify-content-center align-items-center btn btn-third sort-button" value="name-asc">이름 ▲</button>
             <button class="mx-2 d-flex justify-content-center align-items-center btn btn-third sort-button" value="name-desc">이름 ▼</button>
             <button class="mx-2 d-flex justify-content-center align-items-center btn btn-third sort-button" value="payment-asc">결제횟수 ▲</button>

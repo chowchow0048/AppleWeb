@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["3.37.147.68"]
 
 AUTH_USER_MODEL = "common.User"
-SESSION_COOKIE_AGE = 5400
+SESSION_COOKIE_AGE = 7200
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 브라우저 닫을 때 세션 만료 안 함
 
 LOGIN_URL = "/user/login/"

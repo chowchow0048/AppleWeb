@@ -1,0 +1,100 @@
+.working{
+    outline: 1px solid #393939;
+}
+
+.handover-head{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* padding: 10px; */
+}
+
+.handover-head-title{
+    display: flex;
+    justify-content: center;
+}
+
+.handover-head-features{
+    display: flex;
+    /* justify-content: space-between; */
+    justify-content: flex-end;
+    padding: 10px 15px;
+    width: 100%;
+}
+
+.btn-write-handover{
+    width: 10rem;
+    text-decoration: none;
+    transition: all 0.3s linear;
+
+    &:hover{
+        background-color: #414efe !important;
+        color: white !important;
+    }
+}
+
+.handover-body{
+    width: 100%;
+    height: auto;
+}
+
+/* #handover-table{
+    border-bottom: 2px solid #393939 !important;
+} */
+
+#handover-thead > tr >.th-handover-title,
+#handover-thead > tr >.th-handover-author,
+#handover-thead > tr >.th-handover-date {
+    /* outline: 1px solid #ff7777; */
+    outline: none;
+}
+
+#handover-thead > tr >.th-handover-title{
+    width: 65%;
+}
+
+#handover-thead > tr >.th-handover-author{
+    width: 15%;
+}
+
+#handover-thead > tr >.th-handover-date {
+    width: auto;
+}
+
+.handover-detail-head {
+    display: flex;
+    flex-direction: row; /* 가로 방향으로 정렬 */
+    width: 100%;
+    border-bottom: 1px solid #bcb4b49f;
+    position: relative; /* author를 오른쪽으로 이동할 수 있게 만듦 */
+}
+
+.handover-detail-date {
+    font-weight: 500;
+    font-size: 1.5rem;
+    /* border-bottom: 1px solid #bcb4b49f; */
+    /* flex-grow: 1; 공간을 차지하도록 설정하여 중앙에 오게 만듦 */
+    /* text-align: center; 텍스트 중앙 정렬 */
+}
+
+.handover-detail-author {
+    font-weight: 400;
+}
+
+.handover-detail-content {
+    width: 100%; /* 컨텐츠가 컨테이너 너비에 맞도록 설정 */
+    max-width: 100%; /* 뷰포트를 넘지 않게 함 */
+    word-wrap: break-word; /* 긴 단어가 있을 때 줄바꿈 */
+    overflow-wrap: break-word; /* 긴 단어를 자동으로 줄바꿈 */
+    white-space: normal; /* 텍스트가 한 줄에 길게 표시되지 않도록 함 */
+}
+
+#handover-content {
+    min-height: 400px;  /* 최소 높이를 400px로 설정 */
+}
+
+/* This selector targets the editable element (excluding comments). */
+.ck-editor__editable_inline:not(.ck-comment__input *) {
+    height: 350px;
+    overflow-y: auto;
+}

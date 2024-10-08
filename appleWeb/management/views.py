@@ -3,23 +3,32 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
+from django.utils.dateparse import parse_date
 from django.utils import timezone
 from django.db import transaction
 from openpyxl import Workbook
 from openpyxl.styles import Alignment
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
-from common.models import User, Course, Attendance, Absence
+from common.models import (
+    User,
+    Course,
+    Attendance,
+    Absence,
+    Handover,
+    Waitlist,
+    Blacklist,
+)
 from common.decorators import manager_required
 import pandas as pd
 import logging
 import urllib.parse
+import traceback
 
 
 logger_appleWeb = logging.getLogger("appleWeb")
-# logger_django = logging.getLogger("django")
-# logger_server = logging.getLogger("django.server")
 
 
 @login_required
@@ -305,8 +314,123 @@ def management_student_detail(request, student_id):
 
 @login_required
 @manager_required
-def management_manage_journal(request):
-    return render(request, "management/management_manage_journal.html")
+def management_handover(request):
+    handovers = Handover.objects.all().order_by("-created_date")
+    paginator = Paginator(handovers, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {"page_obj": page_obj}
+
+    return render(request, "management/management_handover.html", context)
+
+
+# 인수인계 검색 보류
+# @login_required
+# @manager_required
+# def search_handover(request):
+#     query = request.GET.get("query", "")
+#     results = []
+
+#     try:
+#         print(f"Search query: {query}")  # 검색어 출력
+
+#         if query:
+#             handovers = Handover.objects.filter(title__icontains=query).order_by(
+#                 "-created_date"
+#             )
+#             for handover in handovers:
+#                 results.append(
+#                     {
+#                         "id": handover.id,
+#                         "title": f"{handover.created_date.strftime('%Y-%m-%d')} {handover.shift} 행정",
+#                         "author": handover.author.username,
+#                         "created_date": handover.created_date.strftime("%Y-%m-%d"),
+#                     }
+#                 )
+
+#         print(f"Results: {results}")  # 결과 출력
+#         return JsonResponse({"results": results})
+
+#     except Exception as e:
+#         print(f"Error: {e}")
+#         print(traceback.format_exc())  # 전체 오류 스택을 로그로 출력
+#         return JsonResponse({"error": "Something went wrong"}, status=500)
+
+
+@login_required
+@manager_required
+def management_handover_detail(request, handover_id):
+    handover = get_object_or_404(Handover, id=handover_id)
+    return render(
+        request, "management/management_handover_detail.html", {"handover": handover}
+    )
+
+
+@login_required
+@manager_required
+def management_handover_delete(request, handover_id):
+    handover = get_object_or_404(Handover, id=handover_id)
+    if handover.author == request.user:
+        handover.delete()
+        return redirect("management_handover")  # 삭제 후 목록 페이지로 리다이렉트
+    return redirect("management_handover_detail", handover_id=handover_id)
+
+
+@login_required
+@manager_required
+def management_handover_add(request):
+    today = timezone.now().strftime("%Y-%m-%d")
+
+    if request.method == "POST":
+        # POST 데이터에서 shift와 content를 직접 가져옵니다.
+        shift = request.POST.get("shift")
+        content = request.POST.get("content")
+
+        if shift and content:
+            # Handover 객체를 생성하여 데이터베이스에 저장
+            handover = Handover(
+                author=request.user,  # 작성자 설정
+                shift=shift,
+                content=content,
+                created_date=timezone.now(),  # 현재 날짜 설정
+            )
+            handover.save()
+
+            # 성공적으로 저장 후 리다이렉트 처리 (원하는 경로로 수정)
+            return redirect("management_handover")
+
+    context = {"today": today}
+    return render(request, "management/management_handover_add.html", context)
+
+
+@login_required
+@manager_required
+def management_handover_update(request, handover_id):
+    handover = get_object_or_404(Handover, id=handover_id)
+
+    # 작성자가 아닌 경우 접근 제한
+    if handover.author != request.user:
+        return redirect("management_handover_detail", handover_id=handover_id)
+
+    if request.method == "POST":
+        # POST 요청에서 데이터를 수동으로 받아옴
+        shift = request.POST.get("shift")
+        content = request.POST.get("content")
+
+        # 데이터가 유효한 경우 업데이트
+        if shift and content:
+            handover.shift = shift
+            handover.content = content
+            handover.save()
+            return redirect("management_handover_detail", handover_id=handover_id)
+
+    context = {
+        "handover": handover,
+        "today": handover.created_date.strftime("%Y-%m-%d"),  # 기존 날짜를 그대로 사용
+    }
+
+    return render(request, "management/management_handover_update.html", context)
 
 
 @login_required
@@ -356,11 +480,127 @@ def management_paylist(request):
 
 @login_required
 @manager_required
-def management_waitList(request):
-    return render(request, "management/management_waitlist.html")
+def management_wait_black_list(request):
+    return render(request, "management/management_wait_black_list.html")
 
 
 @login_required
 @manager_required
-def management_blacklist(request):
-    return render(request, "management/management_blacklist.html")
+def fetch_wait_black_list(request):
+    list_type = request.GET.get("type", "wait")
+    school = request.GET.get("school", None)
+    query = request.GET.get("query", None)
+
+    if list_type == "wait":
+        queryset = Waitlist.objects.all()
+    else:
+        queryset = Blacklist.objects.all()
+
+    if school:
+        queryset = queryset.filter(school=school)
+
+    if query:
+        queryset = queryset.filter(name__icontains=query)
+
+    # 데이터를 list로 변환, id와 list_type을 포함
+    data = list(
+        queryset.values("id", "school", "grade", "name", "phone", "date", "note")
+    )
+    for entry in data:
+        entry["list_type"] = list_type  # 각 엔트리에 list_type 추가
+
+    return JsonResponse(data, safe=False)
+
+
+@login_required
+@manager_required
+def management_wait_black_list_add(request):
+    today = timezone.now().strftime("%Y-%m-%d")
+
+    if request.method == "POST":
+        # POST 요청 처리 (대기리스트/블랙리스트 추가)
+        list_type = request.POST.get("list_type", "wait")  # 'wait' 또는 'black' 선택
+        school = request.POST.get("school")
+        grade = request.POST.get("grade")
+        name = request.POST.get("name")
+        phone = request.POST.get("phone")
+        note = request.POST.get("note")
+
+        if list_type == "wait":
+            Waitlist.objects.create(
+                school=school,
+                grade=grade,
+                name=name,
+                phone=phone,
+                note=note,
+                author=request.user,
+            )
+        else:
+            Blacklist.objects.create(
+                school=school,
+                grade=grade,
+                name=name,
+                phone=phone,
+                note=note,
+                author=request.user,
+            )
+
+        return redirect("management_wait_black_list")
+
+    context = {"today": today}
+    return render(request, "management/management_wait_black_list_add.html", context)
+
+
+@login_required
+@manager_required
+def management_wait_black_list_delete(request, list_type, entry_id):
+    # 'list_type'은 'wait' 또는 'black'을 받아 대기/블랙리스트 구분
+    if list_type == "wait":
+        entry = get_object_or_404(Waitlist, id=entry_id)
+    else:
+        entry = get_object_or_404(Blacklist, id=entry_id)
+
+    entry.delete()  # 항목 삭제
+    return redirect("management_wait_black_list")
+
+
+@login_required
+@manager_required
+def management_wait_black_list_wait_detail(request, waitlist_id):
+    wait = get_object_or_404(Waitlist, id=waitlist_id)
+
+    context = {
+        "wait": wait,
+        "school": wait.school,
+        "grade": wait.grade,
+        "name": wait.name,
+        "phone": wait.phone,
+        "note": wait.note,
+        "date": wait.date,
+        "author": wait.author,
+    }
+
+    return render(
+        request, "management/management_wait_black_list_wait_detail.html", context
+    )
+
+
+@login_required
+@manager_required
+def management_wait_black_list_black_detail(request, blacklist_id):
+    black = get_object_or_404(Blacklist, id=blacklist_id)
+
+    context = {
+        "black": black,
+        "school": black.school,
+        "grade": black.grade,
+        "name": black.name,
+        "phone": black.phone,
+        "note": black.note,
+        "date": black.date,
+        "author": black.author,
+    }
+
+    return render(
+        request, "management/management_wait_black_list_black_detail.html", context
+    )
