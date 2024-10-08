@@ -11,6 +11,11 @@ urlpatterns = [
         views.management_lecture,
         name="management_lecture",
     ),
+    path(  # 전체 수업 페이지
+        "all-lectures/",
+        views.management_all_lectures,
+        name="management_all_lectures",
+    ),
     path(  # 인수인계 페이지
         "handover/",
         views.management_handover,

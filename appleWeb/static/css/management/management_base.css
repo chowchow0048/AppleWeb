@@ -2954,7 +2954,7 @@ textarea.form-control-lg {
   border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
   border-radius: var(--bs-btn-border-radius);
   background-color: var(--bs-btn-bg);
-  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, border 0.5s ease, outline 0.5s ease;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease
 }
 @media (prefers-reduced-motion: reduce) {
   .btn {
@@ -2965,8 +2965,6 @@ textarea.form-control-lg {
   color: var(--bs-btn-hover-color);
   background-color: var(--bs-btn-hover-bg);
   border-color: var(--bs-btn-hover-border-color);
-  border: none;
-  outline: none;
 }
 .btn-check + .btn:hover {
   color: var(--bs-btn-color);

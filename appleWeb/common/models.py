@@ -365,6 +365,7 @@ class Review(models.Model):
     image = models.ImageField(
         upload_to="review_images/", null=True, blank=True, verbose_name="이미지"
     )
+    importance = models.IntegerField(default=10)
 
     def __str__(self):
         return f"{self.name}"

@@ -71,14 +71,11 @@ def api_courses(request):
 
     day = request.GET.get("day")
     school = request.GET.get("school")
-    courses = Course.objects.filter(
-        course_day=day, course_school=school, is_active=True
-    )
 
-    # Testing: 일요일 수업만
-    # courses = Course.objects.filter(
-    #     course_day="일요일", course_school=school, is_active=True
-    # )
+    courses = Course.objects.filter(course_school=school, is_active=True)
+
+    if day:
+        courses = courses.filter(course_day=day)
 
     data = [
         {
@@ -86,6 +83,7 @@ def api_courses(request):
             "course_grade": course.course_grade,
             "course_subject": course.course_subject,
             "course_time": course.course_time.strftime("%H:%M"),
+            "course_day": course.course_day,
         }
         for course in courses
     ]
@@ -162,6 +160,12 @@ def export_attendance_to_excel(request, course_id):
 @manager_required
 def management_home(request):
     return render(request, "management/management_home.html")
+
+
+@login_required
+@manager_required
+def management_all_lectures(request):
+    return render(request, "management/management_all_lectures.html")
 
 
 @login_required

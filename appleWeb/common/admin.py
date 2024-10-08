@@ -110,6 +110,7 @@ class UserAdmin(BaseUserAdmin):
         "sync_payment_request",
         "sync_courses_count",
         "sync_courses",
+        "payement_completed",
         "format_phone_numbers",
         "set_payment_request_true",
         "set_payment_request_false",
@@ -191,6 +192,19 @@ class UserAdmin(BaseUserAdmin):
         self.message_user(request, ("%d 비활성화" % count))
 
     deactivate_users.short_description = "회원 비활성화"
+
+    def payment_completed(self, request, queryset):
+        for user in queryset:
+            user.payment_count += user.courses_count * 4
+            if user.payment_count > 0:
+                user.payment_request = False
+            else:
+                user.payment_request = True
+            user.save()
+
+        self.message_user(request, "선택된 사용자들의 결제횟수가 갱신되었습니다.")
+
+    payment_completed.short_description = "결제횟수 갱신 (수업횟수*4)"
 
     def format_phone_numbers(modeladmin, request, queryset):
         formatted_count = 0
@@ -530,6 +544,7 @@ class ReviewAdminForm(forms.ModelForm):
 class ReviewAdmin(admin.ModelAdmin):
     form = ReviewAdminForm
     list_display = (
+        "importance",
         "school",
         "name",
         "university",
@@ -537,7 +552,26 @@ class ReviewAdmin(admin.ModelAdmin):
         "title",
         "created_at",
     )
-    list_filter = ("school",)
+    list_filter = ("school", "importance")
+    actions = ("set_importance_0", "set_importance_5", "set_importance_10")
+
+    def set_importance_0(self, request, queryset):
+        count = queryset.update(importance=0)
+        self.message_user(request, ("%d 중요도 == 0" % count))
+
+    set_importance_0.short_description = "중요도 0"
+
+    def set_importance_5(self, request, queryset):
+        count = queryset.update(importance=5)
+        self.message_user(request, ("%d 중요도 == 5" % count))
+
+    set_importance_5.short_description = "중요도 5"
+
+    def set_importance_10(self, request, queryset):
+        count = queryset.update(importance=10)
+        self.message_user(request, ("%d 중요도 == 10" % count))
+
+    set_importance_10.short_description = "중요도 10"
 
 
 # WaitlistAdmin 클래스

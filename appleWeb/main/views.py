@@ -16,7 +16,7 @@ def main(request):
     except EmptyPage:
         articles = paginator.page(paginator.num_pages)
 
-    reviews = Review.objects.all()
+    reviews = Review.objects.order_by("importance")
 
     return render(
         request,
