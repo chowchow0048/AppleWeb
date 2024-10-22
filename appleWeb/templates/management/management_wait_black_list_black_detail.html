@@ -1,34 +1,44 @@
 {% extends 'management/management_base.html' %}
 {% load static %}
 {% block extra_css %}
-<link href="{% static 'css/management/management_handover.css' %}" rel="stylesheet" />
+<link href="{% static 'css/management/management_black_black_list.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <div class="handover-detail-head d-flex flex-row justify-content-between align-items-center">
-        <div class="handover-detail-h-da d-flex flex-column">
-            <p class="handover-detail-date mt-4">{{ black.date|date:"Y-m-d" }} {{ black.date|date:"l" }} 블랙 명단</p>
-            <p class="handover-detail-author">등록자: {{ black.author }}</p>
-        </div>
-        {% if black.author == user %}
-        <div class="handover-actions mt-4 d-flex flex-row justify-content-between">
-            <form method="post" action="{% url 'management_wait_black_list_delete' 'black' black.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger mx-3" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-            </form>
-        </div>
-        {% endif %}
-    </div>
-
-    <div class="handover-detail-body">
-        <div class="handover-detail-content px-3 py-4">
-            <p><strong>학교:</strong> {{ black.school }}</p>
-            <p><strong>학년:</strong> {{ black.grade }}</p>
-            <p><strong>이름:</strong> {{ black.name }}</p>
-            <p><strong>연락처:</strong> {{ black.phone }}</p>
-            <p><strong>비고:</strong> {{ black.note|safe }}</p>
+    <div class="wb-detail-container mt-4">
+        <label class="form-label" for="wb-black-date">블랙리스트</label>
+        <div class="d-flex flex-row align-items-center">
+            <p id="wb-black-date" class="form-control nomargin">{{ black.date|date:"Y-m-d" }} {{ black.date|date:"l" }} 블랙리스트</p>
+            {% if black.author == user %}
+            <div class="wb-actions d-flex flex-row justify-content-end nomargin">
+                <form method="post" action="{% url 'management_wait_black_list_delete' 'black' black.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger ms-4" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                </form>            
+            </div>
+            {% endif %}
         </div>
     </div>
+    <div class="wb-detail-container">
+        <label for="" class="form-label">학교</label>
+        <p class="form-control"> {{black.school}}</p>
+    </div>
+    <div class="wb-detail-container">
+        <label for="" class="form-label">학년</label>
+        <p class="form-control"> {{black.grade}}</p>
+    </div>
+    <div class="wb-detail-container">
+        <label for="" class="form-label">이름</label>
+        <p class="form-control"> {{black.name}}</p>
+    </div>
+    <div class="wb-detail-container">
+        <label for="" class="form-label">연락처</label>
+        <p class="form-control"> {{black.phone}}</p>
+    </div>
+    <div class="wb-detail-container">
+        <label for="" class="form-label">비고</label>
+        <div class="form-control" style="min-height: 150px;">{{ black.note|safe }}</div>
+    </div>    
 </div>
 {% endblock %}

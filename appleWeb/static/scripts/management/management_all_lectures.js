@@ -36,7 +36,7 @@ function filterCourses(school) {
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            console.log('MANAGEALLLECTURES', data);
+            console.log('MANAGE ALLLECTURES', data);
             const coursesByGrade = {};
 
             data.forEach(course => {
@@ -53,7 +53,8 @@ function filterCourses(school) {
                 coursesByGrade[grade][subject].push({
                     id: course.id,
                     time: course.course_time,
-                    day: dayTranslations[course.course_day] || course.course_day
+                    day: dayTranslations[course.course_day] || course.course_day,
+                    attendance: course.attendance
                 });
             });
             
@@ -67,7 +68,6 @@ function filterCourses(school) {
 
 function displayCourses(coursesByGrade) {
     const container = document.querySelector('.container');
-    // 학교 선택 버튼과 제목을 제외한 나머지 내용만 지웁니다.
     const coursesContainer = document.getElementById('courses-container');
     if (coursesContainer) {
         coursesContainer.remove();
@@ -115,7 +115,7 @@ function displayCourses(coursesByGrade) {
                 const button = document.createElement('button');
                 button.className = 'btn btn-secondary m-2';
                 button.textContent = `${course.day} ${course.time}`;
-                button.addEventListener('click', () => redirectToCourse(course.id));
+                button.addEventListener('click', () => redirectToCourse(course.id, course.attendance));
                 buttonsContainer.appendChild(button);
             });
 
@@ -128,14 +128,53 @@ function displayCourses(coursesByGrade) {
     });
 }
 
-function redirectToCourse(courseId) {
+function redirectToCourse(courseId, attendance) {
+    if (attendance) {
+        localStorage.setItem(`attendance_${courseId}`, JSON.stringify(attendance));
+    } else {
+        localStorage.removeItem(`attendance_${courseId}`);
+    }
     window.location.href = `/management/lecture/${courseId}/`;
 }
 
-// 페이지 로드 시 자동으로 첫 번째 학교 선택
+function loadAttendance(courseId) {
+    const attendanceData = localStorage.getItem(`attendance_${courseId}`);
+    if (attendanceData) {
+        const attendance = JSON.parse(attendanceData);
+        const now = new Date();
+        const nextClassTime = new Date(attendance.next_class_time);
+        
+        if (now < nextClassTime) {
+            displayAttendance(attendance);
+        } else {
+            localStorage.removeItem(`attendance_${courseId}`);
+        }
+    }
+}
+
+function displayAttendance(attendance) {
+    attendance.students.forEach(student => {
+        const checkbox = document.querySelector(`input[name="attendance_${student.id}"]`);
+        if (checkbox) {
+            checkbox.checked = student.status === 'present';
+        }
+    });
+}
+
+function getCourseIdFromUrl() {
+    const path = window.location.pathname;
+    const matches = path.match(/\/management\/lecture\/(\d+)\//);
+    return matches ? matches[1] : null;
+}
+
 document.addEventListener('DOMContentLoaded', (event) => {
     const firstSchoolButton = document.querySelector('.school-button');
     if (firstSchoolButton) {
         firstSchoolButton.click();
+    }
+
+    const courseId = getCourseIdFromUrl();
+    if (courseId) {
+        loadAttendance(courseId);
     }
 });

@@ -418,6 +418,8 @@ class CourseAdmin(admin.ModelAdmin):
         "activate_course",
         "deactivate_course",
         "only_active_students",
+        "set_day_mon",
+        "set_day_tue",
         "set_day_wed",
         "set_day_thu",
         "set_day_fri",
@@ -458,6 +460,18 @@ class CourseAdmin(admin.ModelAdmin):
         self.message_user(request, "비활성 학생 삭제")
 
     only_active_students.short_description = "비활성 학생 삭제"
+
+    def set_day_mon(self, request, queryset):
+        count = queryset.update(course_day="월요일")
+        self.message_user(request, ("%d 수업요일 == 월요일" % count))
+
+    set_day_mon.short_description = "수업요일을 월요일로"
+
+    def set_day_tue(self, request, queryset):
+        count = queryset.update(course_day="화요일")
+        self.message_user(request, ("%d 수업요일 == 화요일" % count))
+
+    set_day_tue.short_description = "수업요일을 화요일로"
 
     def set_day_wed(self, request, queryset):
         count = queryset.update(course_day="수요일")

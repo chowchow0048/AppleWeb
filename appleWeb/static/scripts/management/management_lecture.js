@@ -1,8 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
     const attendanceCheckboxes = document.querySelectorAll(".attendance-checkbox");
     const absenceCheckboxes = document.querySelectorAll(".absence-checkbox");
+    const attendanceAllCheckButton = document.getElementById("selectAllAttendance");
+    const absenceAllCheckButton = document.getElementById("selectAllAbsence");
+    const day = new Date().toLocaleDateString('ko-KR', { weekday: 'long' }).toLowerCase();
+    const courseDay = document.getElementById("course-title").innerHTML.split(' ')[5];
 
-    document.getElementById("selectAllAttendance").addEventListener("click", function() {
+    attendanceAllCheckButton.addEventListener("click", function() {
         attendanceCheckboxes.forEach(checkbox => {
             checkbox.checked = true;
             const studentId = checkbox.getAttribute("data-student-id");
@@ -11,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    document.getElementById("selectAllAbsence").addEventListener("click", function() {
+    absenceAllCheckButton.addEventListener("click", function() {
         absenceCheckboxes.forEach(checkbox => {
             checkbox.checked = true;
             const studentId = checkbox.getAttribute("data-student-id");
@@ -21,23 +25,31 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     attendanceCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", function() {
-            const studentId = this.getAttribute("data-student-id");
-            const correspondingAbsenceCheckbox = document.querySelector(`.absence-checkbox[data-student-id="${studentId}"]`);
-            if (this.checked) {
-                correspondingAbsenceCheckbox.checked = false;
-            }
-        });
+        if(day != courseDay) {
+            checkbox.disabled = true;
+        } else {
+            checkbox.addEventListener("change", function() {
+                const studentId = this.getAttribute("data-student-id");
+                const correspondingAbsenceCheckbox = document.querySelector(`.absence-checkbox[data-student-id="${studentId}"]`);
+                if (this.checked) {
+                    correspondingAbsenceCheckbox.checked = false;
+                }
+            });
+        }
     });
 
     absenceCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", function() {
-            const studentId = this.getAttribute("data-student-id");
-            const correspondingAttendanceCheckbox = document.querySelector(`.attendance-checkbox[data-student-id="${studentId}"]`);
-            if (this.checked) {
-                correspondingAttendanceCheckbox.checked = false;
-            }
-        });
+        if(day != courseDay) {
+            checkbox.disabled = true;
+        } else {
+            checkbox.addEventListener("change", function() {
+                const studentId = this.getAttribute("data-student-id");
+                const correspondingAttendanceCheckbox = document.querySelector(`.attendance-checkbox[data-student-id="${studentId}"]`);
+                if (this.checked) {
+                    correspondingAttendanceCheckbox.checked = false;
+                }
+            });
+        }
     });
 
     document.getElementById("submitAttendance").addEventListener("click", function() {

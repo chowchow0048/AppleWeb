@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const tableBody = document.getElementById('wb-tbody');
     const searchInput = document.getElementById('wb-search');
     const schoolButtons = document.querySelectorAll('.wb-btn-school');
+    const addListBtn = document.getElementById('btn-add-list');
     
     let isWaitlist = true;  // 대기리스트가 기본 상태
     let selectedSchool = '';  // 선택된 학교 필터
@@ -25,6 +26,12 @@ document.addEventListener('DOMContentLoaded', function () {
         wbWaitBtn.classList.remove('focused');  // 대기리스트 버튼에서 포커스 제거
         
         fetchData('black', selectedSchool, searchQuery);  // 데이터를 다시 로드
+    });
+
+    // 명단 추가 버튼 클릭 시
+    addListBtn.addEventListener('click', function() {
+        const listType = isWaitlist ? 'wait' : 'black';
+        window.location.href = `/management/wait-blacklist/${listType}-add/`;
     });
 
     // 학교 버튼 클릭 시 필터링

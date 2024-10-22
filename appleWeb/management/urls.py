@@ -57,7 +57,9 @@ urlpatterns = [
         views.confirm_payment,
         name="confirm_payment",
     ),
-    path("paylist/", views.management_paylist, name="management_paylist"),
+    path(
+        "paylist/", views.management_paylist, name="management_paylist"
+    ),  # 결제 리스트 페이지,
     path(  # 대기&블랙 페이지
         "wait-blacklist/",
         views.management_wait_black_list,
@@ -68,8 +70,8 @@ urlpatterns = [
         views.fetch_wait_black_list,
         name="fetch_wait_black_list",
     ),
-    path(  # 대기블랙 명단 추가
-        "wait-blacklist/add/",
+    path(
+        "wait-blacklist/<str:list_type>-add/",
         views.management_wait_black_list_add,
         name="management_wait_black_list_add",
     ),

@@ -1,4 +1,3 @@
-// timetable modal
 document.addEventListener('DOMContentLoaded', (event) => {
     var timetableModal = document.getElementById('timetableModal');
     if (!timetableModal) {
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
-// makeStars: header background module
 const makeStars = () => {
     const $sky = document.querySelector(".sky");
     const centerX = window.innerWidth / 2;
@@ -58,8 +56,6 @@ const makeStars = () => {
 
 // Naver map API options
 function initMap() {
-    // var HOME_PATH = window.HOME_PATH || ',';
-    console.log('INIT MAP');
     var mapOptions = {
         center: new naver.maps.LatLng(37.5065445, 127.004894), // 지도의 중심좌표
         zoom: 17, // 지도의 초기 줌 레벨
@@ -79,8 +75,7 @@ function initMap() {
         '   <h3>애플과학</h3> <span class="grey">교습학원, 교습소</span>' ,
         '   <p>서울특별시 서초구 신반포로 189 반포 쇼핑타운 4동 402호<br />',
         '   02-532-1706 |',
-        // '       <img src="'+ HOME_PATH +'/img/example/hi-seoul.jpg" width="55" height="55" alt="서울시청" class="thumb" /><br />',
-        '       <a href="https://www.banpo-applecom" target="_blank">www.banpo-apple.com</a>',
+        '       <a href="https://www.banpo-apple.com" target="_blank">www.banpo-apple.com</a>',
         '   </p>',
         '</div>'
     ].join('');
@@ -101,10 +96,9 @@ function initMap() {
 }
 
 window.navermap_authFailure = function () {
-    console.log('인증 실패'); // 콘솔에 로그 출력
+    console.log('인증 실패'); 
 }
 
-// CALL FUNCTIONS
 window.onresize = () => {
     makeStars();
 }

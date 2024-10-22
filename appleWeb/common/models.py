@@ -3,7 +3,11 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils import timezone
+from datetime import datetime, timedelta
 from django_ckeditor_5.fields import CKEditor5Field  # CKEditor 5 필드 추가
+import logging
+
+logger_appleWeb = logging.getLogger("appleWeb")
 
 
 class User(AbstractUser):
@@ -113,11 +117,6 @@ class Course(models.Model):
         ("biology", "생명과학"),
         ("earth_science", "지구과학"),
         ("integrated_science", "통합과학"),
-        # ("special_physics", "특강-물리"),
-        # ("special_chemistry", "특강-화학"),
-        # ("special_biology", "특강-생명과학"),
-        # ("special_earth_science", "특강-지구과학"),
-        # ("special_integrated_science", "특강-통합과학"),
     )
     is_active = models.BooleanField(
         default=False, verbose_name="활성화"
@@ -157,6 +156,56 @@ class Course(models.Model):
         blank=True,
         verbose_name="학생",
     )
+
+    def get_next_class_time(self, from_time=None):
+        try:
+            if from_time is None:
+                from_time = timezone.now()
+
+            day_to_number = {
+                "월요일": 0,
+                "화요일": 1,
+                "수요일": 2,
+                "목요일": 3,
+                "금요일": 4,
+                "토요일": 5,
+                "일요일": 6,
+            }
+            course_day_number = day_to_number.get(self.course_day)
+            if course_day_number is None:
+                raise ValueError(f"Invalid course_day: {self.course_day}")
+
+            current_day_number = from_time.weekday()
+
+            days_ahead = course_day_number - current_day_number
+            if days_ahead <= 0:
+                days_ahead += 7
+
+            next_date = from_time.date() + timedelta(days=days_ahead)
+            next_time = timezone.make_aware(
+                datetime.combine(next_date, self.course_time)
+            )
+
+            if next_time <= from_time:
+                next_time += timedelta(days=7)
+
+            # print(
+            #     "course:",
+            #     course_day_number,
+            #     "today:",
+            #     current_day_number,
+            #     "course:",
+            #     days_ahead,
+            #     next_date,
+            #     next_time,
+            # )
+
+            return next_time
+        except Exception as e:
+            logger_appleWeb.error(
+                f"Error in get_next_class_time for course {self.id}: {str(e)}"
+            )
+            return None
 
     def __str__(self):
         subject = self.course_subject
@@ -276,6 +325,7 @@ class Waitlist(models.Model):
         return f"대기: {self.school} {self.grade} - {self.name}"
 
     class Meta:
+        ordering = ["-date"]
         verbose_name = "대기리스트"
         verbose_name_plural = "대기리스트"
 
@@ -303,6 +353,7 @@ class Blacklist(models.Model):
         return f"블랙리스트: {self.school} {self.grade} - {self.name}"
 
     class Meta:
+        ordering = ["-date"]
         verbose_name = "블랙리스트"
         verbose_name_plural = "블랙리스트"
 
@@ -344,6 +395,7 @@ class Review(models.Model):
         ("상문고", "상문고"),
         ("서울고", "서울고"),
         ("서문여고", "서문여고"),
+        ("영동고", "영동고"),
     )
 
     school = models.CharField(

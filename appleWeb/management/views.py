@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, HttpResponse
 from django.utils.dateparse import parse_date
 from django.utils import timezone
@@ -440,7 +441,9 @@ def management_handover_update(request, handover_id):
 @login_required
 @manager_required
 def management_paylist(request):
-    users_with_payment_request = User.objects.filter(payment_request=True)
+    users_with_payment_request = User.objects.filter(
+        payment_request=True, is_active=True
+    )
     users_with_payment_request = [
         {
             "id": user.id,
@@ -453,6 +456,7 @@ def management_paylist(request):
         }
         for user in users_with_payment_request
     ]
+    print(users_with_payment_request)
 
     return render(
         request,
@@ -468,7 +472,7 @@ def fetch_paylist(request):
     school = request.GET.get("school", None)
     query = request.GET.get("query", "")
 
-    users = User.objects.filter(payment_request=True)
+    users = User.objects.filter(payment_request=True, is_active=True, is_teacher=False)
 
     # 학교 필터 적용
     if school:
@@ -520,7 +524,7 @@ def fetch_wait_black_list(request):
     list_type = request.GET.get("type", "wait")
     school = request.GET.get("school", None)
     query = request.GET.get("query", None)
-
+    print(list_type)
     if list_type == "wait":
         queryset = Waitlist.objects.all()
     else:
@@ -544,12 +548,10 @@ def fetch_wait_black_list(request):
 
 @login_required
 @manager_required
-def management_wait_black_list_add(request):
+def management_wait_black_list_add(request, list_type):
     today = timezone.now().strftime("%Y-%m-%d")
 
     if request.method == "POST":
-        # POST 요청 처리 (대기리스트/블랙리스트 추가)
-        list_type = request.POST.get("list_type", "wait")  # 'wait' 또는 'black' 선택
         school = request.POST.get("school")
         grade = request.POST.get("grade")
         name = request.POST.get("name")
@@ -577,8 +579,10 @@ def management_wait_black_list_add(request):
 
         return redirect("management_wait_black_list")
 
-    context = {"today": today}
-    return render(request, "management/management_wait_black_list_add.html", context)
+    context = {"today": today, "list_type": list_type}
+    return render(
+        request, f"management/management_wait_black_list_{list_type}_add.html", context
+    )
 
 
 @login_required

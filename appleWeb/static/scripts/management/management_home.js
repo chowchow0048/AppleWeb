@@ -28,7 +28,7 @@ function filterCourses(school) {
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            console.log('MANAGEHOME', data);
+            console.log('MANAGEHOME', data, url);
             const coursesByGrade = {
                 '2학년': { '물리': [], '화학': [], '생명과학': [], '지구과학': [] },
                 '1학년': { '통합과학': [], '물리': [], '화학': [], '생명과학': [], '지구과학': [] }

@@ -103,7 +103,7 @@ function renderTable(data) {
             <td>${student.payment_count}</td>
         `;
         row.onclick = () => {
-            window.location.href = `/management/student_detail/${student.id}/`;
+            window.location.href = `/management/student-detail/${student.id}/`;
         };
     });
 }
