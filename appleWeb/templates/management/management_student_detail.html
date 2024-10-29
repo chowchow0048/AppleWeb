@@ -7,92 +7,75 @@
 {% endblock %}
 
 {% block content %}
-<div class="container p-5">
-    <h1 class="mb-4 pb-2 border-bottom">{{ student.name }}의 정보</h1>
-    <div class="mb-1" style="display: flex;">
-        <span class="me-1" style="font-weight: bold;">학교: </span>
-        <p>{{ student.school }}</p>
+<div class="container">
+    <div class="handover-detail-container mt-4">
+        <h1 class="mb-4 pb-2 border-bottom">{{ student.name }}의 정보</h1>
     </div>
-    <div class="mb-1" style="display: flex;">
-        <span class="me-1" style="font-weight: bold;">학년:</span>
-        <p>{{ student.grade }}</p>
-    </div>
-    {% if student.phone == None %}
-        <div class="mb-1" style="display: flex;">
-            <span class="me-1" style="font-weight: bold;">전화번호: </span>
-            <p> - </p>
-        </div>
-    {% else %}
-        <div class="mb-1" style="display: flex;">
-            <span class="me-1" style="font-weight: bold;">전화번호: </span>
-            <p>{{ student.phone }}</p>
-        </div>
-    {% endif %}
-    <div class="mb-1" style="display: flex;">
-        <span class="me-1" style="font-weight: bold;">부모님 전화번호: </span>
-        <p>{{ student.parent_phone }}</p>
-    </div>
-    <div class="mb-1" style="display: flex;">
-        <span class="me-1" style="font-weight: bold;">잔여 수업 횟수:</span>
-        <p>{{ student.payment_count }}</p>
-    </div>
-    {% if student.latest_payment != None %}
-        <div class="mb-1" style="display: flex;">
-            <span class="me-1" style="font-weight: bold;">최근 결제 날짜: </span>
-            <p>{{ student.latest_payment|date_kor }}</p>
-        </div>
-    {% endif %}
-    {% if student.payment_request %}
-    <div class="mb-2" style="display: flex;">
-        <span class="">결제 요청: 필요</span>
-    </div>
-    {% endif %}
-    <h3 class="mt-4 mb-4 py-2 border-bottom">수강 과목</h3>
-    <ul>
-        {% for course in courses %}
-            <p class="nomargin">{{ course.course_school }} {{ course.course_grade }} {{ course.course_subject|subject_kor }} {{ course.course_day }} {{ course.course_time|time_kor }}</p>
-        {% endfor %}
-    </ul>
-    <h3 class="mt-4 mb-4 py-2 border-bottom">출석 기록</h3>
-    <ul>
-        {% for attendance in attendances %}
-            <p class="nomargin">{{ attendance.date|date_kor }} {{attendance.course.course_day}} {{ attendance.course|course_kor }}</p>
-        {% endfor %}
-    </ul>
-    <h3 class="mt-4 mb-4 py-2 border-bottom">결석 기록</h3>
-    <ul>
-        {% for absence in absences %}
-            <p class="nomargin">{{ absence.date|date_kor }} {{ absence.course.course_day }} {{ absence.course|course_kor }}</p>
-        {% endfor %}
-    </ul>
 
-    <!-- {% if user.is_superuser or user.is_manager or user.id == student.id %}
-    <button id="change-password-btn" class="btn btn-primary mt-4">비밀번호 수정</button>
-    <form id="change-password-form" method="POST" style="display: none;" class="mt-3">
-        {% csrf_token %}
-        <div class="form-group mb-2">
-            <label for="password1">새 비밀번호</label>
-            <input type="password" class="form-control" id="password1" name="password1" required>
+    <div class="handover-detail-container">
+        <label class="form-label">학교</label>
+        <p class="form-control">{{ student.school }}</p>
+    </div>
+
+    <div class="handover-detail-container">
+        <label class="form-label">학년</label>
+        <p class="form-control">{{ student.grade }}</p>
+    </div>
+
+    <div class="handover-detail-container">
+        <label class="form-label">전화번호</label>
+        <p class="form-control">{% if student.phone %}{{ student.phone }}{% else %}-{% endif %}</p>
+    </div>
+
+    <div class="handover-detail-container">
+        <label class="form-label">부모님 전화번호</label>
+        <p class="form-control">{{ student.parent_phone }}</p>
+    </div>
+
+    <div class="handover-detail-container">
+        <label class="form-label">잔여 수업 횟수</label>
+        <p class="form-control">{{ student.payment_count }}</p>
+    </div>
+
+    {% if student.latest_payment %}
+    <div class="handover-detail-container">
+        <label class="form-label">최근 결제 날짜</label>
+        <p class="form-control">{{ student.latest_payment|date_kor }}</p>
+    </div>
+    {% endif %}
+
+    {% if student.payment_request %}
+    <div class="handover-detail-container">
+        <label class="form-label">결제 요청</label>
+        <p class="form-control">필요</p>
+    </div>
+    {% endif %}
+
+    <div class="handover-detail-container mb-3">
+        <label class="form-label">수강 과목</label>
+        <div class="form-control">
+            {% for course in courses %}
+                <p class="nomargin">{{ course.course_school }} {{ course.course_grade }} {{ course.course_subject|subject_kor }} {{ course.course_day }} {{ course.course_time|time_kor }}</p>
+            {% endfor %}
         </div>
-        <div class="form-group mb-2">
-            <label for="password2">새 비밀번호 확인</label>
-            <input type="password" class="form-control" id="password2" name="password2" required>
+    </div>
+
+    <div class="handover-detail-container mb-3">
+        <label class="form-label">출석 기록</label>
+        <div class="form-control">
+            {% for attendance in attendances %}
+                <p class="nomargin">{{ attendance.date|date_kor }} {{attendance.course.course_day}} {{ attendance.course|course_kor }}</p>
+            {% endfor %}
         </div>
-        <button type="submit" class="btn btn-success">비밀번호 변경</button>
-    </form>
-    {% endif %} -->
+    </div>
+
+    <div class="handover-detail-container mb-3">
+        <label class="form-label">결석 기록</label>
+        <div class="form-control">
+            {% for absence in absences %}
+                <p class="nomargin">{{ absence.date|date_kor }} {{ absence.course.course_day }} {{ absence.course|course_kor }}</p>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}
-
-<!-- {% block extra_scripts %}
-<script>
-    document.getElementById('change-password-btn').addEventListener('click', function() {
-        var form = document.getElementById('change-password-form');
-        if (form.style.display === 'none') {
-            form.style.display = 'block';
-        } else {
-            form.style.display = 'none';
-        }
-    });
-</script>
-{% endblock %} -->

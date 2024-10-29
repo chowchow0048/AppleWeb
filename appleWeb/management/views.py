@@ -289,8 +289,8 @@ def bulk_attendance(request):
 def management_student_detail(request, student_id):
     user = request.user
     student = get_object_or_404(User, pk=student_id)
-    attendances = Attendance.objects.filter(student=student).order_by("attended_at")
-    absences = Absence.objects.filter(student=student).order_by("absent_at")
+    attendances = Attendance.objects.filter(student=student).order_by("-date")
+    absences = Absence.objects.filter(student=student).order_by("-date")
     courses = student.enrolled_courses.filter(is_active=True).all()
 
     if not (user.is_superuser or user.is_manager or user.id == student_id):

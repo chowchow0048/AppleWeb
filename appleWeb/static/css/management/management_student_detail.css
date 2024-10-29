@@ -2,22 +2,18 @@
     font-size: x-large;
     font-weight: 350;
     padding: 25px 0px;
-    /* margin: 20px 0px; */
 }
 
 .decorate-none{
     text-decoration-style: none;
 }
 
+
+
 .btn.active {
-    background-color: #007B; /* 예시로 파란색 배경 설정 */
+    background-color: #007B; 
     color: white;
 }
-
-/* .table thead th {
-    width: auto;
-    text-align: center;
-} */
 
 .d-flex-ni{
     display: flex;
@@ -56,10 +52,6 @@
     width: 10%;
     text-align: center;
 }
-
-/* .studentlist-detail-head tr {
-
-} */
 
 #mngsldt-thead th,
 #mngsl-thead th,
