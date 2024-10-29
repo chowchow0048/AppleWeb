@@ -114,9 +114,16 @@ class UserAdmin(BaseUserAdmin):
         "format_phone_numbers",
         "set_payment_request_true",
         "set_payment_request_false",
-        "sub_payment_count_1",
         "add_payment_count_1",
+        "sub_payment_count_1",
+        "add_payment_count_2",
+        "sub_payment_count_2",
+        "add_payment_count_3",
+        "sub_payment_count_3",
         "add_payment_count_4",
+        "sub_payment_count_4",
+        "add_payment_count_5",
+        "sub_payment_count_5",
         "add_payment_count_8",
         "add_payment_count_12",
         "set_payment_count_1",
@@ -246,23 +253,35 @@ class UserAdmin(BaseUserAdmin):
 
     set_payment_request_false.short_description = "결제요청 OFF"
 
-    def sub_payment_count_1(self, request, queryset):
-        count = queryset.update(payment_count=F("payment_count") - 1)
-        self.message_user(request, ("%d 결제횟수 1회 감소" % count))
-
-    sub_payment_count_1.short_description = "결제횟수 1회 감소"
-
     def add_payment_count_1(self, request, queryset):
         count = queryset.update(payment_count=F("payment_count") + 1)
         self.message_user(request, ("%d 결제횟수 1회 추가" % count))
 
     add_payment_count_1.short_description = "결제횟수 1회 추가"
 
+    def add_payment_count_2(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") + 2)
+        self.message_user(request, ("%d 결제횟수 2회 추가" % count))
+
+    add_payment_count_2.short_description = "결제횟수 2회 추가"
+
+    def add_payment_count_3(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") + 3)
+        self.message_user(request, ("%d 결제횟수 3회 추가" % count))
+
+    add_payment_count_3.short_description = "결제횟수 3회 추가"
+
     def add_payment_count_4(self, request, queryset):
         count = queryset.update(payment_count=F("payment_count") + 4)
         self.message_user(request, ("%d 결제횟수 4회 추가" % count))
 
     add_payment_count_4.short_description = "결제횟수 4회 추가"
+
+    def add_payment_count_5(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") + 5)
+        self.message_user(request, ("%d 결제횟수 5회 추가" % count))
+
+    add_payment_count_5.short_description = "결제횟수 5회 추가"
 
     def add_payment_count_8(self, request, queryset):
         count = queryset.update(payment_count=F("payment_count") + 8)
@@ -275,6 +294,36 @@ class UserAdmin(BaseUserAdmin):
         self.message_user(request, ("%d 결제횟수 12회 추가" % count))
 
     add_payment_count_12.short_description = "결제횟수 12회 추가"
+
+    def sub_payment_count_1(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") - 1)
+        self.message_user(request, ("%d 결제횟수 1회 감소" % count))
+
+    sub_payment_count_1.short_description = "결제횟수 1회 감소"
+
+    def sub_payment_count_2(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") - 2)
+        self.message_user(request, ("%d 결제횟수 2회 감소" % count))
+
+    sub_payment_count_2.short_description = "결제횟수 2회 감소"
+
+    def sub_payment_count_3(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") - 3)
+        self.message_user(request, ("%d 결제횟수 3회 감소" % count))
+
+    sub_payment_count_3.short_description = "결제횟수 3회 감소"
+
+    def sub_payment_count_4(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") - 4)
+        self.message_user(request, ("%d 결제횟수 4회 감소" % count))
+
+    sub_payment_count_4.short_description = "결제횟수 4회 감소"
+
+    def sub_payment_count_5(self, request, queryset):
+        count = queryset.update(payment_count=F("payment_count") - 5)
+        self.message_user(request, ("%d 결제횟수 5회 감소" % count))
+
+    sub_payment_count_5.short_description = "결제횟수 5회 감소"
 
     def set_payment_count_1(self, request, queryset):
         count = queryset.update(payment_count=1)
