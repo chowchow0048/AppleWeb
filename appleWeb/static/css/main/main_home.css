@@ -367,12 +367,10 @@
     line-height: 1.8;
     color: #4a5568;
     flex: 1;
-    /* 텍스트 래핑 관련 속성 추가 */
-    white-space: pre-wrap;       /* 공백과 줄바꿈 유지 */
-    word-wrap: break-word;       /* 긴 단어 래핑 */
-    overflow-wrap: break-word;   /* 긴 문자열 래핑 */
-    word-break: break-all;       /* 모든 가능한 지점에서 줄바꿈 */
-    max-width: 100%;            /* 컨테이너 너비를 넘지 않도록 */
+    word-wrap: break-word;      
+    overflow-wrap: break-word;  
+    word-break: break-all;      
+    max-width: 100%;        
 }
 
 @media (max-width: 768px) {
@@ -498,8 +496,6 @@
     line-height: 1.8;
     color: #4a5568;
     flex: 1;
-    /* 텍스트 래핑 관련 속성 추가 */
-    white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
     word-break: break-all;
