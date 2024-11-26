@@ -31,7 +31,8 @@ function filterCourses(school) {
             console.log('MANAGEHOME', data, url);
             const coursesByGrade = {
                 '2학년': { '물리': [], '화학': [], '생명과학': [], '지구과학': [] },
-                '1학년': { '통합과학': [], '물리': [], '화학': [], '생명과학': [], '지구과학': [] }
+                '1학년': { '통합과학': [], '물리': [], '화학': [], '생명과학': [], '지구과학': [] },
+                '예비고1': { '물리': [], '화학': [], '생명과학': [], '지구과학': [] },
             };
 
             data.forEach(course => {
@@ -112,7 +113,7 @@ function displayCourses(coursesByGrade) {
         mainContainer.innerHTML = '';  // Clear previous content
 
         const noCoursesHeader = document.createElement('h2');
-        noCoursesHeader.textContent = '수업이 없습니다.';
+        noCoursesHeader.textContent = '예정된 수업이 없습니다.';
         mainContainer.appendChild(noCoursesHeader);
     }
 }

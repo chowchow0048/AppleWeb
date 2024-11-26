@@ -12,7 +12,7 @@ logger_appleWeb = logging.getLogger("appleWeb")
 
 class User(AbstractUser):
     GRADE_CHOICES = (
-        ("에비고1", "예비고1"),
+        ("예비고1", "예비고1"),
         ("1학년", "1학년"),
         ("2학년", "2학년"),
         ("3학년", "3학년"),
@@ -188,17 +188,6 @@ class Course(models.Model):
 
             if next_time <= from_time:
                 next_time += timedelta(days=7)
-
-            # print(
-            #     "course:",
-            #     course_day_number,
-            #     "today:",
-            #     current_day_number,
-            #     "course:",
-            #     days_ahead,
-            #     next_date,
-            #     next_time,
-            # )
 
             return next_time
         except Exception as e:
