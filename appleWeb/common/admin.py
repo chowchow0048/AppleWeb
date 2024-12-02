@@ -105,15 +105,15 @@ class UserAdmin(BaseUserAdmin):
         "name",
     )
     actions = [
-        "activate_users",
-        "deactivate_users",
         "sync_payment_request",
         "sync_courses_count",
         "sync_courses",
-        "payement_completed",
+        "payment_completed",
         "format_phone_numbers",
         "set_payment_request_true",
         "set_payment_request_false",
+        "activate_users",
+        "deactivate_users",
         "add_payment_count_1",
         "sub_payment_count_1",
         "add_payment_count_2",

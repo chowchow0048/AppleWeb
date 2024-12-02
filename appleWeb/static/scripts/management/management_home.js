@@ -6,7 +6,19 @@ document.querySelectorAll('.school-button').forEach(button => {
             this.classList.add('active');
         }
 
-        filterCourses(this.getAttribute('data-school'));
+        const school = this.getAttribute('data-school');
+        // 학교 선택에 따라 표시할 목록 변경
+        if (school === '연합반') {
+            document.getElementById('courses-list-gr0').style.display = 'block';
+            document.getElementById('courses-list-gr1').style.display = 'none';
+            document.getElementById('courses-list-gr2').style.display = 'none';
+        } else {
+            document.getElementById('courses-list-gr0').style.display = 'none';
+            document.getElementById('courses-list-gr1').style.display = 'block';
+            document.getElementById('courses-list-gr2').style.display = 'block';
+        }
+
+        filterCourses(school);
     });
 });
 
@@ -17,7 +29,6 @@ const subjectTranslations = {
     earth_science: '지구과학',
     integrated_science: '통합과학'
 };
-
 
 function filterCourses(school) {
     const day = new Date().toLocaleDateString('ko-KR', { weekday: 'long' }).toLowerCase();
@@ -44,7 +55,7 @@ function filterCourses(school) {
                     });
                 }
             });
-            displayCourses(coursesByGrade);
+            displayCourses(coursesByGrade, school);
         },
         beforeSend: function() {
             console.log('I am waiting');
@@ -59,11 +70,22 @@ function filterCourses(school) {
     });
 }
 
-function displayCourses(coursesByGrade) {
+function displayCourses(coursesByGrade, school) {
     let allEmpty = true;
+    
     Object.entries(coursesByGrade).forEach(([grade, subjects]) => {
-        const container = document.getElementById(`courses-list-gr${grade === '2학년' ? '2' : '1'}`);
+        // 예비고1 데이터는 courses-list-gr0에 표시
+        const containerId = grade === '예비고1' ? 'courses-list-gr0' : 
+                          grade === '2학년' ? 'courses-list-gr2' : 'courses-list-gr1';
+        
+        // 연합반인 경우 예비고1 데이터만 표시
+        if (school === '연합반' && grade !== '예비고1') return;
+        // 일반 고등학교의 경우 예비고1 데이터 제외
+        if (school !== '연합반' && grade === '예비고1') return;
+
+        const container = document.getElementById(containerId);
         container.innerHTML = '';  // Clear previous content
+        
         const gradeHeader = document.createElement('h2');
         gradeHeader.textContent = `${grade}`;
         gradeHeader.className = 'mt-2 mb-4';
