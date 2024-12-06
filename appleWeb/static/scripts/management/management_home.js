@@ -129,15 +129,6 @@ function displayCourses(coursesByGrade, school) {
             allEmpty = false;
         }
     });
-
-    if (allEmpty) {
-        const mainContainer = document.getElementById('main-courses-container');
-        mainContainer.innerHTML = '';  // Clear previous content
-
-        const noCoursesHeader = document.createElement('h2');
-        noCoursesHeader.textContent = '예정된 수업이 없습니다.';
-        mainContainer.appendChild(noCoursesHeader);
-    }
 }
 
 function redirectToCourse(courseId) {
