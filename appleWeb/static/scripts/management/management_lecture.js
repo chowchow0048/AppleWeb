@@ -1,68 +1,34 @@
 document.addEventListener("DOMContentLoaded", function() {
     const attendanceCheckboxes = document.querySelectorAll(".attendance-checkbox");
-    const absenceCheckboxes = document.querySelectorAll(".absence-checkbox");
     const attendanceAllCheckButton = document.getElementById("selectAllAttendance");
-    const absenceAllCheckButton = document.getElementById("selectAllAbsence");
     const day = new Date().toLocaleDateString('ko-KR', { weekday: 'long' }).toLowerCase();
     const courseDay = document.getElementById("course-title").innerHTML.split(' ')[5];
 
     attendanceAllCheckButton.addEventListener("click", function() {
         attendanceCheckboxes.forEach(checkbox => {
             checkbox.checked = true;
-            const studentId = checkbox.getAttribute("data-student-id");
-            const correspondingAbsenceCheckbox = document.querySelector(`.absence-checkbox[data-student-id="${studentId}"]`);
-            correspondingAbsenceCheckbox.checked = false;
-        });
-    });
-
-    absenceAllCheckButton.addEventListener("click", function() {
-        absenceCheckboxes.forEach(checkbox => {
-            checkbox.checked = true;
-            const studentId = checkbox.getAttribute("data-student-id");
-            const correspondingAttendanceCheckbox = document.querySelector(`.attendance-checkbox[data-student-id="${studentId}"]`);
-            correspondingAttendanceCheckbox.checked = false;
         });
     });
 
     attendanceCheckboxes.forEach(checkbox => {
         if(day != courseDay) {
             checkbox.disabled = true;
-        } else {
-            checkbox.addEventListener("change", function() {
-                const studentId = this.getAttribute("data-student-id");
-                const correspondingAbsenceCheckbox = document.querySelector(`.absence-checkbox[data-student-id="${studentId}"]`);
-                if (this.checked) {
-                    correspondingAbsenceCheckbox.checked = false;
-                }
-            });
-        }
-    });
-
-    absenceCheckboxes.forEach(checkbox => {
-        if(day != courseDay) {
-            checkbox.disabled = true;
-        } else {
-            checkbox.addEventListener("change", function() {
-                const studentId = this.getAttribute("data-student-id");
-                const correspondingAttendanceCheckbox = document.querySelector(`.attendance-checkbox[data-student-id="${studentId}"]`);
-                if (this.checked) {
-                    correspondingAttendanceCheckbox.checked = false;
-                }
-            });
         }
     });
 
     document.getElementById("submitAttendance").addEventListener("click", function() {
         const course = document.getElementById('course-title')
         const attendanceCount = document.querySelectorAll(".attendance-checkbox:checked").length;
-        const absenceCount = document.querySelectorAll(".absence-checkbox:checked").length;
-        const absenceDetails = Array.from(document.querySelectorAll(".absence-checkbox:checked")).map(checkbox => {
-            const studentId = checkbox.getAttribute("data-student-id");
-            const studentName = checkbox.closest("tr").querySelector("td:nth-child(4)").textContent;
-            return `${studentName} (ID: ${studentId})`;
+        const totalStudents = document.querySelectorAll(".attendance-checkbox").length;
+        const absenceCount = totalStudents - attendanceCount;
+        
+        const absentStudents = Array.from(document.querySelectorAll(".attendance-checkbox:not(:checked)")).map(checkbox => {
+            const studentRow = checkbox.closest("tr");
+            const studentName = studentRow.querySelector("td:nth-child(4)").textContent;
+            return `${studentName.trim()} (ID: ${checkbox.value})`;
         }).join("\n");
 
-        if (confirm(`출석: ${attendanceCount}명\n결석: ${absenceCount}명\n\n결석자 정보:\n${absenceDetails}\n\n출결 처리를 진행하시겠습니까?`)) {
+        if (confirm(`출석: ${attendanceCount}명\n결석: ${absenceCount}명\n\n결석자 정보:\n${absentStudents}\n\n출결 처리를 진행하시겠습니까?`)) {
             document.getElementById("attendanceForm").submit();
             alert(`${course.innerText} 수업의 출결처리가 완료되었습니다`);
         }

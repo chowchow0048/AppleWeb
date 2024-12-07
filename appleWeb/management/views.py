@@ -1,17 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, HttpResponse
-from django.utils.dateparse import parse_date
 from django.utils import timezone
-from django.db import transaction
 from openpyxl import Workbook
 from openpyxl.styles import Alignment
-from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
 from common.models import (
     User,
@@ -23,10 +18,8 @@ from common.models import (
     Blacklist,
 )
 from common.decorators import manager_required
-import pandas as pd
 import logging
 import urllib.parse
-import traceback
 
 
 logger_appleWeb = logging.getLogger("appleWeb")
@@ -209,79 +202,110 @@ def management_lecture(request, course_id):
     )
 
 
+# @login_required
+# @manager_required
+# @require_POST  # 이 뷰 함수는 POST 요청만 허용
+# def bulk_attendance(request):
+#     date = timezone.now().date()  # 오늘 날짜를 가져옴
+#     course_id = request.POST.get("course_id")  # POST 데이터에서 course_id를 가져옴
+
+#     if not course_id:
+#         return redirect("management_home")  # course_id가 없으면 홈 페이지로 리디렉션
+
+#     course = get_object_or_404(
+#         Course, id=course_id
+#     )  # 주어진 course_id에 해당하는 Course 객체를 가져옴
+
+#     attendance_ids = request.POST.getlist(
+#         "attendance"
+#     )  # POST 데이터에서 attendance 리스트를 가져옴
+#     absence_ids = request.POST.getlist(
+#         "absence"
+#     )  # POST 데이터에서 absence 리스트를 가져옴
+
+#     # 기존 출석 및 결석 기록을 초기화하기 전에 기존 출석 기록의 결제 횟수를 복구
+#     old_attendance_records = Attendance.objects.filter(course=course, date=date)
+#     old_absence_records = Absence.objects.filter(course=course, date=date)
+
+#     # print("OLD ATTENDANCE RECORD:", old_attendance_records)
+#     # print("OLD ABSENCE RECORD:", old_absence_records)
+
+#     # 기존 출석 기록을 삭제하고, 결제 횟수를 복구합니다
+#     for record in old_attendance_records:
+#         student = record.student  # 학생 객체를 가져옴
+#         student.payment_count += 1  # 결제 횟수를 복구
+#         student.save()
+
+#     for record in old_absence_records:
+#         student = record.student
+#         student.payment_count += 1
+#         student.save()
+
+#     old_attendance_records.delete()  # 기존 출석 기록 삭제
+#     old_absence_records.delete()  # 기존 결석 기록 삭제
+
+#     # 새로운 출석 기록을 생성하고, 결제 횟수를 차감
+#     for student_id in attendance_ids:
+#         student = course.course_students.get(
+#             id=student_id
+#         )  # student_id에 해당하는 학생을 가져옴
+#         Attendance.objects.create(
+#             course=course, student=student, date=date
+#         )  # 새로운 출석 기록 생성
+#         student.payment_count -= 1  # 결제 횟수를 차감
+#         if student.payment_count <= 0:
+#             student.payment_request = True
+
+#         student.save()
+
+#     # 새로운 결석 기록을 생성
+#     for student_id in absence_ids:
+#         student = course.course_students.get(
+#             id=student_id
+#         )  # student_id에 해당하는 학생을 가져옴
+#         Absence.objects.create(
+#             course=course, student=student, date=date
+#         )  # 새로운 결석 기록 생성
+#         student.payment_count -= 1  # 결제 횟수를 차감
+#         if student.payment_count <= 0:
+#             student.payment_request = True
+
+#         student.save()
+
+#     return redirect(
+#         "management_lecture", course_id=course_id
+#     )  # 출석부 페이지로 리디렉션
+
+
 @login_required
 @manager_required
-@require_POST  # 이 뷰 함수는 POST 요청만 허용
+@require_POST
 def bulk_attendance(request):
-    date = timezone.now().date()  # 오늘 날짜를 가져옴
-    course_id = request.POST.get("course_id")  # POST 데이터에서 course_id를 가져옴
+    date = timezone.now().date()
+    course_id = request.POST.get("course_id")
 
     if not course_id:
-        return redirect("management_home")  # course_id가 없으면 홈 페이지로 리디렉션
+        return redirect("management_home")
 
-    course = get_object_or_404(
-        Course, id=course_id
-    )  # 주어진 course_id에 해당하는 Course 객체를 가져옴
+    course = get_object_or_404(Course, id=course_id)
+    students = course.course_students.all()
 
-    attendance_ids = request.POST.getlist(
-        "attendance"
-    )  # POST 데이터에서 attendance 리스트를 가져옴
-    absence_ids = request.POST.getlist(
-        "absence"
-    )  # POST 데이터에서 absence 리스트를 가져옴
+    # 기존 출석/결석 기록 삭제
+    Attendance.objects.filter(course=course, date=date).delete()
+    Absence.objects.filter(course=course, date=date).delete()
 
-    # 기존 출석 및 결석 기록을 초기화하기 전에 기존 출석 기록의 결제 횟수를 복구
-    old_attendance_records = Attendance.objects.filter(course=course, date=date)
-    old_absence_records = Absence.objects.filter(course=course, date=date)
+    # 새로운 출석/결석 기록 생성
+    attendance_ids = set(request.POST.getlist("attendance"))
 
-    # print("OLD ATTENDANCE RECORD:", old_attendance_records)
-    # print("OLD ABSENCE RECORD:", old_absence_records)
+    for student in students:
+        if str(student.id) in attendance_ids:
+            # 출석 처리
+            Attendance.objects.create(course=course, student=student, date=date)
+        else:
+            # 결석 처리
+            Absence.objects.create(course=course, student=student, date=date)
 
-    # 기존 출석 기록을 삭제하고, 결제 횟수를 복구합니다
-    for record in old_attendance_records:
-        student = record.student  # 학생 객체를 가져옴
-        student.payment_count += 1  # 결제 횟수를 복구
-        student.save()
-
-    for record in old_absence_records:
-        student = record.student
-        student.payment_count += 1
-        student.save()
-
-    old_attendance_records.delete()  # 기존 출석 기록 삭제
-    old_absence_records.delete()  # 기존 결석 기록 삭제
-
-    # 새로운 출석 기록을 생성하고, 결제 횟수를 차감
-    for student_id in attendance_ids:
-        student = course.course_students.get(
-            id=student_id
-        )  # student_id에 해당하는 학생을 가져옴
-        Attendance.objects.create(
-            course=course, student=student, date=date
-        )  # 새로운 출석 기록 생성
-        student.payment_count -= 1  # 결제 횟수를 차감
-        if student.payment_count <= 0:
-            student.payment_request = True
-
-        student.save()
-
-    # 새로운 결석 기록을 생성
-    for student_id in absence_ids:
-        student = course.course_students.get(
-            id=student_id
-        )  # student_id에 해당하는 학생을 가져옴
-        Absence.objects.create(
-            course=course, student=student, date=date
-        )  # 새로운 결석 기록 생성
-        student.payment_count -= 1  # 결제 횟수를 차감
-        if student.payment_count <= 0:
-            student.payment_request = True
-
-        student.save()
-
-    return redirect(
-        "management_lecture", course_id=course_id
-    )  # 출석부 페이지로 리디렉션
+    return redirect("management_lecture", course_id=course_id)
 
 
 @login_required

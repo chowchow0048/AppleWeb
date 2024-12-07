@@ -20,6 +20,10 @@
   outline: 1px solid #eee;
 }
 
+.ck-editor__editable {
+  line-height: 1;  /* 또는 원하는 값으로 설정 */
+}
+
 #search-form {
   display: none;  /* 기본값을 none으로 설정하여 보이지 않게 */
 }

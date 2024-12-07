@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "main",
     "community",
     "management",
+    "django_apscheduler",
     "widget_tweaks",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -156,7 +157,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 NAVER_CLIENT_ID = "v2uy1n9cc7"
 NAVER_CLIENT_SECRET = "SgFqv8FBOrYyCjmym4InxD6Daig1yHvhDr68F2vz"
 
-# 로깅설정
+# 로깅 설정
+PROJECT_ROOT = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
+
+# logs 디렉토리 경로
+LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR)
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -175,12 +185,15 @@ LOGGING = {
             "style": "{",
         },
         "standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},
+        "detailed": {
+            "format": "%(asctime)s [%(levelname)s] %(name)s.%(funcName)s:%(lineno)d: %(message)s"
+        },
     },
     "handlers": {
         "console_file": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs/console.log",
+            "filename": os.path.join(LOGS_DIR, "console.log"),
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
             "backupCount": 5,
             "formatter": "standard",
@@ -188,7 +201,7 @@ LOGGING = {
         "django_server_file": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs/django_server.log",
+            "filename": os.path.join(LOGS_DIR, "django_server.log"),
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
             "backupCount": 5,
             "formatter": "django.server",
@@ -198,19 +211,35 @@ LOGGING = {
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler",
         },
-        "file": {
+        "app_file": {
             "level": "DEBUG",
             "filters": ["require_debug_false"],
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs/appleWeb.log",
+            "filename": os.path.join(LOGS_DIR, "appleWeb.log"),
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
             "backupCount": 5,
             "formatter": "standard",
         },
+        "payment_file": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(LOGS_DIR, "payment.log"),
+            "maxBytes": 1024 * 1024 * 5,  # 5 MB
+            "backupCount": 5,
+            "formatter": "detailed",
+        },
+        "scheduler_file": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(LOGS_DIR, "scheduler.log"),
+            "maxBytes": 1024 * 1024 * 5,  # 5 MB
+            "backupCount": 5,
+            "formatter": "detailed",
+        },
     },
     "loggers": {
         "django": {
-            "handlers": ["console_file", "mail_admins", "file"],
+            "handlers": ["console_file", "mail_admins", "app_file"],
             "level": "DEBUG",
         },
         "django.server": {
@@ -218,13 +247,24 @@ LOGGING = {
             "level": "DEBUG",
             "propagate": False,
         },
+        # 애플리케이션 전반적인 로거
         "appleWeb": {
-            "handlers": ["file"],
+            "handlers": ["app_file"],
             "level": "DEBUG",
+        },
+        # 결제 관련 로거
+        "appleWeb.payment": {
+            "handlers": ["payment_file"],
+            "level": "DEBUG",
+            "propagate": True,  # 상위 로거(appleWeb)에도 전달
+        },
+        "appleWeb.scheduler": {
+            "handlers": ["scheduler_file"],
+            "level": "DEBUG",
+            "propagate": False,  # 상위 로거로 전파하지 않음
         },
     },
 }
-
 
 # CKEditor 5 설정
 CKEDITOR_5_CONFIGS = {
@@ -239,7 +279,7 @@ CKEDITOR_5_CONFIGS = {
             "numberedList",
             "blockQuote",
         ],
-        "height": 300,
+        "height": 400,
         "width": "auto",
         "image": {
             "toolbar": ["imageTextAlternative", "imageStyle:full", "imageStyle:side"],
@@ -253,3 +293,7 @@ CKEDITOR_5_CONFIGS = {
         "width": "100%",
     },
 }
+
+# APScheduler 설정
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+SCHEDULER_DEFAULT = True

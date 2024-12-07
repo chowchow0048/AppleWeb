@@ -15,6 +15,8 @@ STATICFILES_DIRS = []
 
 DEBUG = False
 
+SESSION_COOKIE_AGE = 7200
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
