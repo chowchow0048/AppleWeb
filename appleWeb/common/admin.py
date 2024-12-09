@@ -410,6 +410,21 @@ class UserAdmin(BaseUserAdmin):
     # set_integrated_science_false.short_description = "선택과목 통합과학 OFF"
 
 
+# class CourseAdminForm(forms.ModelForm):
+#     class Meta:
+#         model = Course
+#         fields = "__all__"
+
+#     def __init__(self, *args, **kwargs):
+#         super(CourseAdminForm, self).__init__(*args, **kwargs)
+#         # course_teacher 필드에 대한 쿼리셋 수정
+#         self.fields["course_teacher"].queryset = User.objects.filter(is_teacher=True)
+#         # course_students 필드에 대한 쿼리셋 수정
+#         self.fields["course_students"].queryset = User.objects.filter(
+#             is_teacher=False, is_manager=False
+#         )
+
+
 class CourseAdminForm(forms.ModelForm):
     class Meta:
         model = Course
@@ -417,12 +432,50 @@ class CourseAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CourseAdminForm, self).__init__(*args, **kwargs)
-        # course_teacher 필드에 대한 쿼리셋 수정
+
+        # course_teacher 필드에 대한 쿼리셋 수정 (기존 유지)
         self.fields["course_teacher"].queryset = User.objects.filter(is_teacher=True)
+
         # course_students 필드에 대한 쿼리셋 수정
-        self.fields["course_students"].queryset = User.objects.filter(
-            is_teacher=False, is_manager=False
+        students_queryset = User.objects.filter(
+            is_teacher=False, is_manager=False, is_active=True  # 1. 활성화된 학생만
         )
+
+        # 2. & 3. 같은 학교, 같은 학년의 학생만 (instance가 있는 경우)
+        if self.instance and self.instance.pk:
+            if self.instance.course_school:
+                students_queryset = students_queryset.filter(
+                    school=self.instance.course_school
+                )
+            if self.instance.course_grade:
+                students_queryset = students_queryset.filter(
+                    grade=self.instance.course_grade
+                )
+
+        self.fields["course_students"].queryset = students_queryset
+
+    def clean(self):
+        cleaned_data = super().clean()
+        # 저장 시 선택된 학생들이 조건에 맞는지 추가 검증
+        if "course_students" in cleaned_data and cleaned_data.get("course_students"):
+            course_school = cleaned_data.get("course_school")
+            course_grade = cleaned_data.get("course_grade")
+
+            for student in cleaned_data["course_students"]:
+                if not student.is_active:
+                    raise forms.ValidationError(
+                        f"비활성 학생({student})은 선택할 수 없습니다."
+                    )
+                if course_school and student.school != course_school:
+                    raise forms.ValidationError(
+                        f"다른 학교 학생({student})은 선택할 수 없습니다."
+                    )
+                if course_grade and student.grade != course_grade:
+                    raise forms.ValidationError(
+                        f"다른 학년 학생({student})은 선택할 수 없습니다."
+                    )
+
+        return cleaned_data
 
 
 class CourseAdmin(admin.ModelAdmin):
