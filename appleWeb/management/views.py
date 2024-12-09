@@ -28,7 +28,7 @@ logger_appleWeb = logging.getLogger("appleWeb")
 @login_required
 @manager_required
 def api_students(request):
-    logger_appleWeb.debug("AWDB: Request received with params: %s", request.GET)
+    # logger_appleWeb.debug("AWDB: Request received with params: %s", request.GET)
 
     school = request.GET.get("school")
     grade = request.GET.get("grade")
@@ -61,7 +61,7 @@ def api_students(request):
 @login_required
 @manager_required
 def api_courses(request):
-    logger_appleWeb.debug("AWDB: Request received with params: %s", request.GET)
+    # logger_appleWeb.debug("AWDB: Request received with params: %s", request.GET)
 
     day = request.GET.get("day")
     school = request.GET.get("school")

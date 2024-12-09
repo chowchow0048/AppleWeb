@@ -78,7 +78,7 @@ def login_view(request):
     # GET 요청이 들어왔을 때
     else:
         # 로그인 페이지 render
-        return render(request, "user/user_login.html")
+        return render(request, "user/user_login.html", {})
 
 
 # 회원가입 뷰 일단 보류
