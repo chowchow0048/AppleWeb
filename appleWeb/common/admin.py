@@ -517,9 +517,10 @@ class CourseAdmin(admin.ModelAdmin):
         "course_day",
     )
     actions = (
+        "remove_wrong_grade_students",
+        "only_active_students",
         "activate_course",
         "deactivate_course",
-        "only_active_students",
         "set_day_mon",
         "set_day_tue",
         "set_day_wed",
@@ -538,6 +539,31 @@ class CourseAdmin(admin.ModelAdmin):
             if obj not in student.courses.all():
                 student.courses.add(obj)
             student.save()
+
+    def remove_wrong_grade_students(self, request, queryset):
+        removed_count = 0
+        for course in queryset:
+            # 각 수업에서 학생들을 확인
+            for student in course.course_students.all():
+                # 학생의 학년과 수업의 학년이 다른 경우
+                if student.grade != course.course_grade:
+                    # 수업에서 학생 제거
+                    course.course_students.remove(student)
+                    # User 모델의 courses에서도 해당 수업 제거
+                    student.courses.remove(course)
+                    student.save()
+                    removed_count += 1
+            course.save()
+
+        if removed_count > 0:
+            self.message_user(
+                request,
+                f"{removed_count}명의 학년이 일치하지 않는 학생이 수업에서 제거되었습니다.",
+            )
+        else:
+            self.message_user(request, "학년이 일치하지 않는 학생이 없습니다.")
+
+    remove_wrong_grade_students.short_description = "학년이 일치하지 않는 학생 제거"
 
     def activate_course(self, request, queryset):
         count = queryset.update(is_active=True)
