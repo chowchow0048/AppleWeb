@@ -112,6 +112,10 @@ class UserAdmin(BaseUserAdmin):
         "format_phone_numbers",
         "set_payment_request_true",
         "set_payment_request_false",
+        "set_grade_pre1",
+        "set_grade_1",
+        "set_grade_2",
+        "set_grade_3",
         "activate_users",
         "deactivate_users",
         "add_payment_count_1",
@@ -139,6 +143,30 @@ class UserAdmin(BaseUserAdmin):
             if obj not in course.course_students.all():
                 course.course_students.add(obj)
             course.save()
+
+    def set_grade_pre1(self, request, queryset):
+        count = queryset.update(grade="예비고1")
+        self.message_user(request, f"{count}명의 학년이 예비고1로 변경되었습니다.")
+
+    set_grade_pre1.short_description = "학년을 예비고1로 변경"
+
+    def set_grade_1(self, request, queryset):
+        count = queryset.update(grade="1학년")
+        self.message_user(request, f"{count}명의 학년이 1학년으로 변경되었습니다.")
+
+    set_grade_1.short_description = "학년을 1학년으로 변경"
+
+    def set_grade_2(self, request, queryset):
+        count = queryset.update(grade="2학년")
+        self.message_user(request, f"{count}명의 학년이 2학년으로 변경되었습니다.")
+
+    set_grade_2.short_description = "학년을 2학년으로 변경"
+
+    def set_grade_3(self, request, queryset):
+        count = queryset.update(grade="3학년")
+        self.message_user(request, f"{count}명의 학년이 3학년으로 변경되었습니다.")
+
+    set_grade_3.short_description = "학년을 3학년으로 변경"
 
     def sync_payment_request(self, request, queryset):
         for user in queryset:
@@ -348,81 +376,6 @@ class UserAdmin(BaseUserAdmin):
         self.message_user(request, ("%d 결제횟수 12회로 변경" % count))
 
     set_payment_count_12.short_description = "결제횟수 12회로 변경"
-
-    # def set_physics_true(self, request, queryset):
-    #     count = queryset.update(physics=True)
-    #     self.message_user(request, ("%d 선택과목 물리 ON" % count))
-
-    # set_physics_true.short_description = "선택과목 물리 ON"
-
-    # def set_physics_false(self, request, queryset):
-    #     count = queryset.update(physics=False)
-    #     self.message_user(request, ("%d 선택과목 물리 OFF" % count))
-
-    # set_physics_false.short_description = "선택과목 물리 OFF"
-
-    # def set_chemistry_true(self, request, queryset):
-    #     count = queryset.update(chemistry=True)
-    #     self.message_user(request, ("%d 선택과목 화학 ON" % count))
-
-    # set_chemistry_true.short_description = "선택과목 화학 ON"
-
-    # def set_chemistry_false(self, request, queryset):
-    #     count = queryset.update(chemistry=False)
-    #     self.message_user(request, ("%d 선택과목 화학 OFF" % count))
-
-    # set_chemistry_false.short_description = "선택과목 화학 OFF"
-
-    # def set_biology_true(self, request, queryset):
-    #     count = queryset.update(biology=True)
-    #     self.message_user(request, ("%d 선택과목 생명과학 ON" % count))
-
-    # set_biology_true.short_description = "선택과목 생명과학 ON"
-
-    # def set_biology_false(self, request, queryset):
-    #     count = queryset.update(biology=False)
-    #     self.message_user(request, ("%d 선택과목 생명과학 OFF" % count))
-
-    # set_biology_false.short_description = "선택과목 생명과학 OFF"
-
-    # def set_earth_science_true(self, request, queryset):
-    #     count = queryset.update(earth_science=True)
-    #     self.message_user(request, ("%d 선택과목 지구과학 ON" % count))
-
-    # set_earth_science_true.short_description = "선택과목 지구과학 ON"
-
-    # def set_earth_science_false(self, request, queryset):
-    #     count = queryset.update(earth_science=False)
-    #     self.message_user(request, ("%d 선택과목 지구과학 OFF" % count))
-
-    # set_earth_science_false.short_description = "선택과목 지구과학 OFF"
-
-    # def set_integrated_science_true(self, request, queryset):
-    #     count = queryset.update(integrated_science=True)
-    #     self.message_user(request, ("%d 선택과목 통합과학 ON" % count))
-
-    # set_integrated_science_true.short_description = "선택과목 통합과학 ON"
-
-    # def set_integrated_science_false(self, request, queryset):
-    #     count = queryset.update(integrated_science=False)
-    #     self.message_user(request, ("%d 선택과목 통합과학 OFF" % count))
-
-    # set_integrated_science_false.short_description = "선택과목 통합과학 OFF"
-
-
-# class CourseAdminForm(forms.ModelForm):
-#     class Meta:
-#         model = Course
-#         fields = "__all__"
-
-#     def __init__(self, *args, **kwargs):
-#         super(CourseAdminForm, self).__init__(*args, **kwargs)
-#         # course_teacher 필드에 대한 쿼리셋 수정
-#         self.fields["course_teacher"].queryset = User.objects.filter(is_teacher=True)
-#         # course_students 필드에 대한 쿼리셋 수정
-#         self.fields["course_students"].queryset = User.objects.filter(
-#             is_teacher=False, is_manager=False
-#         )
 
 
 class CourseAdminForm(forms.ModelForm):
