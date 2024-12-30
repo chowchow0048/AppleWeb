@@ -106,7 +106,6 @@ class UserAdmin(BaseUserAdmin):
     )
     actions = [
         "sync_payment_request",
-        "sync_courses_count",
         "sync_courses",
         "payment_completed",
         "format_phone_numbers",
@@ -116,6 +115,9 @@ class UserAdmin(BaseUserAdmin):
         "set_grade_1",
         "set_grade_2",
         "set_grade_3",
+        "set_school_sehwa",
+        "set_school_sehwagirls",
+        "set_school_yunhap",
         "activate_users",
         "deactivate_users",
         "add_payment_count_1",
@@ -143,6 +145,24 @@ class UserAdmin(BaseUserAdmin):
             if obj not in course.course_students.all():
                 course.course_students.add(obj)
             course.save()
+
+    def set_school_sehwa(self, request, queryset):
+        count = queryset.update(school="세화고")
+        self.message_user(request, f"{count}명의 학교가 세화고로 변경되었습니다.")
+
+    set_school_sehwa.short_description = "학교를 세화고로 변경"
+
+    def set_school_sehwagirls(self, request, queryset):
+        count = queryset.update(school="세화여고")
+        self.message_user(request, f"{count}명의 학교가 세화여고로 변경되었습니다.")
+
+    set_school_sehwagirls.short_description = "학교를 세화여고로 변경"
+
+    def set_school_yunhap(self, request, queryset):
+        count = queryset.update(school="연합반")
+        self.message_user(request, f"{count}명의 학교가 연합반으로 변경되었습니다.")
+
+    set_school_yunhap.short_description = "학교를 연합반으로 변경"
 
     def set_grade_pre1(self, request, queryset):
         count = queryset.update(grade="예비고1")
@@ -199,22 +219,13 @@ class UserAdmin(BaseUserAdmin):
                 if not course.is_active or course not in correct_courses:
                     user.courses.remove(course)
 
+            user.courses_count = user.courses.count()
+
             user.save()
 
         self.message_user(request, "선택된 사용자들의 수업이 동기화되었습니다.")
 
     sync_courses.short_description = "수업 동기화"
-
-    def sync_courses_count(self, request, queryset):
-        for user in queryset:
-            user.courses_count = user.courses.count()
-            user.save()
-
-        self.message_user(
-            request, "선택된 사용자들의 선택과목 수 가 동기화 되었습니다."
-        )
-
-    sync_courses_count.short_description = "선택과목 수 동기화"
 
     def activate_users(self, request, queryset):
         count = queryset.update(is_active=True)
@@ -245,7 +256,6 @@ class UserAdmin(BaseUserAdmin):
         formatted_count = 0
 
         for user in queryset:
-            # 전화번호에서 숫자 이외의 문자를 제거
             if user.phone:
                 digits = re.sub(r"\D", "", user.phone)
 
@@ -472,6 +482,7 @@ class CourseAdmin(admin.ModelAdmin):
     actions = (
         "remove_wrong_grade_students",
         "only_active_students",
+        "remove_all_students",
         "activate_course",
         "deactivate_course",
         "set_day_mon",
@@ -492,6 +503,33 @@ class CourseAdmin(admin.ModelAdmin):
             if obj not in student.courses.all():
                 student.courses.add(obj)
             student.save()
+
+    def remove_all_students(self, request, queryset):
+        total_removed = 0
+        for course in queryset:
+            # 수업에 등록된 학생 수 카운트
+            student_count = course.course_students.count()
+
+            # 모든 학생의 courses에서 해당 수업 제거
+            for student in course.course_students.all():
+                student.courses.remove(course)
+                student.save()
+
+            # 수업의 모든 학생 제거
+            course.course_students.clear()
+            course.save()
+
+            total_removed += student_count
+
+        if total_removed > 0:
+            self.message_user(
+                request,
+                f"선택된 수업에서 총 {total_removed}명의 학생이 제거되었습니다.",
+            )
+        else:
+            self.message_user(request, "선택된 수업에 제거할 학생이 없습니다.")
+
+    remove_all_students.short_description = "모든 학생 제거"
 
     def remove_wrong_grade_students(self, request, queryset):
         removed_count = 0
