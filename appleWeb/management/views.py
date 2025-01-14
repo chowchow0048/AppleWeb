@@ -20,6 +20,7 @@ from common.models import (
 from common.decorators import manager_required
 import logging
 import urllib.parse
+import json
 
 
 logger_appleWeb = logging.getLogger("appleWeb")
@@ -200,81 +201,6 @@ def management_lecture(request, course_id):
             "absence_records": absence_records,
         },
     )
-
-
-# @login_required
-# @manager_required
-# @require_POST  # 이 뷰 함수는 POST 요청만 허용
-# def bulk_attendance(request):
-#     date = timezone.now().date()  # 오늘 날짜를 가져옴
-#     course_id = request.POST.get("course_id")  # POST 데이터에서 course_id를 가져옴
-
-#     if not course_id:
-#         return redirect("management_home")  # course_id가 없으면 홈 페이지로 리디렉션
-
-#     course = get_object_or_404(
-#         Course, id=course_id
-#     )  # 주어진 course_id에 해당하는 Course 객체를 가져옴
-
-#     attendance_ids = request.POST.getlist(
-#         "attendance"
-#     )  # POST 데이터에서 attendance 리스트를 가져옴
-#     absence_ids = request.POST.getlist(
-#         "absence"
-#     )  # POST 데이터에서 absence 리스트를 가져옴
-
-#     # 기존 출석 및 결석 기록을 초기화하기 전에 기존 출석 기록의 결제 횟수를 복구
-#     old_attendance_records = Attendance.objects.filter(course=course, date=date)
-#     old_absence_records = Absence.objects.filter(course=course, date=date)
-
-#     # print("OLD ATTENDANCE RECORD:", old_attendance_records)
-#     # print("OLD ABSENCE RECORD:", old_absence_records)
-
-#     # 기존 출석 기록을 삭제하고, 결제 횟수를 복구합니다
-#     for record in old_attendance_records:
-#         student = record.student  # 학생 객체를 가져옴
-#         student.payment_count += 1  # 결제 횟수를 복구
-#         student.save()
-
-#     for record in old_absence_records:
-#         student = record.student
-#         student.payment_count += 1
-#         student.save()
-
-#     old_attendance_records.delete()  # 기존 출석 기록 삭제
-#     old_absence_records.delete()  # 기존 결석 기록 삭제
-
-#     # 새로운 출석 기록을 생성하고, 결제 횟수를 차감
-#     for student_id in attendance_ids:
-#         student = course.course_students.get(
-#             id=student_id
-#         )  # student_id에 해당하는 학생을 가져옴
-#         Attendance.objects.create(
-#             course=course, student=student, date=date
-#         )  # 새로운 출석 기록 생성
-#         student.payment_count -= 1  # 결제 횟수를 차감
-#         if student.payment_count <= 0:
-#             student.payment_request = True
-
-#         student.save()
-
-#     # 새로운 결석 기록을 생성
-#     for student_id in absence_ids:
-#         student = course.course_students.get(
-#             id=student_id
-#         )  # student_id에 해당하는 학생을 가져옴
-#         Absence.objects.create(
-#             course=course, student=student, date=date
-#         )  # 새로운 결석 기록 생성
-#         student.payment_count -= 1  # 결제 횟수를 차감
-#         if student.payment_count <= 0:
-#             student.payment_request = True
-
-#         student.save()
-
-#     return redirect(
-#         "management_lecture", course_id=course_id
-#     )  # 출석부 페이지로 리디렉션
 
 
 @login_required
@@ -662,3 +588,48 @@ def management_wait_black_list_black_detail(request, blacklist_id):
     return render(
         request, "management/management_wait_black_list_black_detail.html", context
     )
+
+
+@login_required
+@manager_required
+@require_POST
+def update_student_phone(request):
+    try:
+        data = json.loads(request.body)
+        student_id = data.get("student_id")
+        phone_type = data.get("phone_type")
+        phone_number = data.get("phone_number")
+
+        student = get_object_or_404(User, id=student_id)
+
+        # 전화번호 형식화
+        if len(phone_number) == 11:
+            formatted_number = (
+                f"{phone_number[:3]}-{phone_number[3:7]}-{phone_number[7:]}"
+            )
+        elif len(phone_number) == 10:
+            formatted_number = (
+                f"{phone_number[:3]}-{phone_number[3:6]}-{phone_number[6:]}"
+            )
+        else:
+            return JsonResponse(
+                {"error": "올바른 전화번호 형식이 아닙니다."}, status=400
+            )
+
+        # 전화번호 업데이트
+        if phone_type == "phone":
+            student.phone = formatted_number
+        else:
+            student.parent_phone = formatted_number
+
+        student.save()
+
+        return JsonResponse(
+            {
+                "message": "전화번호가 업데이트되었습니다.",
+                "formatted_number": formatted_number,
+            }
+        )
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)

@@ -105,4 +105,9 @@ urlpatterns = [
         views.export_attendance_to_excel,
         name="export_attendance",
     ),
+    path(
+        "student/update-phone/",
+        views.update_student_phone,
+        name="update_student_phone",
+    ),
 ]

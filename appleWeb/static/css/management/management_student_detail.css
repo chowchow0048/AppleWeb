@@ -111,3 +111,35 @@
     width: 10%;
     justify-content: center;
 }
+
+.detail-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.phone-display, .phone-input {
+    width: 70%;
+    margin-bottom: 1rem;
+}
+
+.button-wrapper {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.edit-btn, .btn-group {
+    width: 100%;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.btn-group {
+    gap: 0.5rem;
+}

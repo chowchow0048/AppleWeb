@@ -24,12 +24,32 @@
 
     <div class="handover-detail-container">
         <label class="form-label">전화번호</label>
-        <p class="form-control">{% if student.phone %}{{ student.phone }}{% else %}-{% endif %}</p>
+        <div class="detail-content-wrapper">
+            <p class="form-control phone-display" id="phone-display">{% if student.phone %}{{ student.phone }}{% else %}-{% endif %}</p>
+            <input type="text" class="form-control phone-input hidden" id="phone-input" value="{% if student.phone %}{{ student.phone }}{% else %}{% endif %}" pattern="[0-9]*">
+            <div class="button-wrapper">
+                <button class="btn btn-secondary edit-btn" id="phone-edit-btn">수정</button>
+                <div class="btn-group hidden" id="phone-action-btns">
+                    <button class="btn btn-primary complete-btn">완료</button>
+                    <button class="btn btn-secondary cancel-btn">취소</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="handover-detail-container">
         <label class="form-label">부모님 전화번호</label>
-        <p class="form-control">{{ student.parent_phone }}</p>
+        <div class="detail-content-wrapper">
+            <p class="form-control phone-display" id="parent-phone-display">{{ student.parent_phone }}</p>
+            <input type="text" class="form-control phone-input hidden" id="parent-phone-input" value="{{ student.parent_phone }}" pattern="[0-9]*">
+            <div class="button-wrapper">
+                <button class="btn btn-secondary edit-btn" id="parent-phone-edit-btn">수정</button>
+                <div class="btn-group hidden" id="parent-phone-action-btns">
+                    <button class="btn btn-primary complete-btn">완료</button>
+                    <button class="btn btn-secondary cancel-btn">취소</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="handover-detail-container">
@@ -78,4 +98,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script type="module" src="{% static 'scripts/management/management_student_detail.js' %}"></script>
 {% endblock %}
