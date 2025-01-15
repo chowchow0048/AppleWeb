@@ -20,6 +20,20 @@
   outline: 1px solid #eee;
 }
 
+#sidebarClose {
+  padding: 0.25rem 0.5rem;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+#sidebarClose span {
+  display: block;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 18px;
+}
+
 .ck-editor__editable {
   line-height: 1;  /* 또는 원하는 값으로 설정 */
 }
@@ -51,6 +65,7 @@
 
 .navbar-user{
   display: flex;
+  margin-left: auto;
 }
 
 .btn-thd{
@@ -98,10 +113,10 @@
   text-align: center; /* 내용을 중앙에 정렬 */
 }
 
-#current-time{
-  position: relative;
-  top: 0.5rem;
-  left: 42%;
+#current-time {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 
@@ -754,7 +769,7 @@ progress {
   color: #6c757d;
 }
 .blockquote-footer::before {
-  content: "— ";
+  content: "— ";
 }
 
 .img-fluid {
@@ -799,6 +814,10 @@ progress {
   padding-left: calc(var(--bs-gutter-x) * 0.5);
   margin-right: auto;
   margin-left: auto;
+}
+
+.container-fluid {
+  padding: 0 1rem;
 }
 
 @media (min-width: 576px) {
@@ -3921,6 +3940,7 @@ textarea.form-control-lg {
   align-items: center;
   justify-content: space-between;
   padding: var(--bs-navbar-padding-y) var(--bs-navbar-padding-x);
+  z-index: 1040;
 }
 .navbar > .container,
 .navbar > .container-fluid,
@@ -5895,7 +5915,7 @@ textarea.form-control-lg {
 .bs-popover-bottom > .popover-arrow::before, .bs-popover-auto[data-popper-placement^=bottom] > .popover-arrow::before, .bs-popover-bottom > .popover-arrow::after, .bs-popover-auto[data-popper-placement^=bottom] > .popover-arrow::after {
   border-width: 0 calc(var(--bs-popover-arrow-width) * 0.5) var(--bs-popover-arrow-height);
 }
-.bs-popover-bottom > .popover-arrow::before, .bs-popover-auto[data-popper-placement^=bottom] > .popover-arrow::before {
+.bs-popover-bottom > .popover-arrow::before, .bs-popper-auto[data-popper-placement^=bottom] > .popover-arrow::before {
   top: 0;
   border-bottom-color: var(--bs-popover-arrow-border);
 }
@@ -10998,9 +11018,14 @@ textarea.form-control-lg {
 }
 
 #sidebar-wrapper {
-  min-height: 100vh;
-  margin-left: -15rem;
-  transition: margin 0.25s ease-out;
+  position: fixed;
+  z-index: 1050;  /* navbar보다 위에 표시 */
+  left: -15rem;   /* 기본적으로 숨김 상태 */
+  width: 15rem;
+  height: 100vh;
+  background-color: white;
+  transition: transform 0.25s ease-out;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -11012,23 +11037,25 @@ textarea.form-control-lg {
   width: 15rem;
 }
 
-#page-content-wrapper {
-  min-width: 100vw;
+.list-group{
+  box-shadow: 1px 0 1px rgba(0,0,0,0.1);
 }
 
-body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
+#page-content-wrapper {
+  width: 100%;
   margin-left: 0;
 }
 
-@media (min-width: 768px) {
-  #sidebar-wrapper {
-    margin-left: 0;
+body.sb-sidenav-toggled #sidebar-wrapper {
+  transform: translateX(15rem);
+}
+
+@media (max-width: 768px) {
+  #current-time {
+      display: none !important;
   }
-  #page-content-wrapper {
-    min-width: 0;
-    width: 100%;
-  }
-  body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
-    margin-left: -15rem;
+  
+  .container-fluid {
+      justify-content: space-between !important;
   }
 }

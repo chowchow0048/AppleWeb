@@ -7,20 +7,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 document.addEventListener('DOMContentLoaded', event => {
-    const sidebarToggle = document.body.querySelector('#sidebarToggle');
+    // 양쪽 토글 버튼에 대한 이벤트 리스너 추가
+    const sidebarToggle = document.querySelector('#sidebarToggle');
+    const sidebarClose = document.querySelector('#sidebarClose');
+    
+    // 토글 기능을 함수로 분리
+    const toggleSidebar = (event) => {
+        event.preventDefault();
+        document.body.classList.toggle('sb-sidenav-toggled');
+    };
+    
+    // 양쪽 버튼에 같은 토글 기능 적용
     if (sidebarToggle) {
-        // Uncomment Below to persist sidebar toggle between refreshes
-        if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-            document.body.classList.toggle('sb-sidenav-toggled');
-        }
-        sidebarToggle.addEventListener('click', event => {
-            event.preventDefault();
-            document.body.classList.toggle('sb-sidenav-toggled');
-            // console.log('CLICKED@@@@@@@');
-            localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
-        })
+        sidebarToggle.addEventListener('click', toggleSidebar);
     }
-
+    if (sidebarClose) {
+        sidebarClose.addEventListener('click', toggleSidebar);
+    }
+    
+    // 기존 시간 업데이트 코드는 그대로 유지
 });
 
 let sessionTime = 90 * 60;  // 90분을 초로 환산

@@ -19,13 +19,7 @@
         <div class="d-flex" id="wrapper">
             <!-- Sidebar-->
             <div class="border-end bg-white" id="sidebar-wrapper">
-                <div class="sidebar-heading border-bottom bg-light bg-gradient d-flex justify-content-between align-items-center">
-                    <span>행정 시스템</span>
-                    <!-- Sidebar Close Button -->
-                    <button class="btn nav-btn-cst" id="sidebarClose">
-                        <span>&times;</span>
-                    </button>
-                </div>
+                <div class="sidebar-heading border-bottom bg-light bg-gradient">행정 시스템</div>
                 <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'management_home' %}">오늘의 수업</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'management_handover' %}">인수인계</a>
@@ -39,30 +33,33 @@
             <!-- Page content wrapper-->
             <div id="page-content-wrapper">
                 <!-- Top navigation-->
-                <nav class="navbar navbar-expand navbar-light bg-light border-bottom">
-                    <div class="container-fluid d-flex align-items-center justify-content-between">
-                        <!-- Sidebar Toggle-->
-                        <button class="btn nav-btn-cst" id="sidebarToggle">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                    <div class="container-fluid">
+                        <button class="btn nav-btn-cst" id="sidebarToggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
-                        
-                        <!-- Current Time - Hidden on mobile -->
-                        <div id="current-time" class="d-none d-md-block">
-                            <p id="date-display" class="mb-0"></p>
-                        </div>
-                        
-                        <!-- User Dropdown -->
-                        <div class="navbar-user">
-                            <div class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ request.user.name }}
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{% url 'main_home' %}">메인페이지</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{% url 'user_logout' %}">로그아웃</a>
-                                </div>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <div id="current-time" class="current-time text-center">
+                                <p id="date-display"></p>
                             </div>
+                            <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                                <li class="nav-item dropdown">
+                                    <div class="navbar-user">
+                                        <!-- <p class="navbar-text nomargin" id="sessionTimer">90:00</p> -->
+                                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            {{ request.user.name }}
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                            <!-- <a class="dropdown-item" href="#!">마이페이지</a>
+                                            <div class="dropdown-divider"></div> -->
+                                            <a class="dropdown-item" href="{% url 'main_home' %}">메인페이지</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{% url 'user_logout' %}">로그아웃</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </nav>
