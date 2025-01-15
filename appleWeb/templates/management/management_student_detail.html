@@ -73,10 +73,42 @@
 
     <div class="handover-detail-container mb-3">
         <label class="form-label">수강 과목</label>
-        <div class="form-control">
-            {% for course in courses %}
-                <p class="nomargin">{{ course.course_school }} {{ course.course_grade }} {{ course.course_subject|subject_kor }} {{ course.course_day }} {{ course.course_time|time_kor }}</p>
-            {% endfor %}
+        <div class="detail-content-wrapper">
+            <div class="form-control course-display" id="course-display">
+                {% for course in courses %}
+                    <div class="course-item" data-course-id="{{ course.id }}">
+                        <div class="course-text">{{ course.course_school }} {{ course.course_grade }} {{ course.course_subject|subject_kor }} {{ course.course_day }} {{ course.course_time|time_kor }}</div>
+                        <div class="course-edit hidden">
+                            <div class="course-edit-row">
+                                <select class="form-select school-select">
+                                    <option value="">학교 선택</option>
+                                </select>
+                                <select class="form-select grade-select">
+                                    <option value="">학년 선택</option>
+                                </select>
+                                <select class="form-select subject-select">
+                                    <option value="">과목 선택</option>
+                                </select>
+                                <select class="form-select day-select">
+                                    <option value="">요일 선택</option>
+                                </select>
+                                <select class="form-select time-select">
+                                    <option value="">시간 선택</option>
+                                </select>
+                                <button class="btn btn-danger delete-btn">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <button class="btn btn-primary add-course-btn hidden">추가</button>
+            </div>
+            <div class="button-wrapper">
+                <button class="btn btn-secondary edit-btn" id="course-edit-btn">수정</button>
+                <div class="btn-group hidden" id="course-action-btns">
+                    <button class="btn btn-primary complete-btn">완료</button>
+                    <button class="btn btn-secondary cancel-btn">취소</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -98,6 +130,9 @@
         </div>
     </div>
 </div>
+
+<input type="hidden" id="user-school" value="{{ student.school }}">
+<input type="hidden" id="user-grade" value="{{ student.grade }}">
 {% endblock %}
 
 {% block extra_scripts %}

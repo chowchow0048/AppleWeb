@@ -143,3 +143,65 @@
 .btn-group {
     gap: 0.5rem;
 }
+
+.course-display {
+    width: 70%;
+}
+
+/* .course-item {
+    margin-bottom: 1rem;
+} */
+
+.course-edit {
+    margin-top: 0.5rem;
+}
+
+.course-edit select {
+    margin-bottom: 0.5rem;
+    width: 100%;
+    display: flex;
+}
+
+.button-wrapper {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.course-text{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.course-edit-row {
+    display: flex;
+    /* gap: 0.5rem; */
+    align-items: center;
+    /* margin-bottom: 0.5rem; */
+}
+
+.course-edit-row select {
+    flex: 1;
+}
+
+.course-edit-row .delete-btn {
+    width: auto;
+    white-space: nowrap;
+    margin-bottom: 0.5rem;
+}
+
+.add-course-btn{
+    display: none;
+    margin: 1rem auto;
+    width: auto;
+}
+
+.add-course-btn.show {
+    display: block;
+}
+
+#course-edit-btn{
+    margin-bottom: 0;
+}

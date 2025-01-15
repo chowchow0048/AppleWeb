@@ -633,3 +633,149 @@ def update_student_phone(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
+
+
+@login_required
+@manager_required
+def available_subjects(request):
+    school = request.GET.get("school")
+    grade = request.GET.get("grade")
+
+    # 해당 학교/학년에서 수강 가능한 과목 목록을 조회하는 로직
+    subjects = (
+        Course.objects.filter(course_school=school, course_grade=grade, is_active=True)
+        .values_list("course_subject", flat=True)
+        .distinct()
+    )
+
+    return JsonResponse(list(subjects), safe=False)
+
+
+@login_required
+@manager_required
+@require_POST
+def update_student_courses(request):
+    try:
+        data = json.loads(request.body)
+        updates = data.get("updates", [])
+        deleted_courses = data.get("deletedCourses", [])
+        student_id = data.get("studentId")
+
+        student = get_object_or_404(User, id=student_id)
+        student_school = student.school
+        student_grade = student.grade
+
+        # 유효성 검사: 모든 새로운 과목이 학생의 학교/학년과 일치하는지 확인
+        for update in updates:
+            if (
+                update.get("school") != student_school
+                or update.get("grade") != student_grade
+            ):
+                return JsonResponse(
+                    {
+                        "error": "학생의 학교와 학년에 맞는 수업만 추가할 수 있습니다.",
+                        "student_school": student_school,
+                        "student_grade": student_grade,
+                    },
+                    status=400,
+                )
+
+        # 삭제된 과목 처리
+        for course_id in deleted_courses:
+            course = Course.objects.get(id=course_id)
+            course.course_students.remove(student)
+
+        # 기존 수강 과목 모두 제거 (다시 추가할 예정)
+        student.courses.clear()
+
+        # 업데이트 및 새로운 과목 추가
+        existing_courses = []  # 수정되지 않은 기존 과목들을 저장할 리스트
+
+        # 먼저 기존 과목들 수집
+        for course in Course.objects.filter(course_students=student):
+            if str(course.id) not in deleted_courses:  # 삭제되지 않은 과목만
+                existing_courses.append(course)
+
+        # 새로운/수정된 과목 처리
+        for update in updates:
+            if "courseId" in update:
+                # 기존 과목 업데이트
+                course = Course.objects.get(id=update["courseId"])
+                course.course_subject = update["subject"]
+                course.course_day = update["day"]
+                course.course_time = update["time"]
+                course.save()
+            else:
+                # 새로운 과목 추가
+                try:
+                    course = Course.objects.get(
+                        course_school=update["school"],
+                        course_grade=update["grade"],
+                        course_subject=update["subject"],
+                        course_day=update["day"],
+                        course_time=update["time"],
+                    )
+                except Course.DoesNotExist:
+                    return JsonResponse(
+                        {"error": "존재하지 않는 수업입니다.", "course_info": update},
+                        status=400,
+                    )
+
+            existing_courses.append(course)
+
+        # 모든 과목(기존 + 새로운/수정된)을 student.courses에 추가
+        for course in existing_courses:
+            student.courses.add(course)
+            course.course_students.add(student)
+
+        student.save()
+        return JsonResponse({"message": "수강 과목이 업데이트되었습니다."})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+
+
+@login_required
+@manager_required
+def available_days(request):
+    school = request.GET.get("school")
+    grade = request.GET.get("grade")
+    subject = request.GET.get("subject")
+
+    days = (
+        Course.objects.filter(
+            course_school=school,
+            course_grade=grade,
+            course_subject=subject,
+            is_active=True,
+        )
+        .values_list("course_day", flat=True)
+        .distinct()
+    )
+
+    return JsonResponse(list(days), safe=False)
+
+
+@login_required
+@manager_required
+def available_times(request):
+    school = request.GET.get("school")
+    grade = request.GET.get("grade")
+    subject = request.GET.get("subject")
+    day = request.GET.get("day")
+
+    times = (
+        Course.objects.filter(
+            course_school=school,
+            course_grade=grade,
+            course_subject=subject,
+            course_day=day,
+            is_active=True,
+        )
+        .values_list("course_time", flat=True)
+        .distinct()
+    )
+
+    # time 객체를 문자열로 변환
+    formatted_times = [time.strftime("%H:%M") for time in times]
+
+    return JsonResponse(formatted_times, safe=False)

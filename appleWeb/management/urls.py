@@ -110,4 +110,14 @@ urlpatterns = [
         views.update_student_phone,
         name="update_student_phone",
     ),
+    path(
+        "api/available-subjects/", views.available_subjects, name="available_subjects"
+    ),
+    path(
+        "student/update-courses/",
+        views.update_student_courses,
+        name="update_student_courses",
+    ),
+    path("api/available-days/", views.available_days, name="available_days"),
+    path("api/available-times/", views.available_times, name="available_times"),
 ]
