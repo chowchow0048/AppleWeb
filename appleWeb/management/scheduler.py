@@ -80,6 +80,11 @@ def process_payment_deductions():
                 for student in students:
                     logger.info(f"    처리중인 학생: {student}")
                     student.payment_count -= 1
+                    # 결제횟수가 0 이하가 되면 결제 요청 설정
+                    if student.payment_count <= 0:
+                        student.payment_request = True
+                        logger.info(f"    {student}의 결제가 필요합니다.")
+
                     students_to_update.append(student)
                     logger.info(
                         f"    {student}의 결제횟수 1회 감소. 현재 결제횟수: {student.payment_count}"
