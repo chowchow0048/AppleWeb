@@ -30,8 +30,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 전체 선택/해제 버튼
     selectAllButton.addEventListener("click", function() {
-        const allChecked = Array.from(paymentCheckboxes).every(checkbox => checkbox.checked);
-        paymentCheckboxes.forEach(checkbox => {
+        const currentCheckboxes = document.querySelectorAll(".payment-checkbox");
+        const allChecked = Array.from(currentCheckboxes).every(checkbox => checkbox.checked);
+        currentCheckboxes.forEach(checkbox => {
             checkbox.checked = !allChecked;
         });
     });
