@@ -247,6 +247,15 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<!-- Google Analytics 추적 코드 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4P7SHR7ZBB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-4P7SHR7ZBB');  // 측정 ID를 사용자의 것으로 교체 필요
+</script>
+
 <script type="text/javascript" 
 src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v2uy1n9cc7"></script>        
 <script type="module" src="{% static 'scripts/main/main_home.js' %}"></script>
