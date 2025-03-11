@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from openpyxl import Workbook
-from openpyxl.styles import Alignment
+from openpyxl.styles import Alignment, Font
 from openpyxl.utils import get_column_letter
 from common.models import (
     User,
@@ -89,7 +89,9 @@ def api_courses(request):
 @manager_required
 def export_attendance_to_excel(request, course_id):
     course = Course.objects.get(id=course_id)
-    students = course.course_students.all()  # 코스에 등록된 모든 학생들을 불러옴
+    students = course.course_students.all().order_by(
+        "name"
+    )  # 코스에 등록된 모든 학생들을 이름순으로 정렬
 
     # 엑셀 파일 제목 줄 설정
     today = timezone.now().strftime("%Y-%m-%d")
@@ -127,6 +129,10 @@ def export_attendance_to_excel(request, course_id):
                 "",  # 출석
             ]
         )
+
+        # 이름 셀에 볼드체와 폰트 크기 적용
+        name_cell = ws.cell(row=ws.max_row, column=3)  # 이름은 3번째 열에 있음
+        name_cell.font = Font(bold=True, size=20)
 
     # 열 너비 조정
     for col in range(1, 8):  # 열 A부터 G까지
