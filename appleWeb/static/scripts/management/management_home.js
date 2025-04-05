@@ -7,16 +7,19 @@ document.querySelectorAll('.school-button').forEach(button => {
         }
 
         const school = this.getAttribute('data-school');
-        // 학교 선택에 따라 표시할 목록 변경
-        if (school === '연합반') {
-            document.getElementById('courses-list-gr0').style.display = 'block';
-            document.getElementById('courses-list-gr1').style.display = 'none';
-            document.getElementById('courses-list-gr2').style.display = 'none';
-        } else {
-            document.getElementById('courses-list-gr0').style.display = 'none';
-            document.getElementById('courses-list-gr1').style.display = 'block';
-            document.getElementById('courses-list-gr2').style.display = 'block';
-        }
+        document.getElementById('courses-list-gr0').style.display = 'block';
+        document.getElementById('courses-list-gr1').style.display = 'block';
+        document.getElementById('courses-list-gr2').style.display = 'block';
+        // // 학교 선택에 따라 표시할 목록 변경
+        // if (school === '연합반') {
+        //     document.getElementById('courses-list-gr0').style.display = 'block';
+        //     document.getElementById('courses-list-gr1').style.display = 'none';
+        //     document.getElementById('courses-list-gr2').style.display = 'none';
+        // } else {
+        //     document.getElementById('courses-list-gr0').style.display = 'none';
+        //     document.getElementById('courses-list-gr1').style.display = 'block';
+        //     document.getElementById('courses-list-gr2').style.display = 'block';
+        // }
 
         filterCourses(school);
     });
@@ -74,14 +77,13 @@ function displayCourses(coursesByGrade, school) {
     let allEmpty = true;
     
     Object.entries(coursesByGrade).forEach(([grade, subjects]) => {
-        // 예비고1 데이터는 courses-list-gr0에 표시
+        // 연합반 학생들(예비고1)은 courses-list-gr0에 표시
         const containerId = grade === '예비고1' ? 'courses-list-gr0' : 
                           grade === '2학년' ? 'courses-list-gr2' : 'courses-list-gr1';
-        
-        // 연합반인 경우 예비고1 데이터만 표시
-        if (school === '연합반' && grade !== '예비고1') return;
-        // 일반 고등학교의 경우 예비고1 데이터 제외
-        if (school !== '연합반' && grade === '예비고1') return;
+        // // 연합반인 경우 연합반 학생(예비고1) 데이터만 표시
+        // if (school === '연합반' && grade !== '예비고1') return;
+        // // 일반 고등학교의 경우 연합반 학생(예비고1) 데이터 제외
+        // if (school !== '연합반' && grade === '예비고1') return;
 
         const container = document.getElementById(containerId);
         container.innerHTML = '';  // Clear previous content

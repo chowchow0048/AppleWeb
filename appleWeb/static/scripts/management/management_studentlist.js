@@ -4,84 +4,47 @@ let studentsData = [];  // 불러온 학생 데이터를 저장할 전역 변수
 document.querySelectorAll('.school-button').forEach(button => {
     button.addEventListener('click', function() {
         const alreadyActive = this.classList.contains('active');
-        if(this.getAttribute('data-school') != '연합반'){
-            document.querySelectorAll('.school-button').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.grade-button').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.sort-button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.school-button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.grade-button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.sort-button').forEach(b => b.classList.remove('active'));
 
-            const tableBody = document.querySelector('#student-table tbody');
-            tableBody.innerHTML = '';  // 기존 데이터를 초기화
+        const tableBody = document.querySelector('#student-table tbody');
+        tableBody.innerHTML = '';  // 기존 데이터를 초기화
 
-            if (!alreadyActive) {
-                this.classList.add('active');
-                document.getElementById('grade-buttons').style.display = 'flex';
-                document.getElementById('search-form').style.display = 'none';
-                document.getElementById('student-table').style.display = 'none';
-            } else {
-                document.getElementById('sort-buttons').style.display = 'none';
-                document.getElementById('grade-buttons').style.display = 'none';
-                document.getElementById('student-table').style.display = 'none';
-            }
-
-            document.querySelectorAll('.grade-button').forEach(gbutton => {
-                gbutton.onclick = function() {
-                    const alreadyActive = this.classList.contains('active');
-                    document.querySelectorAll('.grade-button').forEach(b => b.classList.remove('active'));
-
-                    const grade = this.getAttribute('data-grade');
-                    const selectedSchool = document.querySelector('.school-button.active') ? document.querySelector('.school-button.active').getAttribute('data-school') : null;
-
-                    if (selectedSchool && !alreadyActive) {
-                        console.log(selectedSchool, alreadyActive);
-                        this.classList.add('active');
-                        const searchForm = document.getElementById('search-form');
-                        searchForm.style.display = '';  // 표시
-                        searchForm.classList.add('flex-row');  // flex-row 클래스 추가
-                        fetchStudents(selectedSchool, grade);  // 학생 정보 불러오기
-                    } else {
-                        const searchForm = document.getElementById('search-form');
-                        searchForm.style.display = 'none';  // 숨김
-                        searchForm.classList.remove('flex-row');  // flex-row 클래스 제거
-                        document.getElementById('student-table').style.display = 'none';
-                    }
-                };
-            });
+        if (!alreadyActive) {
+            this.classList.add('active');
+            document.getElementById('grade-buttons').style.display = 'flex';
+            document.getElementById('search-form').style.display = 'none';
+            document.getElementById('student-table').style.display = 'none';
         } else {
-            console.log('???');
-            document.querySelectorAll('.school-button').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.grade-button').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.sort-button').forEach(b => b.classList.remove('active'));
-
-            const tableBody = document.querySelector('#student-table tbody');
-            tableBody.innerHTML = '';  // 기존 데이터를 초기화
-
-            if (!alreadyActive) {
-                this.classList.add('active');
-                document.getElementById('search-form').style.display = 'none';
-                document.getElementById('grade-buttons').style.display = 'none';
-                document.getElementById('student-table').style.display = 'flex';
-            } else {
-                document.getElementById('sort-buttons').style.display = 'none';
-                document.getElementById('grade-buttons').style.display = 'none';
-                document.getElementById('student-table').style.display = 'none';
-            }
-
-            const grade = '예비고1';
-            const selectedSchool = this.getAttribute('data-school');
-            if (selectedSchool && !alreadyActive) {
-                console.log(selectedSchool, alreadyActive);
-                this.classList.add('active');
-                const searchForm = document.getElementById('search-form');
-                searchForm.style.display = '';  // 표시
-                searchForm.classList.add('flex-row');  // flex-row 클래스 추가
-                fetchStudents(selectedSchool, grade);  // 학생 정보 불러오기
-            } else {
-                const searchForm = document.getElementById('search-form');
-                searchForm.style.display = 'none';  // 숨김
-                searchForm.classList.remove('flex-row');  // flex-row 클래스 제거
-                document.getElementById('student-table').style.display = 'none';
-            }
+            document.getElementById('sort-buttons').style.display = 'none';
+            document.getElementById('grade-buttons').style.display = 'none';
+            document.getElementById('student-table').style.display = 'none';
         }
+
+        document.querySelectorAll('.grade-button').forEach(gbutton => {
+            gbutton.onclick = function() {
+                const alreadyActive = this.classList.contains('active');
+                document.querySelectorAll('.grade-button').forEach(b => b.classList.remove('active'));
+
+                const grade = this.getAttribute('data-grade');
+                const selectedSchool = document.querySelector('.school-button.active') ? document.querySelector('.school-button.active').getAttribute('data-school') : null;
+
+                if (selectedSchool && !alreadyActive) {
+                    console.log(selectedSchool, alreadyActive);
+                    this.classList.add('active');
+                    const searchForm = document.getElementById('search-form');
+                    searchForm.style.display = '';  // 표시
+                    searchForm.classList.add('flex-row');  // flex-row 클래스 추가
+                    fetchStudents(selectedSchool, grade);  // 학생 정보 불러오기
+                } else {
+                    const searchForm = document.getElementById('search-form');
+                    searchForm.style.display = 'none';  // 숨김
+                    searchForm.classList.remove('flex-row');  // flex-row 클래스 제거
+                    document.getElementById('student-table').style.display = 'none';
+                }
+            };
+        });
 
         // 정렬 버튼 클릭 이벤트
         document.querySelectorAll('.sort-button').forEach(button => {
