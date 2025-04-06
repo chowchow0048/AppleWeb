@@ -158,7 +158,7 @@
                     <td class="col-date">{{ article.created_at|date:"Y-m-d" }}</td>
                 </tr> -->
 
-                <tr onclick="location.href='{% url 'notice_detail' article.id %}'">
+                <tr onclick="location.href='{% url 'notice_detail' article.id %}'; return false;">
                     <td class="col-no">{{ forloop.counter }}</td>
                     <td class="col-title">{{ article.title }}</td>
                     <td class="col-date">{{ article.created_at|date:"Y.m.d" }}</td>
@@ -201,7 +201,7 @@
         </div>
         <div class="row row-cols-2 row-cols-md-6 g-2 review-container">
             {% for review in reviews %}
-            <div class="col" onclick="location.href='{% url 'review_detail' review.id %}'">
+            <div class="col" onclick="location.href='{% url 'review_detail' review.id %}'; return false;">
                 <div class="review-box p-3">
                     <p>{{review.school}}</p>
                     <p>{{review.name}}</p>
@@ -244,6 +244,30 @@
     </div>
 </div>
 
+<!-- 배너 모달 팝업 1 -->
+<div id="bannerModal1" class="banner-modal">
+    <div class="banner-modal-content">
+        <img src="{% static 'images/banner1.jpg' %}" alt="배너 1" class="banner-modal-image">
+        <div class="banner-modal-footer">
+            <button class="banner-modal-button hide-today-btn" data-modal-id="bannerModal1">오늘 하루 보지 않기</button>
+            <button class="banner-modal-button close-btn" data-modal-id="bannerModal1">닫기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 배너 모달 팝업 2 -->
+<!-- <div id="bannerModal2" class="banner-modal">
+    <div class="banner-modal-content">
+        <img src="{% static 'images/banner2.jpg' %}" alt="배너 2" class="banner-modal-image">
+        <div class="banner-modal-footer">
+            <button class="banner-modal-button hide-today-btn" data-modal-id="bannerModal2">오늘 하루 보지 않기</button>
+            <button class="banner-modal-button close-btn" data-modal-id="bannerModal2">닫기</button>
+        </div>
+    </div>
+</div> -->
+
+
+
 {% endblock %}
 
 {% block extra_scripts %}
@@ -259,4 +283,5 @@
 <script type="text/javascript" 
 src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=v2uy1n9cc7"></script>        
 <script type="module" src="{% static 'scripts/main/main_home.js' %}"></script>
+<script type="module" src="{% static 'scripts/main/main_banner_modals.js' %}"></script>
 {% endblock %}
