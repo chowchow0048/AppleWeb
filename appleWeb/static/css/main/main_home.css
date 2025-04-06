@@ -600,3 +600,65 @@
     --bs-aspect-ratio: 56.25%;
   }
   
+  /* 배너 모달 팝업 스타일 */
+  .banner-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    display: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 500px;
+    width: 100%;
+    background-color: #fff;
+  }
+
+  .banner-modal.show {
+    display: block;
+  }
+
+  .banner-modal-content {
+    width: 100%;
+  }
+
+  .banner-modal-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .banner-modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    background-color: #f8f9fa;
+  }
+
+  .banner-modal-button {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #E8E8E8;
+    color: #333;
+    transition: background-color 0.2s;
+  }
+
+  .banner-modal-button:hover {
+    background-color: #d1d1d1;
+  }
+
+  .hide-today-btn {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 576px) {
+    .banner-modal {
+      max-width: 90%;
+    }
+  }
+  
