@@ -1,0 +1,66 @@
+{% extends 'management/management_base.html' %}
+{% load static %}
+{% block extra_css %}
+<link href="{% static 'css/management/management_studentlist.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column justify-content-center align-items-center container">
+    <h2 id="course-title" class="text-center border-bottom w-100">{{ course.course_school }} {{ course.course_grade }} {% if course.course_subject == 'physics' %} 물리 {% elif course.course_subject == 'chemistry' %} 화학 {% elif course.course_subject == 'biology' %} 생명과학 {% else %} 지구과학 {% endif %} {{course.course_day}} {{course.course_time}}</h2>
+    <form id="attendanceForm" method="post" action="{% url 'bulk_attendance' %}">
+        {% csrf_token %}
+        <input type="hidden" name="course_id" value="{{ course.id }}">
+        <div class="table-responsive text-center w-100">
+            <table class="table table-striped">
+                <thead id="mngsldt-thead">
+                    <tr>
+                        <th>구분</th>
+                        <th>학교</th>
+                        <th>학년</th>
+                        <th>이름</th>
+                        <th>부모님 전화번호</th>
+                        <th>전화번호</th>
+                        <th><button type="button" id="selectAllAttendance" class="btn btn-link">출석</button></th>
+                        <th><button type="button" id="selectAllAbsence" class="btn btn-link">결석</button></th>
+                    </tr>
+                </thead>
+                <tbody id="mngsldt-tbody">
+                    {% for student in students %}
+                    {% if not student.is_teacher %}
+                    <tr>
+                        <td>학생</td>
+                        <td>{{ student.school }}</td>
+                        <td>{{ student.grade }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.parent_phone }}</td>
+                        {% if student.phone != None %}
+                            <td>{{ student.phone }}</td>
+                        {% else %}
+                            <td> - </td>
+                        {% endif %}
+                        <td>
+                            <input type="checkbox" name="attendance" value="{{ student.id }}" class="attendance-checkbox" data-student-id="{{ student.id }}" {% if student.id in attendance_records %}checked{% endif %}>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="absence" value="{{ student.id }}" class="absence-checkbox" data-student-id="{{ student.id }}" {% if student.id in absence_records %}checked{% endif %}>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class="text-center my-4 w-100">
+            <button type="button" class="btn btn-primary me-4 slbtn" id="submitAttendance">출결 처리</button>
+            <a href="{% url 'export_attendance' course.id %}" class="btn btn-primary slbtn">출석부 출력</a>
+        </div>
+    </form>
+    <br>
+    <br>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script type="module" src="{% static 'scripts/management/management_studentlist_detail.js' %}"></script>
+{% endblock %}
