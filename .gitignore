@@ -1,3 +1,6 @@
+env.example
+RAILWAY_MIGRATION_GUIDE.md
+
 # Python 관련
 *.pyc
 __pycache__/
@@ -11,8 +14,6 @@ __pycache__/
 ./.env
 /.env
 .env
-
-
 
 # VSCode 설정
 .vscode/
