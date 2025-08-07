@@ -1,5 +1,6 @@
 env.example
-RAILWAY_MIGRATION_GUIDE.md
+RAILWAY_MIGRATION_GUIDE_DETAILED.md
+DB_BACKUP_GUIDE.md
 
 # Python 관련
 *.pyc
