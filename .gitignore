@@ -1,6 +1,9 @@
 # Python 관련
 *.pyc
 __pycache__/
+DB_BACKUP_GUIDE.md
+RAILWAY_MIGRATION_GUIDE_DETAILED.md
+env.example
 
 # Virtual Environment
 ./.venv/
