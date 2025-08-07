@@ -1,6 +1,6 @@
 [build]
-# Railway에서 Python 프로젝트로 자동 인식되도록 설정
-builder = "heroku/buildpacks:20"
+# Railway가 Python 프로젝트를 자동으로 감지하도록 설정
+# builder 설정을 제거하여 Railway의 Nixpacks 자동 감지 사용
 
 [deploy]
 # 정적 파일 수집과 마이그레이션은 release 명령에서 실행
