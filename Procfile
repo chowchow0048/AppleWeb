@@ -1,2 +1,2 @@
-web: cd appleWeb && gunicorn config.wsgi:application -c ../gunicorn.conf.py
-release: cd appleWeb && python manage.py collectstatic --noinput && python manage.py migrate 
+web: cd appleWeb && DJANGO_SETTINGS_MODULE=config.settings.railway gunicorn config.wsgi:application -c ../gunicorn.conf.py
+release: cd appleWeb && DJANGO_SETTINGS_MODULE=config.settings.railway python manage.py collectstatic --noinput && DJANGO_SETTINGS_MODULE=config.settings.railway python manage.py migrate 
