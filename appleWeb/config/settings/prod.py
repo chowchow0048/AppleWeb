@@ -4,12 +4,8 @@ from .base import *
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / ".env")
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
-
 STATIC_ROOT = BASE_DIR / "static/"
 STATICFILES_DIRS = []
-
-DEBUG = os.environ.get("DEBUG_PROD")
 
 SESSION_COOKIE_AGE = 7200
 # 추가된 부분
