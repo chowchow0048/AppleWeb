@@ -4,6 +4,7 @@ DB_BACKUP_GUIDE.md
 env.railway.example
 RAILWAY_ENV_VARIABLES.md
 RAILWAY_DEPLOYMENT_GUIDE.md
+RAILWAY_BUILD_FIX.md
 
 # Python 관련
 *.pyc

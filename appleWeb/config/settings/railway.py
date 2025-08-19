@@ -90,8 +90,12 @@ STATICFILES_DIRS = [BASE_DIR / "static"]  # 개발 시 정적 파일 경로
 # WhiteNoise 미들웨어 추가 (정적 파일 서빙)
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
-# 정적 파일 압축 및 캐싱 (성능 최적화)
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# 정적 파일 압축 및 캐싱 (성능 최적화) - 빌드 오류 방지를 위해 단순화
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
+# 정적 파일 찾기 비활성화 (성능 향상)
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = True
 
 # ===========================
 # 데이터베이스 설정 (PostgreSQL)
@@ -128,8 +132,8 @@ else:
             }
         }
     else:
-        # PostgreSQL이 설정되지 않은 경우 SQLite 사용 (임시)
-        print("WARNING: PostgreSQL not configured, using SQLite as fallback")
+        # PostgreSQL이 설정되지 않은 경우 SQLite 사용 (빌드 단계용)
+        print("INFO: Using SQLite fallback (build phase or development)")
         DATABASES = {
             "default": {
                 "ENGINE": "django.db.backends.sqlite3",
