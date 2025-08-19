@@ -1,13 +1,16 @@
 [build]
 # Railway가 Python 프로젝트를 자동으로 감지하도록 설정
-# builder 설정을 제거하여 Railway의 Nixpacks 자동 감지 사용
+# Nixpacks가 자동으로 Python 환경을 설정합니다
 
 [deploy]
-# 정적 파일 수집과 마이그레이션은 release 명령에서 실행
+# 헬스체크 및 재시작 정책 설정
 healthcheckPath = "/"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
+
+# 시작 명령어 (Procfile 사용)
+startCommand = "web"
 
 [environments.production]
 # 프로덕션 환경 변수 설정
@@ -18,4 +21,6 @@ PYTHONPATH = "/app/appleWeb"
 # 기본 환경 변수들
 DEBUG = "False"
 DJANGO_LOG_LEVEL = "INFO"
-APP_LOG_LEVEL = "INFO" 
+APP_LOG_LEVEL = "INFO"
+PYTHONDONTWRITEBYTECODE = "1"
+PYTHONUNBUFFERED = "1" 

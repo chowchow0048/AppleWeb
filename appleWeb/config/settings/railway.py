@@ -1,33 +1,91 @@
-# Railway 배포용 설정 파일
-import os
-import dj_database_url
 from .base import *
+import os
 
-# ===========================
-# 기본 Django 설정 오버라이드
-# ===========================
+# Railway DATABASE_URL 파싱용 (설치된 경우에만 import)
+try:
+    import dj_database_url
+except ImportError:
+    dj_database_url = None
 
-# SECRET_KEY를 환경 변수로 관리 (보안 강화)
-SECRET_KEY = os.environ.get("SECRET_KEY")
-
-# 프로덕션 모드 설정
-DEBUG = os.environ.get("DEBUG_PROD")
-
-# Railway 도메인 및 커스텀 도메인 허용
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
+# DEBUG 설정 - Railway 환경변수에서 가져오기
+DEBUG = os.environ.get("DEBUG", "False").lower() in ["true", "1", "yes", "on"]
 
 # Railway 환경에서 제공되는 도메인 자동 추가
 railway_domain = os.environ.get("RAILWAY_PUBLIC_DOMAIN")
+railway_static_url = os.environ.get("RAILWAY_STATIC_URL")
+
+# ALLOWED_HOSTS 초기화 (base.py에서 빈 리스트로 설정됨)
+ALLOWED_HOSTS = []
+
 if railway_domain:
     ALLOWED_HOSTS.append(railway_domain)
+if railway_static_url:
+    ALLOWED_HOSTS.append(railway_static_url)
+
+
+# 데이터베이스 설정 - .env 파일 수동 로딩
+env_file = BASE_DIR / ".env"
+if env_file.exists():
+    with open(env_file) as f:
+        for line in f:
+            if "=" in line and not line.startswith("#"):
+                key, value = line.strip().split("=", 1)
+                # 따옴표 제거
+                value = value.strip("\"'")
+                os.environ.setdefault(key, value)
+
+# ALLOWED_HOSTS: 환경변수에서 추가 도메인 가져오기
+allowed_hosts_str = os.environ.get("ALLOWED_HOSTS")
+if allowed_hosts_str:
+    additional_hosts = [
+        host.strip() for host in allowed_hosts_str.split(",") if host.strip()
+    ]
+    ALLOWED_HOSTS.extend(additional_hosts)
+
+# Railway 기본 도메인들 추가 (안전장치)
+if not ALLOWED_HOSTS:
+    # Railway 기본 패턴 허용 (프로덕션에서는 실제 도메인 설정 필요)
+    ALLOWED_HOSTS = [
+        "*.up.railway.app",  # Railway 기본 도메인
+        "127.0.0.1",
+        "localhost",
+    ]
+    print(
+        "WARNING: Using default ALLOWED_HOSTS. Set ALLOWED_HOSTS environment variable for production."
+    )
+
+# 세션 설정
+SESSION_COOKIE_AGE = 7200
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
+
+# 기본 데이터베이스 설정은 아래 PostgreSQL 설정 섹션에서 처리
+
+# 미디어 파일 설정
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media/"
+
+# CKEditor 업로드 경로
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+# SECRET_KEY: 환경변수 필수 (보안 강화)
+secret_key = os.environ.get("SECRET_KEY")
+if not secret_key:
+    raise ValueError(
+        "SECRET_KEY environment variable is required for security. "
+        "Generate a new secret key and set it in your .env file."
+    )
+SECRET_KEY = secret_key
 
 # ===========================
-# 정적 파일 설정 (WhiteNoise)
+# 정적 파일 설정 (Railway 최적화)
 # ===========================
 
 # 정적 파일 경로 설정
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic이 파일을 수집할 경로
+STATICFILES_DIRS = [BASE_DIR / "static"]  # 개발 시 정적 파일 경로
 
 # WhiteNoise 미들웨어 추가 (정적 파일 서빙)
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
@@ -41,7 +99,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Railway PostgreSQL 연결 설정
 database_url = os.environ.get("DATABASE_URL")
-if database_url:
+if database_url and dj_database_url:
     # dj_database_url로 DATABASE_URL 파싱 (Railway 표준 방식)
     DATABASES = {
         "default": dj_database_url.parse(
