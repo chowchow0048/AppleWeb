@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG_LOCAL")
 
-ALLOWED_HOSTS = ["3.37.147.68"]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
 
 AUTH_USER_MODEL = "common.User"
 SESSION_COOKIE_AGE = 7200
