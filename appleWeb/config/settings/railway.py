@@ -8,22 +8,13 @@ from .base import *
 # ===========================
 
 # SECRET_KEY를 환경 변수로 관리 (보안 강화)
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "django-insecure-railway-fallback-key-change-in-production"
-)
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # 프로덕션 모드 설정
-DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+DEBUG = os.environ.get("DEBUG_PROD")
 
 # Railway 도메인 및 커스텀 도메인 허용
-ALLOWED_HOSTS = [
-    "*",  # Railway는 동적 도메인을 사용하므로 모든 호스트 허용
-    ".up.railway.app",  # Railway 기본 도메인
-    "banpo-apple.com",  # 커스텀 도메인
-    "www.banpo-apple.com",  # 커스텀 도메인 www
-    "127.0.0.1",  # 로컬 테스트
-    "localhost",  # 로컬 테스트
-]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
 
 # Railway 환경에서 제공되는 도메인 자동 추가
 railway_domain = os.environ.get("RAILWAY_PUBLIC_DOMAIN")

@@ -4,16 +4,11 @@ from .base import *
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / ".env")
 
-ALLOWED_HOSTS = [
-    "3.37.147.68",
-    "banpo-apple.com",
-    "www.banpo-apple.com",
-    "ec2-3-37-147-68.ap-northeast-2.compute.amazonaws.com",
-]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
 STATIC_ROOT = BASE_DIR / "static/"
 STATICFILES_DIRS = []
 
-DEBUG = False
+DEBUG = os.environ.get("DEBUG_PROD")
 
 SESSION_COOKIE_AGE = 7200
 # 추가된 부분
