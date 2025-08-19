@@ -21,33 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY 환경변수 처리: 환경변수가 없으면 개발용 기본값 사용 (프로덕션에서는 반드시 설정 필요)
-SECRET_KEY = os.environ.get("SECRET_KEY")
-if not SECRET_KEY:
-    # 개발환경용 기본 SECRET_KEY (절대 프로덕션에서 사용하면 안됨)
-    import warnings
-
-    warnings.warn(
-        "SECRET_KEY environment variable is not set. Using development fallback. "
-        "This is NOT secure for production use!",
-        RuntimeWarning,
-    )
-    SECRET_KEY = "django-insecure-development-key-change-in-production-12345"
+# SECRET_KEY는 각 환경별 설정 파일에서 정의
+# base.py에서는 기본값만 설정
+SECRET_KEY = "django-insecure-development-key-change-in-production-12345"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG 환경변수 처리: 문자열 "True"/"true"일 때만 True, 그 외는 False
 DEBUG = os.environ.get("DEBUG", "False").lower() in ["true", "1", "yes", "on"]
 
-# ALLOWED_HOSTS 환경변수 처리: 쉼표로 구분된 문자열을 리스트로 변환
-allowed_hosts_str = os.environ.get("ALLOWED_HOSTS", "")
-if allowed_hosts_str:
-    # 쉼표로 구분하고 공백 제거
-    ALLOWED_HOSTS = [
-        host.strip() for host in allowed_hosts_str.split(",") if host.strip()
-    ]
-else:
-    # 환경변수가 없으면 빈 리스트 (개발환경용)
-    ALLOWED_HOSTS = []
+# ALLOWED_HOSTS는 각 환경별 설정 파일에서 정의
+# base.py에서는 기본값만 설정
+ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = "common.User"
 SESSION_COOKIE_AGE = 7200
