@@ -15,8 +15,6 @@ DJANGO_SETTINGS_MODULE = "config.settings.railway"
 PYTHONPATH = "/app/appleWeb"
 
 [environments.production.variables]
-# Django 설정 모듈 지정
-DJANGO_SETTINGS_MODULE = "config.settings.railway"
 # 기본 환경 변수들
 DEBUG = "False"
 DJANGO_LOG_LEVEL = "INFO"

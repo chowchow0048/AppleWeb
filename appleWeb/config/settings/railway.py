@@ -60,21 +60,36 @@ if database_url:
         )
     }
 else:
-    # 환경 변수 개별 설정 (백업용)
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("PGDATABASE", "railway"),
-            "USER": os.environ.get("PGUSER", "postgres"),
-            "PASSWORD": os.environ.get("PGPASSWORD", ""),
-            "HOST": os.environ.get("PGHOST", "localhost"),
-            "PORT": os.environ.get("PGPORT", "5432"),
-            "OPTIONS": {
-                "connect_timeout": 10,  # 연결 타임아웃
-                "options": "-c default_transaction_isolation=read_committed",
-            },
+    # PostgreSQL 환경 변수가 있는지 확인
+    pg_host = os.environ.get("PGHOST")
+    if pg_host:
+        # 환경 변수 개별 설정 (백업용)
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": os.environ.get("PGDATABASE", "railway"),
+                "USER": os.environ.get("PGUSER", "postgres"),
+                "PASSWORD": os.environ.get("PGPASSWORD", ""),
+                "HOST": pg_host,
+                "PORT": os.environ.get("PGPORT", "5432"),
+                "OPTIONS": {
+                    "connect_timeout": 10,  # 연결 타임아웃
+                    "options": "-c default_transaction_isolation=read_committed",
+                },
+            }
         }
-    }
+    else:
+        # PostgreSQL이 설정되지 않은 경우 SQLite 사용 (임시)
+        print("WARNING: PostgreSQL not configured, using SQLite as fallback")
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": BASE_DIR / "db.sqlite3",
+                "OPTIONS": {
+                    "timeout": 20,
+                },
+            }
+        }
 
 # ===========================
 # 보안 설정 (HTTPS 환경)
