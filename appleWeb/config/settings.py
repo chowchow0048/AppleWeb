@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-ebved*q!zji3wjbw8@!--f&wxra#oyn(9nqko1)@khxwm0vh$2"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -143,5 +143,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Naver API KEY
 
-NAVER_CLIENT_ID = "v2uy1n9cc7"
-NAVER_CLIENT_SECRET = "SgFqv8FBOrYyCjmym4InxD6Daig1yHvhDr68F2vz"
+NAVER_CLIENT_ID = os.environ.get("NAVER_CLIENT_ID")
+NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET")
