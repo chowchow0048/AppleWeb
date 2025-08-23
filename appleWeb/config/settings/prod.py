@@ -1,13 +1,11 @@
 from .base import *
 import os
 
-# 정적 파일 설정
 STATIC_ROOT = BASE_DIR / "static/"
 STATICFILES_DIRS = []
 
 DEBUG = False
 
-# 데이터베이스 설정 - .env 파일 수동 로딩
 env_file = BASE_DIR / ".env"
 if env_file.exists():
     with open(env_file) as f:
@@ -18,7 +16,6 @@ if env_file.exists():
                 value = value.strip("\"'")
                 os.environ.setdefault(key, value)
 
-# ALLOWED_HOSTS: 환경변수 필수 (가장 안전한 방법)
 allowed_hosts_str = os.environ.get("ALLOWED_HOSTS")
 if not allowed_hosts_str:
     raise ValueError(
@@ -27,8 +24,7 @@ if not allowed_hosts_str:
     )
 ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_str.split(",") if host.strip()]
 
-# 세션 설정
-SESSION_COOKIE_AGE = 7200
+# SESSION_COOKIE_AGE = 24000000000
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

@@ -4,6 +4,10 @@ __pycache__/
 DB_BACKUP_GUIDE.md
 RAILWAY_MIGRATION_GUIDE_DETAILED.md
 env.example
+env.railway.example
+RAILWAY_ENV_VARIABLES.md
+RAILWAY_BUILD_FIX.md
+RAILWAY_DEPLOYMENT_GUIDE.md
 
 # Virtual Environment
 ./.venv/
