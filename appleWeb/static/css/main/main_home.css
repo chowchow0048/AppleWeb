@@ -616,6 +616,29 @@
     background-color: #fff;
   }
 
+  /* banner2 스타일 (데스크톱용 - 크게) */
+  #bannerModal2 {
+    max-width: 90vw;
+    min-width: 80vw;
+    width: 85vw;
+  }
+
+  /* banner3 스타일 (모바일용 - 스크롤 가능) */
+  #bannerModal3 {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  #bannerModal3 .banner-modal-content {
+    max-height: calc(90vh - 60px); /* 버튼 영역 제외 */
+    overflow-y: auto;
+  }
+
+  #bannerModal3 .banner-modal-image {
+    height: auto;
+    max-height: none;
+  }
+
   .banner-modal.show {
     display: block;
   }
@@ -659,6 +682,16 @@
   @media (max-width: 576px) {
     .banner-modal {
       max-width: 90%;
+    }
+    
+    /* 모바일에서 banner3 스크롤 최적화 */
+    #bannerModal3 {
+      max-height: 85vh;
+      width: 90%;
+    }
+    
+    #bannerModal3 .banner-modal-content {
+      max-height: calc(85vh - 50px);
     }
   }
   
