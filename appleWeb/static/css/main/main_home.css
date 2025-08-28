@@ -618,9 +618,9 @@
 
   /* banner2 스타일 (데스크톱용 - 크게) */
   #bannerModal2 {
-    max-width: 90vw;
-    min-width: 80vw;
-    width: 85vw;
+    max-width: 85vw;
+    min-width: 75vw;
+    width: 80vw;
   }
 
   /* banner3 스타일 (모바일용 - 스크롤 가능) */
