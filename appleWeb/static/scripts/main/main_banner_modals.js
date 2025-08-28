@@ -92,18 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imgElement = modal.querySelector('img');
                 if (imgElement) {
                     const imgSrc = imgElement.getAttribute('src');
-                    try {
-                        if (imgSrc.includes('/static/images/')) {
-                            openModal(secondModalId);
-                        } else {
-                            const exists = await imageExists(imgSrc);
-                            if (exists) {
-                                openModal(secondModalId);
-                            }
-                        }
-                    } catch (error) {
-                        // Silently handle image loading errors
-                    }
+                    openModal(secondModalId);
                 }
             }
         }
@@ -120,18 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imgElement = modal.querySelector('img');
                 if (imgElement) {
                     const imgSrc = imgElement.getAttribute('src');
-                    try {
-                        if (imgSrc.includes('/static/images/')) {
-                            openModal(modalId);
-                        } else {
-                            const exists = await imageExists(imgSrc);
-                            if (exists) {
-                                openModal(modalId);
-                            }
-                        }
-                    } catch (error) {
-                        // Silently handle image loading errors
-                    }
+                    openModal(modalId);
                 }
             }
         } else {
