@@ -71,49 +71,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return window.innerWidth <= 576;
     };
 
-    // 이미지 존재 여부 확인 함수
-    const imageExists = (imageUrl) => {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => resolve(true);
-            img.onerror = () => resolve(false);
-            img.src = imageUrl;
-        });
-    };
-
     // 두 번째 배너 표시 함수 (반응형)
-    const showSecondBanner = async () => {
+    const showSecondBanner = () => {
         const secondModalId = isMobile() ? 'bannerModal3' : 'bannerModal2';
         const isHidden = getCookie(secondModalId) === 'hidden';
         
         if (!isHidden) {
-            const modal = document.getElementById(secondModalId);
-            if (modal) {
-                const imgElement = modal.querySelector('img');
-                if (imgElement) {
-                    const imgSrc = imgElement.getAttribute('src');
-                    openModal(secondModalId);
-                }
-            }
+            openModal(secondModalId);
         }
     };
 
     // 첫 번째 배너만 표시하는 함수
-    const showFirstBanner = async () => {
+    const showFirstBanner = () => {
         const modalId = 'bannerModal1';
         const isHidden = getCookie(modalId) === 'hidden';
         
         if (!isHidden) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                const imgElement = modal.querySelector('img');
-                if (imgElement) {
-                    const imgSrc = imgElement.getAttribute('src');
-                    openModal(modalId);
-                }
-            }
+            openModal(modalId);
         } else {
-            // banner1이 숨겨져 있으면 바로 두 번째 배너 표시
             showSecondBanner();
         }
     };
