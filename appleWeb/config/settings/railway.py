@@ -71,13 +71,13 @@ MEDIA_ROOT = BASE_DIR / "media/"
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
 # SECRET_KEY: 환경변수 필수 (보안 강화)
-secret_key = os.environ.get("SECRET_KEY")
+secret_key = os.environ.get("DJANGO_SECRET_KEY")
 if not secret_key:
     raise ValueError(
-        "SECRET_KEY environment variable is required for security. "
+        "DJANGO_SECRET_KEY environment variable is required for security. "
         "Generate a new secret key and set it in your .env file."
     )
-SECRET_KEY = secret_key
+DJANGO_SECRET_KEY = secret_key
 
 # ===========================
 # 정적 파일 설정 (Railway 최적화)
