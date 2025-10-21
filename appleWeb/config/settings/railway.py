@@ -71,13 +71,13 @@ MEDIA_ROOT = BASE_DIR / "media/"
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
 # SECRET_KEY: 환경변수 필수 (보안 강화)
-secret_key = os.environ.get("DJANGO_SECRET_KEY")
+secret_key = os.environ.get("DJANGO_SECRET_KEY") or os.environ.get("SECRET_KEY")
 if not secret_key:
     raise ValueError(
-        "DJANGO_SECRET_KEY environment variable is required for security. "
-        "Generate a new secret key and set it in your .env file."
+        "DJANGO_SECRET_KEY or SECRET_KEY environment variable is required for security. "
+        "Generate a new secret key and set it in your environment variables."
     )
-DJANGO_SECRET_KEY = secret_key
+SECRET_KEY = secret_key
 
 # ===========================
 # 정적 파일 설정 (Railway 최적화)
@@ -332,10 +332,13 @@ USE_TZ = True
 TIME_ZONE = "Asia/Seoul"
 LANGUAGE_CODE = "ko-kr"
 
-# Railway 환경 변수 디버깅 (개발시에만 사용)
-if DEBUG:
-    print("=== Railway Environment Variables ===")
-    for key, value in os.environ.items():
-        if key.startswith(("RAILWAY_", "DATABASE_", "REDIS_")):
-            print(f"{key}: {value}")
-    print("=====================================")
+# Railway 환경 변수 디버깅
+print("=== Railway Configuration Debug ===")
+print(f"DEBUG: {DEBUG}")
+print(f"BASE_DIR: {BASE_DIR}")
+print(f"STATIC_ROOT: {BASE_DIR / 'staticfiles'}")
+print(f"STATIC_URL: {STATIC_URL}")
+print(f"STATICFILES_DIRS: {STATICFILES_DIRS}")
+print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
+print(f"DATABASE_URL exists: {'DATABASE_URL' in os.environ}")
+print("===================================")
