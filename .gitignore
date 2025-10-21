@@ -6,6 +6,8 @@ RAILWAY_ENV_VARIABLES.md
 RAILWAY_DEPLOYMENT_GUIDE.md
 RAILWAY_BUILD_FIX.md
 
+prod(DEP).py
+
 # Python 관련
 *.pyc
 __pycache__/
