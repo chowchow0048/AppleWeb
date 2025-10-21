@@ -115,6 +115,9 @@ WHITENOISE_MAX_AGE = 31536000  # 1년 캐싱
 
 # Railway PostgreSQL 연결 설정
 database_url = os.environ.get("DATABASE_URL")
+print(f"=== DATABASE CONNECTION DEBUG ===")
+print(f"DATABASE_URL exists: {bool(database_url)}")
+print(f"dj_database_url module: {dj_database_url}")
 if database_url and dj_database_url:
     # dj_database_url로 DATABASE_URL 파싱 (Railway 표준 방식)
     DATABASES = {
@@ -124,6 +127,9 @@ if database_url and dj_database_url:
             conn_health_checks=True,  # 연결 상태 확인
         )
     }
+    print(f"Using PostgreSQL via DATABASE_URL")
+    print(f"Database HOST: {DATABASES['default'].get('HOST', 'N/A')}")
+    print(f"Database NAME: {DATABASES['default'].get('NAME', 'N/A')}")
 else:
     # PostgreSQL 환경 변수가 있는지 확인
     pg_host = os.environ.get("PGHOST")
