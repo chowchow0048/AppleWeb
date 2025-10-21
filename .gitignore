@@ -56,6 +56,8 @@ appleWeb/templates/management/(HOLD)management_special_lecture.html
 appleWeb/static/css/management/(HOLD)management_special_lecture.css
 
 # migrations
+# IMPORTANT: Migration files should be tracked in git to ensure consistency
+# Only ignore __pycache__ in migrations directories
+appleWeb/common/migrations/__pycache__/
 
-appleWeb/common/migrations/*
-./appleWeb/common/migrations/*
+AWS_RDS_to_LOCAL_MIGRATION_GUIDE.txt
