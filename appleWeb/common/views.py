@@ -157,7 +157,19 @@ def page_not_found(request, exception):
 
 
 def server_error(request):
-    return render(request, "main/500.html", {})
+    # 임시: 500 에러 디버깅을 위해 간단한 응답
+    from django.http import HttpResponse
+    import traceback
+    import sys
+
+    # 실제 에러 정보 가져오기
+    exc_info = sys.exc_info()
+    error_message = "".join(traceback.format_exception(*exc_info)) if exc_info[0] else "No exception info"
+
+    return HttpResponse(
+        f"<h1>500 Server Error (Debug)</h1><pre>{error_message}</pre>",
+        status=500
+    )
 
 
 def forbidden_error(request, exception):

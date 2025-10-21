@@ -100,7 +100,9 @@ if not _staticfiles_path.exists():
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 # 정적 파일 압축 및 캐싱 (성능 최적화)
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# CompressedManifestStaticFilesStorage는 manifest 파일 누락시 에러 발생
+# 안정성을 위해 CompressedStaticFilesStorage 사용
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 # WhiteNoise 설정
 WHITENOISE_USE_FINDERS = False  # 프로덕션에서는 False
@@ -234,7 +236,12 @@ LOGGING = {
         },
         "django.request": {
             "handlers": ["error_console"],
-            "level": "ERROR",
+            "level": "DEBUG",  # 모든 요청 에러 로그 출력
+            "propagate": False,
+        },
+        "django.template": {
+            "handlers": ["error_console"],
+            "level": "DEBUG",  # 템플릿 에러 로그 출력
             "propagate": False,
         },
         "appleWeb": {
