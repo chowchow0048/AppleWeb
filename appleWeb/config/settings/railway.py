@@ -90,6 +90,12 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic이 파일을 수집할 경로
 STATICFILES_DIRS = [BASE_DIR / "static"]  # 개발 시 정적 파일 경로
 
+# staticfiles 디렉토리가 없으면 생성
+_staticfiles_path = BASE_DIR / "staticfiles"
+if not _staticfiles_path.exists():
+    _staticfiles_path.mkdir(parents=True, exist_ok=True)
+    print(f"Created staticfiles directory: {_staticfiles_path}")
+
 # WhiteNoise 미들웨어 추가 (정적 파일 서빙)
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
