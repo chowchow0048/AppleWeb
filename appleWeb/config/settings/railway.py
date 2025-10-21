@@ -83,6 +83,9 @@ DJANGO_SECRET_KEY = secret_key
 # 정적 파일 설정 (Railway 최적화)
 # ===========================
 
+# 정적 파일 URL (슬래시로 시작해야 함)
+STATIC_URL = "/static/"
+
 # 정적 파일 경로 설정
 STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic이 파일을 수집할 경로
 STATICFILES_DIRS = [BASE_DIR / "static"]  # 개발 시 정적 파일 경로
@@ -90,12 +93,13 @@ STATICFILES_DIRS = [BASE_DIR / "static"]  # 개발 시 정적 파일 경로
 # WhiteNoise 미들웨어 추가 (정적 파일 서빙)
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
-# 정적 파일 압축 및 캐싱 (성능 최적화) - 빌드 오류 방지를 위해 단순화
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+# 정적 파일 압축 및 캐싱 (성능 최적화)
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# 정적 파일 찾기 비활성화 (성능 향상)
-WHITENOISE_USE_FINDERS = True
-WHITENOISE_AUTOREFRESH = True
+# WhiteNoise 설정
+WHITENOISE_USE_FINDERS = False  # 프로덕션에서는 False
+WHITENOISE_AUTOREFRESH = False  # 프로덕션에서는 False
+WHITENOISE_MAX_AGE = 31536000  # 1년 캐싱
 
 # ===========================
 # 데이터베이스 설정 (PostgreSQL)
