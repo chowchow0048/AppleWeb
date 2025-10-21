@@ -308,6 +308,7 @@ CONN_MAX_AGE = 600  # 10분 연결 유지
 
 # 템플릿 캐싱 (프로덕션에서만)
 if not DEBUG:
+    TEMPLATES[0]["APP_DIRS"] = False  # loaders 사용시 APP_DIRS는 False여야 함
     TEMPLATES[0]["OPTIONS"]["loaders"] = [
         (
             "django.template.loaders.cached.Loader",
