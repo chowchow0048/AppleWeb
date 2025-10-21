@@ -16,7 +16,11 @@ def main(request):
     except EmptyPage:
         articles = paginator.page(paginator.num_pages)
 
-    reviews = Review.objects.order_by("importance")
+    # 임시: importance 컬럼이 없는 경우 created_at으로 정렬
+    try:
+        reviews = Review.objects.order_by("importance")
+    except Exception:
+        reviews = Review.objects.order_by("-created_at")
 
     return render(
         request,
