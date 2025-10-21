@@ -19,8 +19,11 @@ def main(request):
     # 임시: importance 컬럼이 없는 경우 created_at으로 정렬
     try:
         reviews = Review.objects.order_by("importance")
-    except Exception:
+        print(f"DEBUG: Found {reviews.count()} reviews")
+    except Exception as e:
+        print(f"DEBUG: Error loading reviews with importance: {e}")
         reviews = Review.objects.order_by("-created_at")
+        print(f"DEBUG: Loaded {reviews.count()} reviews by created_at")
 
     return render(
         request,
