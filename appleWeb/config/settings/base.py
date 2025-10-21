@@ -8,8 +8,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECRET_KEY = "django-insecure-development-key-change-in-production-12345"
-DJANGO_SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+# SECRET_KEY는 환경변수에서 가져오기 (DJANGO_SECRET_KEY 또는 SECRET_KEY)
+# .env 파일이 로드되면 자동으로 사용됨
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") or os.environ.get("SECRET_KEY", "django-insecure-development-key-for-local-only-12345")
 
 DEBUG = os.environ.get("DEBUG", "False").lower() in ["true", "1", "yes", "on"]
 
