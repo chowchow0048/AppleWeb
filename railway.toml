@@ -4,9 +4,7 @@
 # 빌드 단계에서는 데이터베이스 연결이 불가능하므로 정적 파일만 수집
 
 [deploy]
-# 헬스체크 및 재시작 정책 설정
-healthcheckPath = "/"
-healthcheckTimeout = 100
+# 재시작 정책 설정
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
