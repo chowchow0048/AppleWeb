@@ -61,3 +61,11 @@ appleWeb/static/css/management/(HOLD)management_special_lecture.css
 appleWeb/common/migrations/__pycache__/
 
 AWS_RDS_to_LOCAL_MIGRATION_GUIDE.txt
+
+*.sql
+
+.claude
+.claude/settings.local.json
+./claude
+./.claude
+./.claude/
