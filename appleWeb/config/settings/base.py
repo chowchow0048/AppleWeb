@@ -10,7 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECRET_KEY는 환경변수에서 가져오기 (DJANGO_SECRET_KEY 또는 SECRET_KEY)
 # .env 파일이 로드되면 자동으로 사용됨
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") or os.environ.get("SECRET_KEY", "django-insecure-development-key-for-local-only-12345")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") or os.environ.get(
+    "SECRET_KEY", "django-insecure-development-key-for-local-only-12345"
+)
 
 DEBUG = os.environ.get("DEBUG", "False").lower() in ["true", "1", "yes", "on"]
 
@@ -125,8 +127,13 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-NAVER_CLIENT_ID = "v2uy1n9cc7"
-NAVER_CLIENT_SECRET = "SgFqv8FBOrYyCjmym4InxD6Daig1yHvhDr68F2vz"
+NAVER_CLIENT_ID = os.environ.get("NAVER_CLIENT_ID")
+NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET")
+if not NAVER_CLIENT_ID or not NAVER_CLIENT_SECRET:
+    raise ValueError(
+        "NAVER_CLIENT_ID and NAVER_CLIENT_SECRET environment variables are required for security. "
+        "Generate a new client ID and secret and set them in your environment variables."
+    )
 
 PROJECT_ROOT = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
