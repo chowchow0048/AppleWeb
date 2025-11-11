@@ -8,6 +8,13 @@ env.railway.example
 RAILWAY_ENV_VARIABLES.md
 RAILWAY_BUILD_FIX.md
 RAILWAY_DEPLOYMENT_GUIDE.md
+appleWeb_backup_20251021_182608.sql
+appleWeb_backup_20251021_182718.sql
+AWS_RDS_to_LOCAL_MIGRATION_GUIDE.txt
+prod(DEP).py
+
+
+
 
 # Virtual Environment
 ./.venv/
