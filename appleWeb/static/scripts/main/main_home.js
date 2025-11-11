@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         var modalBody = timetableModal.querySelector('.modal-body-custom'); // Ensure this selector is correct
         var schoolName = timetable.slice(0, -1); // 마지막 문자를 제외한 나머지 부분
         var grade = timetable.slice(-1); // 마지막 문자
-        console.log('MODAL ONONONONONONONNONONON @!@#!@#!@#!@');
+
         if (timetable === '1학년') {
             modalTitle.textContent = `1학년 시간표`;
             console.log('1학년');
