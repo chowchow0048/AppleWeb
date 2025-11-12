@@ -29,12 +29,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById(modalId);
         if (modal) {
             modal.classList.remove('show');
-            
+
+            // banner0이 닫힐 때 banner1 표시
+            if (showNext && modalId === 'bannerModal0') {
+                setTimeout(() => {
+                    showFirstBanner();
+                }, 300);
+            }
             // banner1이 닫힐 때 다음 모달 표시
-            if (showNext && modalId === 'bannerModal1') {
+            else if (showNext && modalId === 'bannerModal1') {
                 setTimeout(() => {
                     showSecondBanner();
-                }, 300); // 애니메이션 완료 후 표시
+                }, 300);
             }
         }
     };
@@ -51,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     closeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const modalId = btn.getAttribute('data-modal-id');
-            const showNext = modalId === 'bannerModal1';
+            const showNext = modalId === 'bannerModal0' || modalId === 'bannerModal1';
             closeModal(modalId, showNext);
         });
     });
@@ -61,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             const modalId = btn.getAttribute('data-modal-id');
             setCookie(modalId, 'hidden', 1); // 하루 동안 쿠키 설정
-            const showNext = modalId === 'bannerModal1';
+            const showNext = modalId === 'bannerModal0' || modalId === 'bannerModal1';
             closeModal(modalId, showNext);
         });
     });
@@ -85,14 +91,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const showFirstBanner = () => {
         const modalId = 'bannerModal1';
         const isHidden = getCookie(modalId) === 'hidden';
-        
+
         if (!isHidden) {
             openModal(modalId);
         } else {
             showSecondBanner();
         }
     };
-    
-    // 페이지 로드 시 첫 번째 배너 모달 표시
-    showFirstBanner();
+
+    // 0번째 배너 표시하는 함수
+    const showZeroBanner = () => {
+        const modalId = 'bannerModal0';
+        const isHidden = getCookie(modalId) === 'hidden';
+
+        if (!isHidden) {
+            openModal(modalId);
+        } else {
+            showFirstBanner();
+        }
+    };
+
+    // 페이지 로드 시 0번째 배너 모달 표시
+    showZeroBanner();
 }); 
