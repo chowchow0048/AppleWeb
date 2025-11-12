@@ -13,8 +13,8 @@ appleWeb_backup_20251021_182718.sql
 AWS_RDS_to_LOCAL_MIGRATION_GUIDE.txt
 prod(DEP).py
 
-
-
+.claude/
+.claude
 
 # Virtual Environment
 ./.venv/
