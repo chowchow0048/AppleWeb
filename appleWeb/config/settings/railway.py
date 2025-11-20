@@ -96,18 +96,16 @@ if not _staticfiles_path.exists():
     _staticfiles_path.mkdir(parents=True, exist_ok=True)
     print(f"Created staticfiles directory: {_staticfiles_path}")
 
-# WhiteNoise 미들웨어 추가 (정적 파일 서빙)
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-
-# 정적 파일 압축 및 캐싱 (성능 최적화)
-# CompressedManifestStaticFilesStorage는 manifest 파일 누락시 에러 발생
-# 안정성을 위해 CompressedStaticFilesStorage 사용
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-
-# WhiteNoise 설정
-WHITENOISE_USE_FINDERS = False  # 프로덕션에서는 False
-WHITENOISE_AUTOREFRESH = False  # 프로덕션에서는 False
-WHITENOISE_MAX_AGE = 31536000  # 1년 캐싱
+# Django 5.0+ STORAGES 설정 (ManifestStaticFilesStorage)
+# 파일명에 해시값 추가로 캐시 무효화 자동 처리
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
 
 # ===========================
 # 데이터베이스 설정 (PostgreSQL)
