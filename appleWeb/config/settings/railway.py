@@ -96,14 +96,17 @@ if not _staticfiles_path.exists():
     _staticfiles_path.mkdir(parents=True, exist_ok=True)
     print(f"Created staticfiles directory: {_staticfiles_path}")
 
-# Django 5.0+ STORAGES 설정 (ManifestStaticFilesStorage)
-# 파일명에 해시값 추가로 캐시 무효화 자동 처리
+# WhiteNoise 미들웨어 추가 (정적 파일 서빙)
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
+# Django 5.0+ STORAGES 설정 (WhiteNoise + Manifest)
+# WhiteNoise로 정적 파일 서빙 + 파일명에 해시값 추가로 캐시 무효화
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
