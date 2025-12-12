@@ -46,6 +46,11 @@ appleWeb/db.sqlite3
 appleWeb/static/images/review_images
 ./appleWeb/static/images/review_images
 
+# Collectstatic 결과물 (Railway에서 자동 생성)
+appleWeb/staticfiles/
+./appleWeb/staticfiles/
+staticfiles/
+
 # 기타
 backup/
 blog.txt
