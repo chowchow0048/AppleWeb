@@ -99,18 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 0번째 배너 표시하는 함수
-    const showZeroBanner = () => {
-        const modalId = 'bannerModal0';
-        const isHidden = getCookie(modalId) === 'hidden';
-
-        if (!isHidden) {
-            openModal(modalId);
-        } else {
-            showFirstBanner();
-        }
-    };
-
-    // 페이지 로드 시 0번째 배너 모달 표시
-    showZeroBanner();
+    // 페이지 로드 시 첫 번째 배너 모달 표시
+    showFirstBanner();
 }); 
